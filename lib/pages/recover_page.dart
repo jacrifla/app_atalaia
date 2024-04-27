@@ -6,7 +6,7 @@ import '../widgets/button_icon.dart';
 import 'package:flutter/material.dart';
 
 class RecoverPage extends StatefulWidget {
-  RecoverPage({Key? key}) : super(key: key);
+  const RecoverPage({Key? key}) : super(key: key);
 
   @override
   State<RecoverPage> createState() => _RecoverPageState();

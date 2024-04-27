@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -21,41 +25,28 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Text('Presets'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 1
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Pontos'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 2
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Monitoramento'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 2
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Perfil'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 2
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Ajuda'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 2
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Sair'),
-            onTap: () {
-              // Adicione aqui a lógica para o item 2
-            },
+            onTap: () {},
           ),
-          // Adicione mais ListTile conforme necessário
         ],
       ),
     );
