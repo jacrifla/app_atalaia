@@ -39,7 +39,7 @@ class BuildRow extends StatelessWidget {
                       height: 1.5, // Altura do sublinhado
                       color: Theme.of(context)
                           .colorScheme
-                          .primary, // Cor do sublinhado
+                          .onSecondary, // Cor do sublinhado
                     ),
                   ),
                 ],

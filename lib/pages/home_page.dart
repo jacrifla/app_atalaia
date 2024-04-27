@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isLightbulbTapped = false;
+  bool _isLightbulbTapped = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +24,18 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           'Home',
           style: TextStyle(
-            color: Color(0xFFF5F5F5),
+            color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: IconThemeData(color: Color(0xFFF5F5F5), size: 30),
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(
+              Icons.menu,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             onPressed: () {
               _scaffoldKey.currentState!.openDrawer();
             },
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       drawer: CustomDrawer(),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             children: [
               Row(
@@ -51,13 +53,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ButtonIcon(
                     labelText: 'Presets',
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   ButtonIcon(
                     labelText: 'Pontos',
-                    backgroundColor: Color(0xfff5f5f5),
-                    color: Color(0xFF202123),
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onSecondary,
                     borderSide: BorderSide(
-                      color: Color(0xFF202123),
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
                   ),
                 ],
@@ -67,13 +70,13 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Sala de Estar',
                 startIcon: Icon(
                   Icons.house,
-                  color: Color(0xFFF5F5F5),
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 defaultEndIcon: Icons.lightbulb,
                 tappedEndIcon: Icons.lightbulb_outline,
                 onTap: () {
                   setState(() {
-                    isLightbulbTapped = !isLightbulbTapped;
+                    _isLightbulbTapped = !_isLightbulbTapped;
                   });
                 },
               ),
@@ -81,13 +84,13 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Perigo',
                 startIcon: Icon(
                   Icons.shield_moon_outlined,
-                  color: Color(0xFFD11111),
+                  color: Theme.of(context).colorScheme.error,
                 ),
                 defaultEndIcon: Icons.lightbulb,
                 tappedEndIcon: Icons.lightbulb_outline,
                 onTap: () {
                   setState(() {
-                    isLightbulbTapped = !isLightbulbTapped;
+                    _isLightbulbTapped = !_isLightbulbTapped;
                   });
                 },
               ),
@@ -95,13 +98,13 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Hora de Dormir',
                 startIcon: Icon(
                   Icons.mode_night_outlined,
-                  color: Color(0xFFF5F5F5),
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 defaultEndIcon: Icons.lightbulb,
                 tappedEndIcon: Icons.lightbulb_outline,
                 onTap: () {
                   setState(() {
-                    isLightbulbTapped = !isLightbulbTapped;
+                    _isLightbulbTapped = !_isLightbulbTapped;
                   });
                 },
               ),

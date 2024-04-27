@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Atalaia App',
       theme: AppTheme.lightTheme(),
+      // theme: AppTheme.darkTheme(),
       routes: {
         '/': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
