@@ -1,18 +1,28 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'pages/recover_confirmation_page.dart';
+import 'theme.dart';
+import 'pages/login_page.dart';
+import 'pages/recover_page.dart';
+import 'pages/signup_page.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      title: 'Atalaia App',
+      theme: AppTheme.lightTheme(),
+      routes: {
+        '/': (context) => LoginPage(),
+        '/signup': (context) => SignupPage(),
+        '/recover': (context) => RecoverPage(),
+        '/recover_confirmation': (context) => const RecoverConfirmationPage(),
+      },
+      initialRoute: '/',
     );
   }
 }
