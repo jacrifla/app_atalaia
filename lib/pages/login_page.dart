@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'example@example.com',
                         icon: Icon(Icons.account_circle_outlined),
                         errorText: '* Digite seu e-mail',
-                        // '* E-mail não encontrado' -> Se nao encontrar no banco de dados
+                        // 'E-mail não encontrado' -> Se nao encontrar no banco de dados
                       ),
                       BuildInput(
                         isPassword: true,
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: '******',
                         icon: Icon(Icons.key_outlined),
                         errorText: '* Digite sua senha',
-                        // '* Senha incorreta' -> Se nao encontrar no banco de dados
+                        // 'Senha incorreta' -> Se nao encontrar no banco de dados
                       ),
                     ],
                   ),
