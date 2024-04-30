@@ -54,6 +54,17 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Criar Conta',
+          style: TextStyle(
+              color: Color(0xFFF5F5F5),
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+        iconTheme: IconThemeData(color: Color(0xFFF5F5F5), size: 30),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),
