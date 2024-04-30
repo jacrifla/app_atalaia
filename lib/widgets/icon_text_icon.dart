@@ -8,7 +8,6 @@ class IconTextIconRow extends StatefulWidget {
   final IconData defaultEndIcon;
   final IconData tappedEndIcon;
   final VoidCallback? onTap;
-  final Color backgroundColor;
 
   const IconTextIconRow({
     Key? key,
@@ -17,7 +16,6 @@ class IconTextIconRow extends StatefulWidget {
     required this.defaultEndIcon,
     required this.tappedEndIcon,
     this.onTap,
-    this.backgroundColor = const Color(0xFF446D9D),
   }) : super(key: key);
 
   @override
@@ -39,7 +37,7 @@ class _IconTextIconRowState extends State<IconTextIconRow> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: widget.backgroundColor,
+            color: Theme.of(context).colorScheme.onSecondary,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
@@ -60,10 +58,11 @@ class _IconTextIconRowState extends State<IconTextIconRow> {
                   Expanded(
                     child: Text(
                       widget.labelText,
-                      style: const TextStyle(
-                          fontSize: 16.0,
-                          color: Color(0xFFF5F5F5),
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 20),
