@@ -24,27 +24,42 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.tune),
             title: Text('Presets'),
             onTap: () {},
           ),
           ListTile(
+            leading: Icon(Icons.lightbulb),
             title: Text('Pontos'),
             onTap: () {},
           ),
           ListTile(
+            leading: Icon(Icons.bar_chart),
             title: Text('Monitoramento'),
             onTap: () {},
           ),
           ListTile(
+            leading: Icon(Icons.person),
             title: Text('Perfil'),
             onTap: () {},
           ),
           ListTile(
+            leading: Icon(Icons.question_mark_outlined),
             title: Text('Ajuda'),
             onTap: () {},
           ),
           ListTile(
-            title: Text('Sair'),
+            tileColor: Theme.of(context).colorScheme.onSecondary,
+            leading: Icon(
+              Icons.logout,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            title: Text(
+              'Sair',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
             onTap: () {},
           ),
         ],
