@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Sala de Estar',
                 startIcon: Icon(
                   Icons.house,
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 defaultEndIcon: Icons.lightbulb,
                 tappedEndIcon: Icons.lightbulb_outline,
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Hora de Dormir',
                 startIcon: Icon(
                   Icons.mode_night_outlined,
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 defaultEndIcon: Icons.lightbulb,
                 tappedEndIcon: Icons.lightbulb_outline,
