@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:app_atalaia/pages/perfil_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -41,7 +42,14 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Perfil'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PerfilPage(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.question_mark_outlined),
