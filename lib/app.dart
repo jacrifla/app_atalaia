@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'pages/perfil_page.dart';
 import 'package:flutter/material.dart';
 import 'pages/recover_confirmation_page.dart';
 import 'theme.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignupPage(),
         '/recover': (context) => RecoverPage(),
         '/recover_confirmation': (context) => const RecoverConfirmationPage(),
+        '/perfil': (context) => const PerfilPage(),
       },
       initialRoute: '/',
     );
