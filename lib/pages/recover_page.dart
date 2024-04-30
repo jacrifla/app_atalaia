@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:app_atalaia/widgets/header.dart';
+
 import '../pages/recover_confirmation_page.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -18,17 +20,7 @@ class _RecoverPageState extends State<RecoverPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Recuperação',
-          style: TextStyle(
-              color: Color(0xFFF5F5F5),
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
-        ),
-        iconTheme: IconThemeData(color: Color(0xFFF5F5F5), size: 30),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+      appBar: Header(title: 'Recuperação'),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30),

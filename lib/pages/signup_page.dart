@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:app_atalaia/widgets/header.dart';
+
 import 'home_page.dart';
 import 'package:flutter/material.dart';
 import '../widgets/build_input.dart';
@@ -54,17 +56,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Criar Conta',
-          style: TextStyle(
-              color: Color(0xFFF5F5F5),
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
-        ),
-        iconTheme: IconThemeData(color: Color(0xFFF5F5F5), size: 30),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+      appBar: Header(title: 'Criar Conta'),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),
