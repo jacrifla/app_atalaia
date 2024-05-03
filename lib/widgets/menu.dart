@@ -10,23 +10,11 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(vertical: 40),
         children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          ),
           ListTile(
             leading: Icon(Icons.tune),
-            title: Text('Presets'),
+            title: Text('Grupos'),
             onTap: () {},
           ),
           ListTile(
