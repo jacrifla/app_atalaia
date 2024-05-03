@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:app_atalaia/pages/grupo_page.dart';
+import 'package:app_atalaia/pages/switch_page.dart';
 import 'package:flutter/material.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/icon_text_icon.dart';
@@ -45,6 +47,14 @@ class _HomePageState extends State<HomePage> {
                   ButtonIcon(
                     labelText: 'Grupos',
                     color: Theme.of(context).colorScheme.onPrimary,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GroupPage(),
+                        ),
+                      );
+                    },
                   ),
                   ButtonIcon(
                     labelText: 'Pontos',
@@ -53,6 +63,14 @@ class _HomePageState extends State<HomePage> {
                     borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.onSecondary,
                     ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SwitchPage(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
