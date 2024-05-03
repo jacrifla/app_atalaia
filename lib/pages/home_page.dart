@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         title: Text(
           'Home',
           style: TextStyle(
@@ -30,17 +32,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            onPressed: () {
-              _scaffoldKey.currentState!.openDrawer();
-            },
-          ),
-        ],
       ),
       drawer: CustomDrawer(),
       body: Center(
@@ -52,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ButtonIcon(
-                    labelText: 'Presets',
+                    labelText: 'Grupos',
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   ButtonIcon(
