@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import '../utils.dart';
 import 'home_page.dart';
 import '../pages/recover_page.dart';
 import '../widgets/build_input.dart';
@@ -21,7 +22,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _inputPassword = TextEditingController();
 
   @override
+  void dispose() {
+    _inputEmail.dispose();
+    _inputPassword.dispose();
+    super.dispose();
+  }
+
+  void _clearTextFields() {
+    _inputEmail.clear();
+    _inputPassword.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _clearTextFields();
     return Scaffold(
       body: Center(
         child: Padding(
@@ -50,11 +64,20 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       BuildInput(
                         controller: _inputEmail,
+                        keyboardType: TextInputType.emailAddress,
                         labelText: 'E-mail',
                         hintText: 'example@example.com',
                         icon: Icon(Icons.account_circle_outlined),
                         errorText: '* Digite seu e-mail',
-                        // 'E-mail não encontrado' -> Se nao encontrar no banco de dados
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '* Digite seu e-mail';
+                          }
+                          if (!isValidEmail(value)) {
+                            return '* Digite um e-mail válido';
+                          }
+                          return null;
+                        },
                       ),
                       BuildInput(
                         isPassword: true,
@@ -63,7 +86,15 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: '******',
                         icon: Icon(Icons.key_outlined),
                         errorText: '* Digite sua senha',
-                        // 'Senha incorreta' -> Se nao encontrar no banco de dados
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '* Digite sua senha';
+                          }
+                          if (value.length < 8) {
+                            return '* Senha deve ter no mínimo 8 caracteres';
+                          }
+                          return null;
+                        },
                       ),
                     ],
                   ),
