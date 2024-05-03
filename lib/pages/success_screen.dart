@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import '../widgets/button_icon.dart';
 
@@ -18,17 +20,16 @@ class SuccessScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Icon(
                 icon,
                 size: 150,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
                 message,
                 textAlign: TextAlign.center,
@@ -37,7 +38,7 @@ class SuccessScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
               ButtonIcon(
                 onPressed: onOKPressed,
                 icon: Icon(Icons.check),
