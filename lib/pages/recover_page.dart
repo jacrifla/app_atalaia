@@ -3,6 +3,7 @@
 import 'package:app_atalaia/widgets/header.dart';
 
 import '../pages/recover_confirmation_page.dart';
+import '../utils.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,17 @@ class RecoverPage extends StatefulWidget {
 class _RecoverPageState extends State<RecoverPage> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputEmailCel = TextEditingController();
+
+  String? _validateInput(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira seu e-mail ou telefone.';
+    }
+    if (!isValidEmail(value) && !isValidPhoneNumber(value)) {
+      return 'Por favor, insira um e-mail ou telefone válido.';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +53,7 @@ class _RecoverPageState extends State<RecoverPage> {
                     child: BuildInput(
                       controller: _inputEmailCel,
                       labelText: 'E-mail ou telefone',
-                      errorText: 'Digite o e-mail / telefone',
-                      // O e-mail / telefone não foi encontrado
+                      validator: _validateInput,
                     ),
                   ),
                 ],

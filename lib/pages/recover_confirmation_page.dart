@@ -21,6 +21,50 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
   final TextEditingController _inputPassword = TextEditingController();
   final TextEditingController _inputPasswordCheck = TextEditingController();
 
+  bool _arePasswordsEqual() {
+    return _inputPassword.text == _inputPasswordCheck.text;
+  }
+
+  void _handleSubmit() {
+    if (!_arePasswordsEqual()) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Erro'),
+          content: Text('As senhas não correspondem.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (_formState.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _inputPassword.dispose();
+    _inputPasswordCheck.dispose();
+    super.dispose();
+  }
+
+  void _clearTextFields() {
+    _inputPassword.clear();
+    _inputPasswordCheck.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +92,29 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
                           controller: _inputPassword,
                           labelText: 'Digite sua senha',
                           icon: Icon(Icons.key_outlined),
-                          errorText: 'Digite sua senha',
-                          //Senha fraca',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '* Digite sua senha';
+                            }
+                            if (value.length < 8) {
+                              return '* Senha deve ter no mínimo 8 caracteres';
+                            }
+                            return null;
+                          },
                         ),
                         BuildInput(
                           controller: _inputPasswordCheck,
                           labelText: 'Repita sua senha',
                           icon: Icon(Icons.key_outlined),
-                          errorText: '* A senha não corresponde',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '* Digite sua senha';
+                            }
+                            if (value.length < 8) {
+                              return '* Senha deve ter no mínimo 8 caracteres';
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
@@ -64,16 +123,7 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
               ),
               ButtonIcon(
                 icon: Icon(Icons.check),
-                onPressed: () {
-                  if (_formState.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ),
-                    );
-                  }
-                },
+                onPressed: _handleSubmit,
               )
             ],
           ),
