@@ -92,7 +92,6 @@ class _SignupPageState extends State<SignupPage> {
                           labelText: 'E-mail',
                           hintText: 'example@example.com',
                           icon: Icon(Icons.account_circle_outlined),
-                          errorText: 'Digite seu e-mail',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Digite seu e-mail';
@@ -105,11 +104,10 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         BuildInput(
                           controller: _inputCel,
-                          // keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.number,
                           labelText: 'Celular',
                           hintText: '(99) 99999-9999',
                           icon: Icon(Icons.phone_outlined),
-                          errorText: 'Digite seu número',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Digite seu e-mail';
@@ -134,7 +132,6 @@ class _SignupPageState extends State<SignupPage> {
                           labelText: 'Digite sua senha',
                           hintText: '*********',
                           icon: Icon(Icons.key_outlined),
-                          errorText: 'Digite sua senha',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '* Digite sua senha';
@@ -151,7 +148,6 @@ class _SignupPageState extends State<SignupPage> {
                           labelText: 'Repita sua senha',
                           hintText: '*********',
                           icon: Icon(Icons.key_outlined),
-                          errorText: 'A senha não corresponde',
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '* Digite sua senha';

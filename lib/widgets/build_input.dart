@@ -2,44 +2,40 @@ import 'package:flutter/material.dart';
 
 class BuildInput extends StatelessWidget {
   final String labelText;
-  final String? errorText;
   final String? hintText;
   final Icon icon;
   final TextEditingController? controller;
   final bool isPassword;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
 
   const BuildInput({
-    Key? key,
+    super.key,
     required this.labelText,
-    this.errorText,
     this.hintText,
     this.icon = const Icon(Icons.account_circle_outlined),
     required this.controller,
     this.isPassword = false,
     this.validator,
-  }) : super(key: key);
+    this.keyboardType,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return errorText;
-            }
-            return null;
-          },
+          validator: validator,
           controller: controller,
           obscureText: isPassword,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             labelText: labelText,
             hintText: hintText,
             prefixIcon: icon,
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 35),
       ],
     );
   }

@@ -62,34 +62,29 @@ class _PerfilPageState extends State<PerfilPage> {
                         BuildInput(
                           labelText: 'E-mail',
                           controller: _inputEmail,
-                          errorText: 'Digite seu e-mail',
                         ),
                         BuildInput(
                           labelText: 'Celular',
                           icon: Icon(Icons.phone_outlined),
                           controller: _inputCel,
-                          errorText: 'Digite seu celular',
                         ),
                         BuildInput(
                           labelText: 'Senha Atual',
                           icon: Icon(Icons.key_outlined),
                           isPassword: true,
                           controller: _inputPassword,
-                          errorText: 'Digite sua senha',
                         ),
                         BuildInput(
                           labelText: 'Nova Senha',
                           icon: Icon(Icons.key_outlined),
                           isPassword: true,
                           controller: _inputNewPassword,
-                          errorText: 'Digite sua nova senha',
                         ),
                         BuildInput(
                           labelText: 'Repita Sua Senha',
                           icon: Icon(Icons.key_outlined),
                           isPassword: true,
                           controller: _inputRepeatPassword,
-                          errorText: 'Repita sua nova senha',
                         )
                       ],
                     )),

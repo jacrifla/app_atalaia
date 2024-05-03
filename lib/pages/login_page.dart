@@ -68,13 +68,12 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'E-mail',
                         hintText: 'example@example.com',
                         icon: Icon(Icons.account_circle_outlined),
-                        errorText: '* Digite seu e-mail',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return '* Digite seu e-mail';
+                            return 'Digite seu e-mail';
                           }
                           if (!isValidEmail(value)) {
-                            return '* Digite um e-mail válido';
+                            return 'Digite um e-mail válido';
                           }
                           return null;
                         },
@@ -85,13 +84,12 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'Senha',
                         hintText: '******',
                         icon: Icon(Icons.key_outlined),
-                        errorText: '* Digite sua senha',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return '* Digite sua senha';
+                            return 'Digite sua senha';
                           }
                           if (value.length < 8) {
-                            return '* Senha deve ter no mínimo 8 caracteres';
+                            return 'Senha deve ter no mínimo 8 caracteres';
                           }
                           return null;
                         },

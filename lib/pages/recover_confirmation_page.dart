@@ -67,6 +67,7 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
 
   @override
   Widget build(BuildContext context) {
+    _clearTextFields();
     return Scaffold(
       appBar: Header(title: 'Nova Senha'),
       body: Center(
@@ -90,6 +91,7 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
                       children: [
                         BuildInput(
                           controller: _inputPassword,
+                          isPassword: true,
                           labelText: 'Digite sua senha',
                           icon: Icon(Icons.key_outlined),
                           validator: (value) {
@@ -104,6 +106,7 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
                         ),
                         BuildInput(
                           controller: _inputPasswordCheck,
+                          isPassword: true,
                           labelText: 'Repita sua senha',
                           icon: Icon(Icons.key_outlined),
                           validator: (value) {
