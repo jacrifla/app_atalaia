@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:app_atalaia/pages/home_page.dart';
 import 'package:app_atalaia/pages/perfil_page.dart';
 import 'package:app_atalaia/pages/switch_page.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,18 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
+              ItemMenu(
+                label: 'Home',
+                icon: Icon(Icons.home),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
+                },
+              ),
               ItemMenu(
                 label: 'Grupos',
                 icon: Icon(Icons.tune),
