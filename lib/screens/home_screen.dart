@@ -1,20 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
-import '../pages/grupo_page.dart';
-import '../pages/switch_page.dart';
+import 'group_screen.dart';
+import 'switch_screen.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/icon_text_icon.dart';
 import '../widgets/menu.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLightbulbTapped = false;
 
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      drawer: CustomDrawer(),
+      drawer: MenuDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => GroupPage(),
+                          builder: (context) => GroupScreen(),
                         ),
                       );
                     },

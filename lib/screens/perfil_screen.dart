@@ -40,7 +40,7 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: 'Perfil'),
-      drawer: CustomDrawer(),
+      drawer: MenuDrawer(),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),

@@ -15,7 +15,7 @@ class _SwitchPageState extends State<SwitchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(),
+      drawer: MenuDrawer(),
       appBar: Header(title: 'Pontos'),
       body: Center(
         child: Text('Pontos'),

@@ -1,13 +1,14 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-import '../pages/home_page.dart';
-import '../pages/perfil_page.dart';
-import '../pages/switch_page.dart';
-import '../pages/grupo_page.dart';
+import '../screens/home_screen.dart';
+import '../screens/perfil_screen.dart';
+import '../screens/switch_screen.dart';
+import '../screens/group_screen.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+class MenuDrawer extends StatelessWidget {
+  const MenuDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,8 @@ class CustomDrawer extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 82), // Espaçamento no topo do Drawer
+        // Espaçamento no topo do Drawer
+        SizedBox(height: 82),
         Container(
           width: MediaQuery.of(context).size.width * 0.6,
           height: screenHeight * 0.6,
@@ -41,7 +43,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => HomeScreen(),
                     ),
                   );
                 },
@@ -53,7 +55,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GroupPage(),
+                      builder: (context) => GroupScreen(),
                     ),
                   );
                 },

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
-import 'recover_confirmation_page.dart';
+import 'recover_confirmation_screen.dart';
 import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';

@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
-import 'pages/perfil_page.dart';
-import 'pages/recover_confirmation_page.dart';
-import 'pages/login_page.dart';
-import 'pages/recover_page.dart';
-import 'pages/signup_page.dart';
+import 'screens/perfil_screen.dart';
+import 'screens/recover_confirmation_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/recover_screen.dart';
+import 'screens/signup_screen.dart';
 import 'theme.dart';
 
 class MyApp extends StatelessWidget {

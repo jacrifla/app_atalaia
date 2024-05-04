@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import 'home_screen.dart';
 import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -45,7 +45,7 @@ class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => HomeScreen(),
         ),
       );
     }

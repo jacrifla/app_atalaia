@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
-import 'recover_page.dart';
-import 'signup_page.dart';
+import 'home_screen.dart';
+import 'recover_screen.dart';
+import 'signup_screen.dart';
 import '../widgets/build_input.dart';
 import '../widgets/build_row.dart';
 import '../widgets/button_icon.dart';
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => HomePage(),
+                              builder: (context) => HomeScreen(),
                             ),
                           );
                         }
