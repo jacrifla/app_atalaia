@@ -7,7 +7,7 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 
 class PerfilPage extends StatefulWidget {
-  const PerfilPage({Key? key}) : super(key: key);
+  const PerfilPage({super.key});
 
   @override
   State<PerfilPage> createState() => _PerfilPageState();

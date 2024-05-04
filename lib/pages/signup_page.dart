@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:app_atalaia/widgets/header.dart';
-
 import '../utils.dart';
 import 'home_page.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -86,6 +85,19 @@ class _SignupPageState extends State<SignupPage> {
                     key: _formState,
                     child: Column(
                       children: [
+                        BuildInput(
+                          controller: _inputEmail,
+                          keyboardType: TextInputType.emailAddress,
+                          labelText: 'Nome',
+                          hintText: 'John Doe',
+                          icon: Icon(Icons.account_circle_outlined),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Digite seu nome';
+                            }
+                            return null;
+                          },
+                        ),
                         BuildInput(
                           controller: _inputEmail,
                           keyboardType: TextInputType.emailAddress,

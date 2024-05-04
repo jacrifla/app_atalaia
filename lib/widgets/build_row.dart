@@ -6,11 +6,11 @@ class BuildRow extends StatelessWidget {
   final VoidCallback? onTap;
 
   const BuildRow({
-    Key? key,
+    super.key,
     required this.labelText,
     this.icon = const Icon(Icons.person_add_alt_outlined),
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

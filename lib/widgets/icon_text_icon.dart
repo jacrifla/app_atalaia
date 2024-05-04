@@ -10,13 +10,13 @@ class IconTextIconRow extends StatefulWidget {
   final VoidCallback? onTap;
 
   const IconTextIconRow({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.startIcon,
     required this.defaultEndIcon,
     required this.tappedEndIcon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   _IconTextIconRowState createState() => _IconTextIconRowState();

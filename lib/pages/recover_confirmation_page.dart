@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 
 class RecoverConfirmationPage extends StatefulWidget {
-  const RecoverConfirmationPage({Key? key}) : super(key: key);
+  const RecoverConfirmationPage({super.key});
 
   @override
   State<RecoverConfirmationPage> createState() =>

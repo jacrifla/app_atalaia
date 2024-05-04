@@ -9,11 +9,11 @@ class SuccessScreen extends StatelessWidget {
   final VoidCallback? onOKPressed;
 
   const SuccessScreen({
-    Key? key,
+    super.key,
     required this.message,
     required this.icon,
     this.onOKPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

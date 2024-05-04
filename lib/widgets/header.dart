@@ -1,12 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   const Header({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);

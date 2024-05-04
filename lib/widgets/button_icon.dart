@@ -11,14 +11,14 @@ class ButtonIcon extends StatelessWidget {
   final Color? color;
 
   const ButtonIcon({
-    Key? key,
+    super.key,
     this.labelText = '',
     this.onPressed,
     this.icon,
     this.backgroundColor,
     this.borderSide,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
