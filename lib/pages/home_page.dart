@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'package:app_atalaia/pages/grupo_page.dart';
-import 'package:app_atalaia/pages/switch_page.dart';
 import 'package:flutter/material.dart';
+
+import '../pages/grupo_page.dart';
+import '../pages/switch_page.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/icon_text_icon.dart';
 import '../widgets/menu.dart';

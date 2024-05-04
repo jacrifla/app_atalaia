@@ -1,12 +1,11 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/material.dart';
 
-import 'package:app_atalaia/widgets/header.dart';
-
-import '../pages/recover_confirmation_page.dart';
-import '../utils.dart';
+import 'recover_confirmation_page.dart';
+import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
-import 'package:flutter/material.dart';
+import '../utils.dart';
 
 class RecoverPage extends StatefulWidget {
   const RecoverPage({super.key});

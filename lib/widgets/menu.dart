@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:app_atalaia/pages/home_page.dart';
-import 'package:app_atalaia/pages/perfil_page.dart';
-import 'package:app_atalaia/pages/switch_page.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/home_page.dart';
+import '../pages/perfil_page.dart';
+import '../pages/switch_page.dart';
 import '../pages/grupo_page.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -71,11 +70,10 @@ class CustomDrawer extends StatelessWidget {
                   );
                 },
               ),
-              // ItemMenu(
-              //   label: 'Monitoramento',
-              //   icon: Icon(Icons.bar_chart),
-              //   height: itemHeight,
-              // ),
+              ItemMenu(
+                label: 'Monitoramento',
+                icon: Icon(Icons.bar_chart),
+              ),
               ItemMenu(
                 label: 'Perfil',
                 icon: Icon(Icons.person),
@@ -88,11 +86,10 @@ class CustomDrawer extends StatelessWidget {
                   );
                 },
               ),
-              // ItemMenu(
-              //   label: 'Ajuda',
-              //   icon: Icon(Icons.question_mark_outlined),
-              //   height: itemHeight,
-              // ),
+              ItemMenu(
+                label: 'Ajuda',
+                icon: Icon(Icons.question_mark_outlined),
+              ),
               Container(
                 color: Theme.of(context).colorScheme.onSecondary,
                 child: ItemMenu(

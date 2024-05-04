@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+
 import '../widgets/button_icon.dart';
 
 class SuccessScreen extends StatelessWidget {

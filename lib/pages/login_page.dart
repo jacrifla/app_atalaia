@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
-import '../utils.dart';
+
 import 'home_page.dart';
-import '../pages/recover_page.dart';
+import 'recover_page.dart';
+import 'signup_page.dart';
 import '../widgets/build_input.dart';
 import '../widgets/build_row.dart';
 import '../widgets/button_icon.dart';
-import '../pages/signup_page.dart';
+import '../utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

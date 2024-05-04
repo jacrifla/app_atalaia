@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'package:app_atalaia/widgets/header.dart';
-import '../utils.dart';
-import 'home_page.dart';
 import 'package:flutter/material.dart';
+
+import 'home_page.dart';
+import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
+import '../utils.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:app_atalaia/widgets/header.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/header.dart';
 import '../widgets/menu.dart';
 
 class SwitchPage extends StatefulWidget {

@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:app_atalaia/widgets/header.dart';
 import 'package:flutter/material.dart';
-import 'success_screen.dart';
+
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
+import 'success_screen.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
@@ -39,6 +40,7 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: 'Perfil'),
+      drawer: CustomDrawer(),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),

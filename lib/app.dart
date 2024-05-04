@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/material.dart';
 
 import 'pages/perfil_page.dart';
-import 'package:flutter/material.dart';
 import 'pages/recover_confirmation_page.dart';
-import 'theme.dart';
 import 'pages/login_page.dart';
 import 'pages/recover_page.dart';
 import 'pages/signup_page.dart';
+import 'theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
