@@ -1,14 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-import 'group_screen.dart';
-import 'switch_screen.dart';
-import '../widgets/button_icon.dart';
-import '../widgets/icon_text_icon.dart';
 import '../widgets/menu.dart';
+import '../widgets/button_icon.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,7 +14,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isLightbulbTapped = false;
+
+  // Variável para controlar qual conteúdo exibir abaixo do card
+  String _selectedContent = 'Guarda';
+
+  // Variável para controlar a cor de fundo do card
+  Color _cardBackgroundColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -35,91 +38,97 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      drawer: MenuDrawer(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
+      endDrawer: MenuDrawer(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ButtonIcon(
-                    labelText: 'Grupos',
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GroupScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  ButtonIcon(
-                    labelText: 'Pontos',
-                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SwitchPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 50),
-              IconTextIconRow(
-                labelText: 'Sala de Estar',
-                startIcon: Icon(
-                  Icons.house,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                defaultEndIcon: Icons.lightbulb,
-                tappedEndIcon: Icons.lightbulb_outline,
-                onTap: () {
+              ButtonIcon(
+                labelText: 'Grupos',
+                onPressed: () {
                   setState(() {
-                    _isLightbulbTapped = !_isLightbulbTapped;
+                    _selectedContent = 'Grupos';
                   });
                 },
               ),
-              IconTextIconRow(
-                labelText: 'Perigo',
-                startIcon: Icon(
-                  Icons.shield_moon_outlined,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                defaultEndIcon: Icons.lightbulb,
-                tappedEndIcon: Icons.lightbulb_outline,
-                onTap: () {
+              ButtonIcon(
+                labelText: 'Pontos',
+                onPressed: () {
                   setState(() {
-                    _isLightbulbTapped = !_isLightbulbTapped;
-                  });
-                },
-              ),
-              IconTextIconRow(
-                labelText: 'Hora de Dormir',
-                startIcon: Icon(
-                  Icons.mode_night_outlined,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                defaultEndIcon: Icons.lightbulb,
-                tappedEndIcon: Icons.lightbulb_outline,
-                onTap: () {
-                  setState(() {
-                    _isLightbulbTapped = !_isLightbulbTapped;
+                    _selectedContent = 'Pontos';
                   });
                 },
               ),
             ],
           ),
-        ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              elevation: 3,
+              color: _cardBackgroundColor, // Definindo a cor de fundo do card
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.security,
+                          size: 50,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Guarda',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Sua guarda não está ativa no momento.',
+                            ),
+                            SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  // Alternando entre a cor de alerta e a cor padrão
+                                  _cardBackgroundColor =
+                                      _cardBackgroundColor == Colors.red
+                                          ? Colors.white
+                                          : Colors.red;
+                                });
+                                // Implementar lógica para ativar a guarda aqui
+                              },
+                              child: Text('Ativar Guarda Agora'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          // Exibir conteúdo abaixo do card com base na seleção do usuário
+          if (_selectedContent == 'Grupos') ...[
+            // Exibir grupos aqui
+            Center(child: Text('Conteúdo dos Grupos')),
+          ] else if (_selectedContent == 'Pontos') ...[
+            // Exibir pontos aqui
+            Center(child: Text('Conteúdo dos Pontos')),
+          ],
+        ],
       ),
     );
   }
