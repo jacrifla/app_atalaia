@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 import '../widgets/menu.dart';
@@ -26,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme:
             IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         title: Text(
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(20),
             child: Card(
               elevation: 3,
-              color: _cardBackgroundColor, // Definindo a cor de fundo do card
+              color: _cardBackgroundColor,
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
