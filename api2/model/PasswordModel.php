@@ -2,7 +2,7 @@
 
 require_once './core/ConnectionMYSQL.php';
 require_once './core/ExceptionPdo.php';
-
+//EM CONSTRUÇÃO
 class PasswordModel {
 
 

@@ -7,6 +7,29 @@ class UserModel
 {
 
 
+    public static function getUserByUUID($userId){
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+    
+    
+            $stmt = $pdo->prepare('
+                SELECT id 
+                FROM tb_user 
+                WHERE uuid = ? 
+                    AND deleted_at IS NULL'
+            );
+            
+            $stmt->execute([$userId]);
+    
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public static function checkUserExists(array $data)
     {
         try {
