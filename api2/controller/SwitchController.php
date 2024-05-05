@@ -14,6 +14,8 @@ class SwitchController
             
             $data            = $request->bodyJson();
             $mac_address     = $data['mac_address'];
+            $user            = UserModel::getUserByUUID($data['user_id']);
+            $data['user_id'] = $user['id'];
             $macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
             $switchExists    = SwitchModel::checkSwitchExists($data);
             
@@ -33,8 +35,7 @@ class SwitchController
                         ], 400);
                     endif;
                 }else if ($macAvailable){
-                    $user = UserModel::getUserByUUID($data['uuid']);
-                    $data['user_id'] = $user['id'];
+                   
                     
                     $reslt = SwitchModel::createSwitch($data);
                     
@@ -100,7 +101,7 @@ class SwitchController
             
             $data = $request->bodyJson();
             
-            $data = SwitchModel::softDelete($data['uuid']);
+            $data = SwitchModel::softDelete($data['mac_address']);
             
             if ($data) {
                 $response::json([

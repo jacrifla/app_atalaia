@@ -66,10 +66,10 @@ class SwitchModel
     
     
             $stmt = $pdo->prepare('
-                SELECT uuid 
+                SELECT s.id 
                 FROM tb_switch s
             JOIN tb_user u ON s.user_id = u.id
-            WHERE u.uuid = ?  AND s.mac_address = ? '
+            WHERE u.id = ?  AND s.mac_address = ? '
             );
             
             $stmt->execute([$data['user_id'],$data['mac_address']]);
@@ -125,8 +125,8 @@ class SwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ? WHERE uuid = ?');
-            $stmt->execute([$data['name'], $data['watts'], $data['uuid']]);
+            $stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ? WHERE mac_address = ?');
+            $stmt->execute([$data['name'], $data['watts'], $data['mac_address']]);
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
@@ -136,12 +136,12 @@ class SwitchModel
         }
     }
 
-    public static function softDelete($switchId)
+    public static function softDelete($mac_address)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            $stmt = $pdo->prepare('UPDATE tb_switch SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
-            $stmt->execute([$switchId]);
+            $stmt = $pdo->prepare('UPDATE tb_switch SET deleted_at = CURRENT_TIMESTAMP WHERE mac_address = ?');
+            $stmt->execute([$mac_address]);
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {

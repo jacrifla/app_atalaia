@@ -23,7 +23,7 @@ class MacModel
     
             $mac_record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if(($mac_record->rowCount() <= 0) || $mac_record['is_used'] ){
+            if(($stmt->rowCount() <= 0) || $mac_record['is_used'] ){
                 return null;
             }
 
@@ -41,7 +41,7 @@ class MacModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('UPDATE tb_mac_addressess SET is_used = true WHERE mac_address = ?');
+            $stmt = $pdo->prepare('UPDATE tb_mac_address SET is_used = true WHERE mac_address = ?');
             $stmt->execute([$mac_address]);
 
             return ($stmt->rowCount() > 0);
