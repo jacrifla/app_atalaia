@@ -3,7 +3,7 @@
 require_once './core/ConnectionMYSQL.php';
 require_once './core/ExceptionPdo.php';
 
-class RegisterModel
+class SwitchModel
 {
     public static function getSwitches($userId)
     {
