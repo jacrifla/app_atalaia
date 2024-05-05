@@ -48,8 +48,8 @@ class SwitchModel
         try {
 
             $pdo = ConnectionMYSQL::getInstance();
-            stmt = $pdo->prepare('UPDATE tb_switch SET is_active = ? WHERE uuid = ?');
-            $stmt->execute([$data['is_active'], $data['uuid']]);
+            stmt = $pdo->prepare('UPDATE tb_switch SET is_active = ? WHERE mac_address = ?');
+            $stmt->execute([$data['is_active'], $data['mac_address']]);
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
