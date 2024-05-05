@@ -30,13 +30,14 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
     Icons.dry_cleaning,
     Icons.clean_hands,
     Icons.report_problem_rounded,
+    Icons.cloud_outlined,
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: 'Criar Grupo'),
-      drawer: MenuDrawer(),
+      endDrawer: MenuDrawer(),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Center(
@@ -72,16 +73,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     child: Icon(icon),
                   );
                 }).toList(),
-              ),
-              CheckboxListTile(
-                title: Text('Grupo Comum'),
-                value: groupCommon,
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (value) {
-                  setState(() {
-                    groupCommon = value ?? true;
-                  });
-                },
               ),
               CheckboxListTile(
                 title: Text('Horário Aleatório'),
