@@ -51,7 +51,7 @@ class GroupSwitchModel
         try {
 
             $pdo = ConnectionMYSQL::getInstance();
-            stmt = $pdo->prepare('UPDATE tb_switch SET is_active = ? WHERE uuid = ?');
+            $stmt = $pdo->prepare('UPDATE tb_switch SET is_active = ? WHERE uuid = ?');
             $stmt->execute([$data['is_active'], $data['uuid']]);
 
             return ($stmt->rowCount() > 0);
@@ -112,7 +112,7 @@ class GroupSwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ?, deleted_at = NULL WHERE mac_address = ?');
+            $stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ?, deleted_at = NULL WHERE mac_address = ?');
             $stmt->execute([$data['name'], $data['watts'], $data['mac_address']]);
 
             return ($stmt->rowCount() > 0);
@@ -128,7 +128,7 @@ class GroupSwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ? WHERE uuid = ?');
+            $stmt = $pdo->prepare('UPDATE tb_switch SET name = ?, watts = ? WHERE uuid = ?');
             $stmt->execute([$data['name'], $data['watts'], $data['uuid']]);
 
             return ($stmt->rowCount() > 0);
@@ -143,7 +143,7 @@ class GroupSwitchModel
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            stmt = $pdo->prepare('UPDATE tb_switch SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
+            $stmt = $pdo->prepare('UPDATE tb_switch SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
             $stmt->execute([$switchId]);
 
             return ($stmt->rowCount() > 0);
