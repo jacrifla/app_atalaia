@@ -7,14 +7,14 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import 'success_screen.dart';
 
-class PerfilPage extends StatefulWidget {
-  const PerfilPage({super.key});
+class PerfilScreen extends StatefulWidget {
+  const PerfilScreen({super.key});
 
   @override
-  State<PerfilPage> createState() => _PerfilPageState();
+  State<PerfilScreen> createState() => _PerfilScreenState();
 }
 
-class _PerfilPageState extends State<PerfilPage> {
+class _PerfilScreenState extends State<PerfilScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputCel = TextEditingController();
@@ -40,7 +40,7 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: 'Perfil'),
-      drawer: MenuDrawer(),
+      endDrawer: MenuDrawer(),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(30.0),

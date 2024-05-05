@@ -7,14 +7,14 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../utils.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupScreenState extends State<SignupScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputCel = TextEditingController();

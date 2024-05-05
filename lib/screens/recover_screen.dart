@@ -7,14 +7,14 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../utils.dart';
 
-class RecoverPage extends StatefulWidget {
-  const RecoverPage({super.key});
+class RecoverScreen extends StatefulWidget {
+  const RecoverScreen({super.key});
 
   @override
-  State<RecoverPage> createState() => _RecoverPageState();
+  State<RecoverScreen> createState() => _RecoverScreenState();
 }
 
-class _RecoverPageState extends State<RecoverPage> {
+class _RecoverScreenState extends State<RecoverScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputEmailCel = TextEditingController();
 
@@ -63,7 +63,7 @@ class _RecoverPageState extends State<RecoverPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RecoverConfirmationPage(),
+                        builder: (context) => RecoverConfirmationScreen(),
                       ),
                     );
                   }

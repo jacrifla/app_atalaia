@@ -6,15 +6,15 @@ import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 
-class RecoverConfirmationPage extends StatefulWidget {
-  const RecoverConfirmationPage({super.key});
+class RecoverConfirmationScreen extends StatefulWidget {
+  const RecoverConfirmationScreen({super.key});
 
   @override
-  State<RecoverConfirmationPage> createState() =>
-      _RecoverConfirmationPageState();
+  State<RecoverConfirmationScreen> createState() =>
+      _RecoverConfirmationScreenState();
 }
 
-class _RecoverConfirmationPageState extends State<RecoverConfirmationPage> {
+class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputPassword = TextEditingController();
   final TextEditingController _inputPasswordCheck = TextEditingController();
