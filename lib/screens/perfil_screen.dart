@@ -25,7 +25,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
       MaterialPageRoute(
         builder: (context) => SuccessScreen(
           message: 'Senha alterada com sucesso',
-          icon: Icons.check_circle_outline,
           onOKPressed: () {
             Navigator.of(context).pop();
           },
