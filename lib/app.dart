@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme(),
       // theme: AppTheme.darkTheme(),
       routes: {
-        '/': (context) => LoginPage(),
-        '/signup': (context) => SignupPage(),
-        '/recover': (context) => RecoverPage(),
-        '/recover_confirmation': (context) => const RecoverConfirmationPage(),
-        '/perfil': (context) => const PerfilPage(),
+        '/': (context) => LoginScreen(),
+        '/signup': (context) => SignupScreen(),
+        '/recover': (context) => RecoverScreen(),
+        '/recover_confirmation': (context) => const RecoverConfirmationScreen(),
+        '/perfil': (context) => const PerfilScreen(),
       },
       initialRoute: '/',
     );
