@@ -25,6 +25,23 @@ class SwitchModel
         }
     }
 
+    public static function getSwitch($mac_address)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT * 
+            FROM tb_switch 
+            WHERE mac_address = ?');
+            $stmt->execute([$mac_address]);
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
     //Atualiza se o switch ta aceso ou apagado
     public static function toggleSwitch($data)
     {

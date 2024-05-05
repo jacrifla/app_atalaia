@@ -3,6 +3,7 @@
 require_once 'Http.php';
 
 Http::get('/switches', 'SwitchController@getSwitches');
+Http::get('/switch', 'SwitchController@getSwitch');
 // Http::get('/switchgroup', 'GroupSwitchController@getGroups');
 Http::post('/login', 'LoginController@login');
 Http::post('/register', 'RegisterController@createUser');

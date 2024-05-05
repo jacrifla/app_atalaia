@@ -6,9 +6,6 @@ require_once './model/MacModel.php';
 //somente uso interno
 class MacAddressController
 {
-    private function __construct()
-    {
-    }
 
     public function insert(Request $request, Response $response)
     {

@@ -5,17 +5,37 @@ require_once './core/ExceptionPdo.php';
 
 class GroupSwitchModel
 {
-    public static function getSwitches($userId)
+    public static function getGroups($userId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT g.* 
+            FROM tb_group g
+            JOIN tb_user u ON g.user_id = u.id
+            WHERE u.uuid = ?            
+            AND g.deleted_at IS NULL');
+            $stmt->execute([$userId]);
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public static function getSwitchesInGroup($groupId)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('SELECT s.* 
             FROM tb_switch s
-            JOIN tb_user u ON s.user_id = u.id
-            WHERE u.uuid = ?            
+            JOIN tb_group g ON s.group_id = g.id
+            WHERE g.uuid = ?            
             AND s.deleted_at IS NULL');
-            $stmt->execute([$userId]);
+            $stmt->execute([$groupId]);
 
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
@@ -67,7 +87,7 @@ class GroupSwitchModel
     }
 
 
-    public static function createSwitch(array $data)
+    public static function createGroup(array $data)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();

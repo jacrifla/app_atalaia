@@ -41,7 +41,7 @@ class MacModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            stmt = $pdo->prepare('UPDATE tb_mac_address SET is_used = true WHERE mac_address = ?');
+            $stmt = $pdo->prepare('UPDATE tb_mac_addressess SET is_used = true WHERE mac_address = ?');
             $stmt->execute([$mac_address]);
 
             return ($stmt->rowCount() > 0);
