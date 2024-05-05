@@ -19,6 +19,7 @@ class AppTheme {
             TextStyle(color: Colors.black), // Cor do texto do AppBar
       ),
       iconTheme: const IconThemeData(color: Color(0xFF001F3E)),
+      buttonTheme: const ButtonThemeData(disabledColor: Color(0xFFCCCCCC)),
     );
   }
 
@@ -41,6 +42,7 @@ class AppTheme {
             TextStyle(color: Colors.white), // Cor do texto do AppBar
       ),
       iconTheme: const IconThemeData(color: Color(0xFF001F3E)),
+      buttonTheme: const ButtonThemeData(disabledColor: Color(0xFF999999)),
     );
   }
 }
