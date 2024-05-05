@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ButtonIcon extends StatelessWidget {
   final String labelText;
   final VoidCallback? onPressed;
-  final Icon? icon; // Tornando o ícone opcional
+  final Icon? icon;
   final Color? backgroundColor;
   final BorderSide? borderSide;
   final Color? color;
@@ -14,7 +14,7 @@ class ButtonIcon extends StatelessWidget {
     Key? key,
     this.labelText = '',
     this.onPressed,
-    this.icon, // Ícone agora é opcional
+    this.icon,
     this.backgroundColor,
     this.borderSide,
     this.color,
