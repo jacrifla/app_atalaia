@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
+import 'help_screen.dart';
 import 'home_screen.dart';
 import 'recover_screen.dart';
 import 'signup_screen.dart';
@@ -9,14 +10,14 @@ import '../widgets/build_row.dart';
 import '../widgets/button_icon.dart';
 import '../utils.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignupPage(),
+                                builder: (context) => SignupScreen(),
                               ),
                             );
                           },
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RecoverPage(),
+                                builder: (context) => RecoverScreen(),
                               ),
                             );
                           },
@@ -129,6 +130,14 @@ class _LoginPageState extends State<LoginPage> {
                         BuildRow(
                           labelText: 'Preciso de Ajuda',
                           icon: Icon(Icons.question_mark_outlined),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HelpScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
