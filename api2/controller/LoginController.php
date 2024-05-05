@@ -24,7 +24,7 @@ class LoginController
             //     return $validationResult;
             // }
 
-            $data = $request->body();
+            $data = $request->bodyJson();
 
             $hasUser = UserModel::checkUserExists($data);
             if($hasUser){
