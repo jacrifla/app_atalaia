@@ -89,8 +89,8 @@ class UserModel
             $sql = rtrim($sql, ', ');
 
             // Adiciona a cláusula WHERE para especificar o usuário a ser atualizado
-            $sql .= ' WHERE id = :id';
-            $params[':id'] = $data['id'];
+            $sql .= ' WHERE uuid = :uuid';
+            $params[':uuid'] = $data['uuid'];
 
             // Executa a query SQL
             $stmt = $pdo->prepare($sql);
@@ -105,13 +105,13 @@ class UserModel
     }
 
 
-    public static function softDelete(int $userId)
+    public static function softDelete($userId)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
     
             // Prepara a query SQL para atualizar o campo deleted_at
-            $sql = 'UPDATE tb_user SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';
+            $sql = 'UPDATE tb_user SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?';
     
             // Executa a query SQL
             $stmt = $pdo->prepare($sql);

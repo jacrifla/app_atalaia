@@ -15,7 +15,7 @@ class LoginModel
     
     
             $stmt = $pdo->prepare('
-                SELECT id, name, email, phone, password_hash 
+                SELECT uuid, name, email, phone, password_hash 
                 FROM tb_user 
                 WHERE (email = ? OR phone = ?) 
                     AND deleted_at IS NULL'
