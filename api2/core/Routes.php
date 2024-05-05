@@ -10,3 +10,8 @@ Http::post('/switches/new', 'SwitchController@createSwitch');
 Http::put('/switches/edit', 'SwitchController@updateSwitch');
 Http::put('/switches/toggle', 'SwitchController@toggleSwitch');
 Http::put('/switches/delete', 'SwitchController@deleteSwitch');
+
+//Rotas internas
+Http::post('/macAddress', 'MacAddressController@insert');
+Http::put('/macAddress/edit', 'MacAddressController@update');
+Http::delete('/macAddress/detele', 'MacAddressController@delete');

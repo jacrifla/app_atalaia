@@ -52,7 +52,7 @@ class MacModel
         }
     }
 
-    //Uso interno somente
+    //USO INTERNO
     public static function insert($mac_address){
         try {
             $pdo = ConnectionMYSQL::getInstance();
@@ -72,5 +72,47 @@ class MacModel
         }
 
     }
+
+    //USO INTERNO
+    public static function delete($id){
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+    
+            $stmt = $pdo->prepare('
+                DELETE FROM tb_mac_address 
+                WHERE id = ?
+            ');
+    
+            $stmt->execute([$id]);
+    
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    //USO INTERNO
+    public static function update($id, $new_mac_address){
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+    
+            $stmt = $pdo->prepare('
+                UPDATE tb_mac_address 
+                SET mac_address = ?
+                WHERE id = ?
+            ');
+    
+            $stmt->execute([ $mac_address, $id]);
+    
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+    
 
 }

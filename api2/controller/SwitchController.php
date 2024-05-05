@@ -13,7 +13,8 @@ class SwitchController
         try {
             
             $data            = $request->bodyJson();
-            $macAvailable    = MacModel::checkMacAddressAvailable($data['mac_address']);
+            $mac_address     = $data['mac_address'];
+            $macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
             $switchExists    = SwitchModel::checkSwitchExists($data);
             
             
@@ -35,12 +36,13 @@ class SwitchController
                     $user = UserModel::getUserByUUID($data['uuid']);
                     $data['user_id'] = $user['id'];
                     
-                    $data = SwitchModel::createSwitch($data);
+                    $reslt = SwitchModel::createSwitch($data);
                     
-                    if ($data) :
+                    if ($reslt) :
+                        MacModel::updateMacAddressRecord($mac_address);
                         $response::json([
                             'status' => 'success',
-                            'dados' => $data
+                            'dados' => $reslt
                         ], 200);
                         else :
                             $response::json([

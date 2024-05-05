@@ -45,7 +45,7 @@ class UserModel
             
             $stmt->execute([$data['email'], $data['phone']]);
     
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return ($stmt->rowCount() > 0);
     
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
@@ -53,41 +53,6 @@ class UserModel
             throw new \Exception($e->getMessage());
         }
     }
-
-    public static function login(string $email, string $phone, string $hashedPassword)
-{
-    try {
-        $pdo = ConnectionMYSQL::getInstance();
-
-        $stmt = $pdo->prepare('
-            SELECT id, name, email, phone, password_hash 
-            FROM tb_user 
-            WHERE (email = ? OR phone = ?) 
-                AND deleted_at IS NULL'
-        );
-        
-        $stmt->execute([$email, $phone]);
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user) {
-            return null;
-        }
-
-        // Verifica se a senha fornecida condiz com o hash salvo no banco
-        if (!password_verify($hashedPassword, $user['password_hash'])) {
-            throw new \Exception('Senha incorreta');
-        }
-
-        // Retorna os dados do usuário
-        unset($user['password_hash']); // Não envie o hash da senha de volta
-        return $user;
-    } catch (\PDOException $e) {
-        throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-    } catch (\Exception $e) {
-        throw new \Exception($e->getMessage());
-    }
-}
 
 
     public static function updateUserInfo(array $data)
