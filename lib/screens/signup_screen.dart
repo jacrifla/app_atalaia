@@ -103,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           keyboardType: TextInputType.emailAddress,
                           labelText: 'E-mail',
                           hintText: 'example@example.com',
-                          icon: Icon(Icons.account_circle_outlined),
+                          icon: Icon(Icons.email_outlined),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Digite seu e-mail';
