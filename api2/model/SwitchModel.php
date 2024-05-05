@@ -43,18 +43,19 @@ class RegisterModel
     }
 
 
-    public static function checkSwitchExists($mac_address){
+    public static function checkSwitchExists($data){
         try {
             $pdo = ConnectionMYSQL::getInstance();
     
     
             $stmt = $pdo->prepare('
                 SELECT uuid 
-                FROM tb_switch 
-                WHERE mac_address = ? '
+                FROM tb_switch s
+            JOIN tb_user u ON s.user_id = u.id
+            WHERE u.uuid = ?  AND s.mac_address = ? '
             );
             
-            $stmt->execute([$mac_address]);
+            $stmt->execute([$data['user_id'],$data['mac_address']]);
     
             return $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -72,11 +73,11 @@ class RegisterModel
             $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('
-            INSERT INTO tb_switch (uuid, name, watts, mac_address) 
-            VALUES (UUID(), ?, ?, ?)'
+            INSERT INTO tb_switch (uuid, name, watts, mac_address, user_id) 
+            VALUES (UUID(), ?, ?, ?, ?)'
         );
 
-        $stmt->execute([$data['name'], $data['watts'], $data['mac_address']]);
+        $stmt->execute([$data['name'], $data['watts'], $data['mac_address'], $data['user_id']]);
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
