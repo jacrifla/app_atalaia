@@ -2,14 +2,14 @@
 
 define('SGBD'       , 'mysql'       );
 define('HOST'       , 'localhost'   );
-define('DBNAME'     , 'atalaia'     );
+define('DBNAME'     , 'db_atalaia'  );
 define('CHARSET'    , 'utf8'        );
 define('USER'       , 'root'        );
 define('PASSWORD'   , ''            );
 define('SERVER'     , 'windows'     );
 define('PORTA_DB'   , 3306          );
 
-class ConnectionDB
+class ConnectionMYSQL
 {
     private static $pdo;
 

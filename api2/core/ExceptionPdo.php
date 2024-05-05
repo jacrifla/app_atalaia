@@ -20,8 +20,10 @@ class ExceptionPdo
             return 'Syntax error sql';
         elseif (strpos($error, 'authentication') !== false) :
             return 'Credentials fail';
-        else :
-            return 'Internal error';
+        else:
+            return $error;
+        // else :
+        //     return 'Internal error';
         endif;
     }
 }

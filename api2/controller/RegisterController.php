@@ -10,7 +10,7 @@ class RegisterController
     public function createUser(Request $request, Response $response)
     {
         try {
-            $data = $request->body();
+            $data = $request->bodyJson();
             
             $hasUser = UserModel::checkUserExists($data);
 
@@ -23,7 +23,7 @@ class RegisterController
                 $success = RegisterModel::insert($data);
                 
                 if ($success) {     
-                                   
+
                     $response::json([
                         'status' => 'success',
                         'dados' => $data

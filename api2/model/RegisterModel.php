@@ -1,7 +1,7 @@
 <?php
 
-require './core/ConnectionDB.php';
-require './core/ExceptionPdo.php';
+require_once './core/ConnectionMYSQL.php';
+require_once './core/ExceptionPdo.php';
 
 class RegisterModel
 {
@@ -10,7 +10,7 @@ class RegisterModel
     public static function insert(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
     
             // Generates hash password
             $passwordHash = password_hash($data['password_hash'], PASSWORD_DEFAULT);

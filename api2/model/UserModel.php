@@ -1,7 +1,7 @@
 <?php
 
-require './core/ConnectionDB.php';
-require './core/ExceptionPdo.php';
+require_once './core/ConnectionMYSQL.php';
+require_once './core/ExceptionPdo.php';
 
 class UserModel
 {
@@ -10,7 +10,7 @@ class UserModel
     public static function checkUserExists(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
     
     
             $stmt = $pdo->prepare('
@@ -34,7 +34,7 @@ class UserModel
     public static function login(string $email, string $phone, string $hashedPassword)
 {
     try {
-        $pdo = ConnectionDB::getInstance();
+        $pdo = ConnectionMYSQL::getInstance();
 
         $stmt = $pdo->prepare('
             SELECT id, name, email, phone, password_hash 
@@ -70,7 +70,7 @@ class UserModel
     public static function updateUserInfo(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             // Prepara a query SQL para atualizar os dados do usuário
             $sql = 'UPDATE tb_user SET ';
@@ -108,7 +108,7 @@ class UserModel
     public static function softDelete(int $userId)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
     
             // Prepara a query SQL para atualizar o campo deleted_at
             $sql = 'UPDATE tb_user SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';

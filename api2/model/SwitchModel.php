@@ -1,14 +1,14 @@
 <?php
 
-require './core/ConnectionDB.php';
-require './core/ExceptionPdo.php';
+require_once './core/ConnectionMYSQL.php';
+require_once './core/ExceptionPdo.php';
 
 class RegisterModel
 {
     public static function show()
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('SELECT * FROM tb_user');
             $stmt->execute();
@@ -24,7 +24,7 @@ class RegisterModel
     public static function find(int $codigo)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('SELECT * from tb_produto WHERE codigo = ?');
             $stmt->execute([$codigo]);
@@ -40,7 +40,7 @@ class RegisterModel
     public static function login(string $email, string $phone, string $hashedPassword)
 {
     try {
-        $pdo = ConnectionDB::getInstance();
+        $pdo = ConnectionMYSQL::getInstance();
 
         $stmt = $pdo->prepare('
             SELECT id, name, email, phone, password_hash 
@@ -76,7 +76,7 @@ class RegisterModel
     public static function insert(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('INSERT INTO tb_produto (descricao, valor) VALUES(?, ?)');
             $stmt->execute([$data['descricao'], $data['valor']]);
@@ -92,7 +92,7 @@ class RegisterModel
     public static function update(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('UPDATE tb_produto SET descricao = ?, valor = ? WHERE codigo = ?');
             $stmt->execute([$data['descricao'], $data['valor'], $data['codigo']]);
@@ -108,7 +108,7 @@ class RegisterModel
     public static function delete(int $codigo)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('DELETE FROM tb_produto WHERE codigo = ?');
             $stmt->execute([$codigo]);
@@ -124,7 +124,7 @@ class RegisterModel
     public static function lastInsertId()
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             return $pdo->lastInsertId();
         } catch (\PDOException $e) {

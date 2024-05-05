@@ -1,7 +1,7 @@
 <?php
 
-require './core/ConnectionDB.php';
-require './core/ExceptionPdo.php';
+require_once './core/ConnectionMYSQL.php';
+require_once './core/ExceptionPdo.php';
 
 class LoginModel
 {
@@ -11,7 +11,7 @@ class LoginModel
     public static function login(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
     
     
             $stmt = $pdo->prepare('

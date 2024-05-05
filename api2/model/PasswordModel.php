@@ -1,7 +1,7 @@
 <?php
 
-require './core/ConnectionDB.php';
-require './core/ExceptionPdo.php';
+require_once './core/ConnectionMYSQL.php';
+require_once './core/ExceptionPdo.php';
 
 class PasswordModel {
 
@@ -9,7 +9,7 @@ class PasswordModel {
     public static function changePassword(array $data)
     {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
     
             // Prepara a query SQL para atualizar o campo deleted_at // Generates hash password
             $passwordHash = password_hash($data['password_hash'], PASSWORD_DEFAULT);
@@ -31,7 +31,7 @@ class PasswordModel {
     //Password Reset Methods
     public static function generateToken(array $data) {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
 
             $email = $data['email'];
             $token = $data['token'];
@@ -48,7 +48,7 @@ class PasswordModel {
 
     public static function getTokenByEmail(array $data) {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
             $email = $data['email'];
 
             $stmt = $pdo->prepare("SELECT * FROM tb_user_reset WHERE email = ?");
@@ -63,7 +63,7 @@ class PasswordModel {
 
     public static function deleteTokenByEmail(array $data) {
         try {
-            $pdo = ConnectionDB::getInstance();
+            $pdo = ConnectionMYSQL::getInstance();
             $email = $data['email'];
 
             $stmt = $pdo->prepare("DELETE FROM tb_user_reset WHERE email = ?");
