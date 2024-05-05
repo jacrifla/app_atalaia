@@ -16,11 +16,9 @@ class PerfilScreen extends StatefulWidget {
 
 class _PerfilScreenState extends State<PerfilScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+  final TextEditingController _inputNome = TextEditingController();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputCel = TextEditingController();
-  final TextEditingController _inputPassword = TextEditingController();
-  final TextEditingController _inputNewPassword = TextEditingController();
-  final TextEditingController _inputRepeatPassword = TextEditingController();
 
   void _navegarParaSucesso() {
     Navigator.of(context).push(
@@ -62,7 +60,12 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     child: Column(
                       children: [
                         BuildInput(
+                          labelText: 'Nome',
+                          controller: _inputNome,
+                        ),
+                        BuildInput(
                           labelText: 'E-mail',
+                          icon: Icon(Icons.email_outlined),
                           controller: _inputEmail,
                         ),
                         BuildInput(
@@ -70,33 +73,30 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           icon: Icon(Icons.phone_outlined),
                           controller: _inputCel,
                         ),
-                        BuildInput(
-                          labelText: 'Senha Atual',
-                          icon: Icon(Icons.key_outlined),
-                          isPassword: true,
-                          controller: _inputPassword,
-                        ),
-                        BuildInput(
-                          labelText: 'Nova Senha',
-                          icon: Icon(Icons.key_outlined),
-                          isPassword: true,
-                          controller: _inputNewPassword,
-                        ),
-                        BuildInput(
-                          labelText: 'Repita Sua Senha',
-                          icon: Icon(Icons.key_outlined),
-                          isPassword: true,
-                          controller: _inputRepeatPassword,
-                        )
                       ],
                     )),
-                ButtonIcon(
-                  onPressed: () {
-                    if (_formState.currentState!.validate()) {
-                      _navegarParaSucesso();
-                    }
-                  },
-                  icon: Icon(Icons.check),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ButtonIcon(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onSecondary,
+                      labelText: 'Mudar senha?',
+                      onPressed: () {
+                        if (_formState.currentState!.validate()) {
+                          Navigator.pushNamed(context, '/recover_confirmation');
+                        }
+                      },
+                    ),
+                    ButtonIcon(
+                      onPressed: () {
+                        if (_formState.currentState!.validate()) {
+                          _navegarParaSucesso();
+                        }
+                      },
+                      icon: Icon(Icons.check),
+                    ),
+                  ],
                 ),
               ],
             ),
