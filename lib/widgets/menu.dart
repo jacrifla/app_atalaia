@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:app_atalaia/screens/help_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home_screen.dart';
@@ -9,6 +10,10 @@ import '../screens/group_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
+
+  void logout(BuildContext context) {
+    Navigator.pushReplacementNamed(context, '/');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,7 @@ class MenuDrawer extends StatelessWidget {
               SizedBox(height: 20),
               ItemMenu(
                 label: 'Home',
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home_outlined),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -49,7 +54,7 @@ class MenuDrawer extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                label: 'Grupos',
+                label: 'Gerenciar Grupos',
                 icon: Icon(Icons.tune),
                 onTap: () {
                   Navigator.push(
@@ -61,29 +66,37 @@ class MenuDrawer extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                label: 'Pontos',
-                icon: Icon(Icons.lightbulb),
+                label: 'Gerenciar Pontos',
+                icon: Icon(Icons.lightbulb_outline),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SwitchPage(),
+                      builder: (context) => SwitchScreen(),
                     ),
                   );
                 },
               ),
               ItemMenu(
-                label: 'Monitoramento',
-                icon: Icon(Icons.bar_chart),
+                label: 'Gerenciar Guarda',
+                icon: Icon(Icons.shield_outlined),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => SwitchScreen(),
+                  //   ),
+                  // );
+                },
               ),
               ItemMenu(
                 label: 'Perfil',
-                icon: Icon(Icons.person),
+                icon: Icon(Icons.person_outline),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PerfilPage(),
+                      builder: (context) => PerfilScreen(),
                     ),
                   );
                 },
@@ -91,6 +104,14 @@ class MenuDrawer extends StatelessWidget {
               ItemMenu(
                 label: 'Ajuda',
                 icon: Icon(Icons.question_mark_outlined),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HelpScreen(),
+                    ),
+                  );
+                },
               ),
               Container(
                 color: Theme.of(context).colorScheme.onSecondary,
@@ -101,7 +122,9 @@ class MenuDrawer extends StatelessWidget {
                     Icons.logout,
                     color: Theme.of(context).colorScheme.background,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    logout(context);
+                  },
                 ),
               ),
             ],
