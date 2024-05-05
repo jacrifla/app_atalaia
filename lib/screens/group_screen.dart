@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
+import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import 'create_group_screen.dart';
 
 class GroupScreen extends StatefulWidget {
+  const GroupScreen({super.key});
+
   @override
   _GroupScreenState createState() => _GroupScreenState();
 }
@@ -40,6 +43,7 @@ class _GroupScreenState extends State<GroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: 'Grupos'),
+      endDrawer: MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -114,27 +118,33 @@ class GroupInfo {
 class GroupCard extends StatelessWidget {
   final GroupInfo groupInfo;
 
-  const GroupCard({required this.groupInfo});
+  const GroupCard({super.key, required this.groupInfo});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 10),
+      color: Theme.of(context).colorScheme.onSecondary,
       child: ListTile(
-        onTap: () {
-          // Adicione aqui a lógica para exibir os detalhes do grupo
-        },
-        leading: Icon(groupInfo.groupIcon),
-        title: Text(groupInfo.groupName),
-        subtitle:
-            Text(groupInfo.groupCommon ? 'Grupo Comum' : 'Grupo Especial'),
+        onTap: () {},
+        leading: Icon(
+          groupInfo.groupIcon,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+        title: Text(
+          groupInfo.groupName,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         trailing: IconButton(
           icon: Icon(
             Icons.clear,
             color: Theme.of(context).colorScheme.error,
           ),
           onPressed: () {
-            // Adicione aqui a lógica para excluir o grupo
+            // Excluir o grupo
           },
         ),
       ),
