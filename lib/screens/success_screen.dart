@@ -5,13 +5,11 @@ import '../widgets/button_icon.dart';
 
 class SuccessScreen extends StatelessWidget {
   final String message;
-  final IconData icon;
   final VoidCallback? onOKPressed;
 
   const SuccessScreen({
     super.key,
     required this.message,
-    required this.icon,
     this.onOKPressed,
   });
 
@@ -25,7 +23,7 @@ class SuccessScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                icon,
+                Icons.check,
                 size: 150,
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -40,7 +38,7 @@ class SuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               ButtonIcon(
-                onPressed: onOKPressed,
+                onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.check),
               ),
             ],
