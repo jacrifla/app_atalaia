@@ -17,11 +17,11 @@ class LoginModel
             $stmt = $pdo->prepare('
                 SELECT uuid, name, email, phone, password_hash 
                 FROM tb_user 
-                WHERE (email = ? OR phone = ?) 
+                WHERE email = ?  
                     AND deleted_at IS NULL'
             );
             
-            $stmt->execute([$data['email'], $data['phone']]);
+            $stmt->execute([$data['email']]);
     
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

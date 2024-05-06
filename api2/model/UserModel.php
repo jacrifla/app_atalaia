@@ -39,11 +39,11 @@ class UserModel
             $stmt = $pdo->prepare('
                 SELECT id 
                 FROM tb_user 
-                WHERE (email = ? OR phone = ?) 
+                WHERE email = ? 
                     AND deleted_at IS NULL'
             );
             
-            $stmt->execute([$data['email'], $data['phone']]);
+            $stmt->execute([$data['email']]);
     
             return ($stmt->rowCount() > 0);
     
