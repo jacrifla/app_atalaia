@@ -41,7 +41,7 @@ class SwitchController
                     $reslt = SwitchModel::createSwitch($data);
                     
                     if ($reslt) :
-                        MacModel::updateMacAddressRecord($mac_address);
+                       // MacModel::updateMacAddressRecord($mac_address);
                         $response::json([
                             'status' => 'success',
                             'dados' => $reslt
