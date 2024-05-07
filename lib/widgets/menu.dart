@@ -1,12 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:app_atalaia/screens/help_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/home_screen.dart';
-import '../screens/perfil_screen.dart';
-import '../screens/switch_screen.dart';
-import '../screens/group_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
@@ -45,72 +38,42 @@ class MenuDrawer extends StatelessWidget {
                 label: 'Home',
                 icon: Icon(Icons.home_outlined),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/home');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Grupos',
                 icon: Icon(Icons.tune),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GroupScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/group_switch');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Pontos',
                 icon: Icon(Icons.lightbulb_outline),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SwitchScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/switch');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Guarda',
                 icon: Icon(Icons.shield_outlined),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => SwitchScreen(),
-                  //   ),
-                  // );
+                  // Navigator.pushNamed(context, '/guard');
                 },
               ),
               ItemMenu(
                 label: 'Perfil',
                 icon: Icon(Icons.person_outline),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PerfilScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/perfil');
                 },
               ),
               ItemMenu(
                 label: 'Ajuda',
                 icon: Icon(Icons.question_mark_outlined),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HelpScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/help');
                 },
               ),
               Container(

@@ -1,14 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 
-import 'help_screen.dart';
-import 'home_screen.dart';
-import 'recover_screen.dart';
-import 'signup_screen.dart';
-import '../widgets/build_input.dart';
-import '../widgets/build_row.dart';
-import '../widgets/button_icon.dart';
-import '../utils.dart';
+import '../../widgets/build_input.dart';
+import '../../widgets/build_row.dart';
+import '../../widgets/button_icon.dart';
+import '../../utils.dart';
+import 'login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,9 +14,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+  final LoginController _loginController = LoginController();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
+  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _clearTextFields();
+  }
 
   @override
   void dispose() {
@@ -36,11 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _clearTextFields();
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(30.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,15 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Column(
                   children: [
                     Image.asset('assets/images/logo.png'),
-                    SizedBox(height: 10),
-                    Text(
-                      'Projeto Atalaia'.toUpperCase(),
-                      style: TextStyle(
-                        fontFamily: 'Montserrat Alternates',
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    const SizedBox(height: 10),
+                    titleLogo(),
                   ],
                 ),
                 Form(
@@ -68,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         labelText: 'E-mail',
                         hintText: 'example@example.com',
-                        icon: Icon(Icons.account_circle_outlined),
+                        icon: const Icon(Icons.account_circle_outlined),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Digite seu e-mail';
@@ -84,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _inputPassword,
                         labelText: 'Senha',
                         hintText: '******',
-                        icon: Icon(Icons.key_outlined),
+                        icon: const Icon(Icons.key_outlined),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Digite sua senha';
@@ -101,66 +96,59 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BuildRow(
-                          labelText: 'Criar Conta',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignupScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        BuildRow(
-                          labelText: 'Esqueci Minha Senha',
-                          icon: Icon(Icons.person_search_outlined),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RecoverScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                        BuildRow(
-                          labelText: 'Preciso de Ajuda',
-                          icon: Icon(Icons.question_mark_outlined),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HelpScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BuildRow(
+                            labelText: 'Criar Conta',
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/signup'),
+                          ),
+                          BuildRow(
+                            labelText: 'Esqueci Minha Senha',
+                            icon: const Icon(Icons.person_search_outlined),
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/recover'),
+                          ),
+                          BuildRow(
+                            labelText: 'Preciso de Ajuda',
+                            icon: const Icon(Icons.question_mark_outlined),
+                            onTap: () => Navigator.pushNamed(context, '/help'),
+                          ),
+                        ],
+                      ),
                     ),
                     ButtonIcon(
                       labelText: 'Entrar',
                       onPressed: () {
                         if (_formState.currentState!.validate()) {
-                          Navigator.push(
+                          _loginController.loginUser(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
+                            _inputEmail.text.trim(),
+                            _inputPassword.text.trim(),
                           );
                         }
                       },
-                      icon: Icon(Icons.check),
+                      icon: const Icon(Icons.check),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget titleLogo() {
+    return Text(
+      'Projeto Atalaia'.toUpperCase(),
+      style: const TextStyle(
+        fontFamily: 'Montserrat Alternates',
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

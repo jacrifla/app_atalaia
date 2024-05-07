@@ -1,15 +1,15 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:app_atalaia/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/help_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/perfil_screen.dart';
 import 'screens/recover_confirmation_screen.dart';
-// import 'screens/login_screen.dart';
+import 'screens/login/login_screen.dart';
 import 'screens/recover_screen.dart';
-// import 'screens/signup_screen.dart';
 import 'screens/signup/signup_screen.dart';
+import 'screens/switch/switch_screen.dart';
+import 'screens/group_screen.dart';
 import 'theme.dart';
 
 class MyApp extends StatelessWidget {
@@ -24,13 +24,16 @@ class MyApp extends StatelessWidget {
       // theme: AppTheme.darkTheme(),
       routes: {
         '/': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
-        '/signup': (context) => SignupScreen(),
-        '/recover': (context) => RecoverScreen(),
-        '/recover_confirmation': (context) => const RecoverConfirmationScreen(),
-        '/perfil': (context) => const PerfilScreen(),
+        '/group_switch': (context) => GroupScreen(),
         '/help': (context) => HelpScreen(),
+        '/home': (context) => HomeScreen(),
+        '/perfil': (context) => PerfilScreen(),
+        '/recover': (context) => RecoverScreen(),
+        '/recover_confirmation': (context) => RecoverConfirmationScreen(),
+        '/signup': (context) => SignupScreen(),
+        '/switch': (context) => SwitchScreen(),
       },
+
       initialRoute: '/',
     );
   }
