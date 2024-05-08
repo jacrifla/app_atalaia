@@ -1,7 +1,7 @@
 import 'package:app_atalaia/screens/error_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils.dart';
+import '../../utils/utils.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
@@ -45,8 +45,8 @@ class _SignupScreenState extends State<SignupScreen> {
     if (_formState.currentState!.validate()) {
       _formState.currentState!.save();
       final response = await _signupController.createUser(
-        _inputName.text,
-        _inputEmail.text,
+        _inputName.text.toLowerCase(),
+        _inputEmail.text.toLowerCase(),
         _inputPhone.text,
         _inputPassword.text,
       );

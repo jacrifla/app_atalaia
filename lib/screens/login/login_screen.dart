@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/build_row.dart';
 import '../../widgets/button_icon.dart';
-import '../../utils.dart';
+import '../../utils/utils.dart';
 import 'login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (_formState.currentState!.validate()) {
                           _loginController.loginUser(
                             context,
-                            _inputEmail.text.trim(),
+                            _inputEmail.text.trim().toLowerCase(),
                             _inputPassword.text.trim(),
                           );
                         }

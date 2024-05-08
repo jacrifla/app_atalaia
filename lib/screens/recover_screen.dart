@@ -5,7 +5,7 @@ import 'recover_confirmation_screen.dart';
 import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 
 class RecoverScreen extends StatefulWidget {
   const RecoverScreen({super.key});

@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
 
+import '../../utils/config.dart';
+
 class LoginProvider {
   final Dio _dio = Dio();
-  String? userUuid;
+  String? _userUuid;
+
+  String? get userUuid => _userUuid;
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       Response response = await _dio.post(
-        'http://192.168.137.144:80/app_atalaia/api2/login',
+        '${Config.apiUrl}login',
         data: {
           'email': email,
           'password_hash': password,
@@ -15,7 +19,8 @@ class LoginProvider {
       );
 
       if (response.statusCode == 200) {
-        userUuid = response.data['uuid'];
+        _userUuid = response.data['uuid'];
+        print('UUID recebido após o login: $userUuid');
         return response.data;
       } else if (response.statusCode == 401) {
         throw Exception('Falha na Credencial');
