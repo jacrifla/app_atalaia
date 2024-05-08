@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:app_atalaia/guard/guard_screen.dart';
+import 'package:app_atalaia/screens/guard/guard_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/help_screen.dart';
