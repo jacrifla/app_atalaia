@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
-import '../widgets/build_input.dart';
-import '../widgets/button_icon.dart';
-import '../widgets/header.dart';
-import '../widgets/menu.dart';
+import '../../widgets/build_input.dart';
+import '../../widgets/button_icon.dart';
+import '../../widgets/header.dart';
+import '../../widgets/menu.dart';
+import '../success_screen.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -141,7 +142,14 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               ButtonIcon(
                 labelText: 'Enviar',
                 onPressed: () {
-                  saveGroupAndReturnToGroupScreen();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SuccessScreen(
+                        message: 'Grupo Criado com sucesso',
+                      ),
+                    ),
+                  );
                 },
               ),
             ],

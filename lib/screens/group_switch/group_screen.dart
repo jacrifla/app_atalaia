@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/menu.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
-import '../create_group_screen.dart';
+import 'create_group_screen.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -53,25 +53,10 @@ class _GroupScreenState extends State<GroupScreen> {
               icon: Icon(Icons.add),
               labelText: 'Criar Novo Grupo',
               onPressed: () async {
-                final newGroupData = await Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreateGroupScreen()),
                 );
-                if (newGroupData != null) {
-                  setState(() {
-                    userGroups.add(GroupInfo(
-                      groupName: newGroupData['groupName'],
-                      groupIcon: newGroupData['groupIcon'],
-                      groupCommon: newGroupData['groupCommon'],
-                      randomTime: newGroupData['randomTime'],
-                      keepActive: newGroupData['keepActive'],
-                      keepActiveHours: newGroupData['keepActiveHours'],
-                      autoActivationTime: newGroupData['autoActivationTime'],
-                      activationStartTime: newGroupData['activationStartTime'],
-                      activationEndTime: newGroupData['activationEndTime'],
-                    ));
-                  });
-                }
               },
             ),
             SizedBox(height: 20),
@@ -143,9 +128,7 @@ class GroupCard extends StatelessWidget {
             Icons.clear,
             color: Theme.of(context).colorScheme.error,
           ),
-          onPressed: () {
-            // Excluir o grupo
-          },
+          onPressed: () {},
         ),
       ),
     );
