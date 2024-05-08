@@ -4,10 +4,6 @@ class AuthStorage {
   static final _box = GetStorage();
 
   static Future<void> saveUserId(String userId) async {
-    if (userId == null) {
-      print('ta null essa porra');
-      return;
-    }
     print('UUID recebido para salvar: $userId');
     await _box.write('userId', userId);
   }

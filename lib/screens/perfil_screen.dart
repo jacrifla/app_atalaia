@@ -24,7 +24,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SuccessScreen(
-          message: 'Senha alterada com sucesso',
+          message: 'Perfil alterado com sucesso',
           onOKPressed: () {
             Navigator.of(context).pop();
           },
