@@ -16,8 +16,8 @@ class SwitchController
             $mac_address     = $data['mac_address'];
             $user            = UserModel::getUserByUUID($data['user_id']);
             $data['user_id'] = $user['id'];
-            $macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
-            $switchExists    = SwitchModel::checkSwitchExists($data);
+            //$macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
+            //$switchExists    = SwitchModel::checkSwitchExists($data);
             
             
             if($switchExists){
@@ -34,13 +34,14 @@ class SwitchController
                             'msg' => 'Internal Error'
                         ], 400);
                     endif;
-                }else if ($macAvailable){
+                }else {
+                //if ($macAvailable){
                    
                     
                     $reslt = SwitchModel::createSwitch($data);
                     
                     if ($reslt) :
-                        MacModel::updateMacAddressRecord($mac_address);
+                       // MacModel::updateMacAddressRecord($mac_address);
                         $response::json([
                             'status' => 'success',
                             'dados' => $reslt
@@ -52,12 +53,13 @@ class SwitchController
                             ], 400);
                         endif;
                         
-                    }else{
-                        $response::json([
-                            'status' => 'error',
-                            'msg' => 'Invalid Mac Address'
-                        ], 401);
                     }
+                    // else{
+                    //     $response::json([
+                    //         'status' => 'error',
+                    //         'msg' => 'Invalid Mac Address'
+                    //     ], 401);
+                    // }
                     
                 } catch (\Exception $e) {
                     $response::json([
