@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
 import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,8 +14,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _selectedContent = 'Guarda';
+  String _guardaStatusText = 'Sua guarda não está ativa no momento.';
 
   Color _cardBackgroundColor = Colors.white;
+  Color _iconColor = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -73,28 +74,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.security,
                           size: 50,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: _iconColor,
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Guarda',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Text(
-                              'Sua guarda não está ativa no momento.',
+                              _guardaStatusText,
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -102,6 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _cardBackgroundColor == Colors.red
                                           ? Colors.white
                                           : Colors.red;
+                                  _iconColor =
+                                      _cardBackgroundColor == Colors.red
+                                          ? Colors.white
+                                          : Colors.black;
+                                  _guardaStatusText = _cardBackgroundColor ==
+                                          Colors.red
+                                      ? 'Sua guarda está ativa no momento.'
+                                      : 'Sua guarda não está ativa no momento.';
                                 });
                                 // Implementar lógica para ativar a guarda aqui
                               },
