@@ -1,28 +1,39 @@
 import 'package:dio/dio.dart';
 
+import '../../utils/config.dart';
+
 class SwitchController {
   static final Dio _dio =
       Dio(BaseOptions(baseUrl: 'http://192.168.1.25:80/app_atalaia/api2/'));
 
-  static Future<bool> createSwitch({
-    required String name,
+  Future<bool> createSwitch({
     required String macAddress,
-    required String watts,
+    required String name,
+    required int watts,
+    required String userId,
   }) async {
     try {
-      Response response = await _dio.post(
-        '/switches/new',
+      final Dio dio = Dio();
+      final response = await dio.post(
+        '${Config.apiUrl}switches/create',
         data: {
-          'name': name,
           'mac_address': macAddress,
+          'name': name,
           'watts': watts,
+          'user_id': userId,
         },
       );
-      // Verifica se o código de status é 200 para determinar o sucesso da operação
-      return response.statusCode == 200;
+
+      if (response.statusCode == 200) {
+        print('Switch created successfully');
+        return true;
+      } else {
+        print('Failed to create switch. Status code: ${response.statusCode}');
+        return false;
+      }
     } catch (e) {
       print('Error creating switch: $e');
-      return false; // Retorna false em caso de erro
+      return false;
     }
   }
 

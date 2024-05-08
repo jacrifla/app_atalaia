@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+import '../../utils/config.dart';
 import 'switch_model.dart';
+import '../../utils/auth_storage.dart';
 
 class SwitchProvider extends ChangeNotifier {
   List<SwitchModel> _switches = [];
-
   List<SwitchModel> get switches => _switches;
 
   void setSwitches(List<SwitchModel> switches) {
@@ -13,13 +14,15 @@ class SwitchProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchSwitches(String userId) async {
+  Future<void> fetchSwitches() async {
     try {
       final Dio dio = Dio();
+      final userUuid = await AuthStorage.readUuid();
 
       final response = await dio.get(
-          'http://192.168.1.25:80/app_atalaia/api2/switches',
-          queryParameters: {'user_id': userId});
+        '${Config.apiUrl}switches',
+        queryParameters: {'user_uuid': userUuid},
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> responseData = response.data;
