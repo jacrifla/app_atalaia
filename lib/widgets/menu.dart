@@ -59,7 +59,7 @@ class MenuDrawer extends StatelessWidget {
                 label: 'Gerenciar Guarda',
                 icon: Icon(Icons.shield_outlined),
                 onTap: () {
-                  // Navigator.pushNamed(context, '/guard');
+                  Navigator.pushNamed(context, '/guard');
                 },
               ),
               ItemMenu(
