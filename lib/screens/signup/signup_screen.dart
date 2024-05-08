@@ -1,9 +1,11 @@
+import 'package:app_atalaia/screens/error_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
+import '../success_screen.dart';
 import 'signup_controller.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -36,7 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _handleSubmit() async {
     if (!_arePasswordsEqual()) {
-      _showErrorDialog('As senhas não correspondem.');
+      _showErrorDialog('Erro', 'As senhas não correspondem.');
       return;
     }
 
@@ -49,45 +51,37 @@ class _SignupScreenState extends State<SignupScreen> {
         _inputPassword.text,
       );
       if (response['status'] == 'success') {
-        _showSuccessSnackBar('Usuário criado com sucesso!');
+        _showSuccessScreen('Usuário criado com sucesso!');
         _clearInputs();
-        Navigator.pushNamed(context, '/');
       } else {
-        _showErrorSnackBar(response['message']);
+        _showErrorDialog('Erro', response['message']);
       }
     }
   }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Erro'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
+  void _showErrorDialog(String message, String errorDescription) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ErrorScreen(
+          message: message,
+          errorDescription: errorDescription,
+          onOKPressed: () => Navigator.pop(context),
+        ),
       ),
     );
   }
 
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-      backgroundColor: Colors.green,
-    ));
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-      backgroundColor: Colors.red,
-    ));
+  void _showSuccessScreen(String message) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SuccessScreen(
+          message: message,
+          onOKPressed: () => Navigator.pop(context),
+        ),
+      ),
+    );
   }
 
   @override
