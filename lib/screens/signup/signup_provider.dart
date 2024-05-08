@@ -12,7 +12,7 @@ class SignupProvider {
       String name, String email, String phone, String password) async {
     try {
       final response = await dio.post(
-        'http://192.168.1.25:80/app_atalaia/api2/register',
+        'http://192.168.137.144:80/app_atalaia/api2/register',
         data: {
           'name': name,
           'email': email,
