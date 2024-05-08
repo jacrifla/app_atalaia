@@ -30,7 +30,7 @@ class SwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('SELECT * 
+            $stmt = $pdo->prepare('SELECT is_active 
             FROM tb_switch 
             WHERE mac_address = ?');
             $stmt->execute([$mac_address]);
