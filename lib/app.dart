@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:app_atalaia/guard/guard_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/help_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/recover_confirmation': (context) => RecoverConfirmationScreen(),
         '/signup': (context) => SignupScreen(),
         '/switch': (context) => SwitchScreen(),
+        '/guard': (context) => GuardManagementScreen(),
       },
 
       initialRoute: '/',
