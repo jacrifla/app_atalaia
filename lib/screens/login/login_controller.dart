@@ -33,7 +33,7 @@ class LoginController {
         MaterialPageRoute(
           builder: (context) => ErrorScreen(
             message: 'Error',
-            errorDescription: 'Usuário não encontrado',
+            errorDescription: 'Erro: ${error.toString()}',
             onOKPressed: () => Navigator.pop(context),
           ),
         ),
