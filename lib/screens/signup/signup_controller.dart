@@ -8,7 +8,7 @@ class SignupController {
     try {
       return await _signupProvider.createUser(name, email, phone, password);
     } catch (error) {
-      return {'status': 'error', 'msg': 'Falha ao criar usuário.'};
+      return {'status': 'error', 'msg': error.toString()};
     }
   }
 }
