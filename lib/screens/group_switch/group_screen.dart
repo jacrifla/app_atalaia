@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 
-import '../widgets/menu.dart';
-import '../widgets/button_icon.dart';
-import '../widgets/header.dart';
-import 'create_group_screen.dart';
+import '../../widgets/menu.dart';
+import '../../widgets/button_icon.dart';
+import '../../widgets/header.dart';
+import '../create_group_screen.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});

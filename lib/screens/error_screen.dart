@@ -1,21 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widgets/button_icon.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String message;
-  final String errorNumber;
   final String errorDescription;
   final VoidCallback? onOKPressed;
 
   const ErrorScreen({
     super.key,
     required this.message,
-    required this.errorNumber,
     required this.errorDescription,
     this.onOKPressed,
   });
@@ -30,7 +24,7 @@ class ErrorScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                Icons.priority_high_rounded,
+                Icons.warning_amber,
                 size: 150,
                 color: Theme.of(context).colorScheme.error,
               ),
@@ -44,60 +38,22 @@ class ErrorScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.error,
                 ),
               ),
-              SizedBox(height: 20),
-              // Erro
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.warning_amber,
-                    color: Theme.of(context).colorScheme.error,
-                    size: 30,
+              const SizedBox(height: 20),
+              Flexible(
+                child: Text(
+                  errorDescription,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  SizedBox(width: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Erro: ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Text(
-                            errorNumber,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        errorDescription,
-                        softWrap: true,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+                ),
               ),
-
               const SizedBox(height: 60),
               ButtonIcon(
                 onPressed: onOKPressed,
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
               ),
             ],
           ),

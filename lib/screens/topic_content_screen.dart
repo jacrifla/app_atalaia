@@ -5,17 +5,21 @@ class TopicContentScreen extends StatelessWidget {
   final String title;
   final String content;
 
-  TopicContentScreen({required this.title, required this.content});
+  const TopicContentScreen({
+    super.key,
+    required this.title,
+    required this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(title: title),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Text(
           content,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
           ),
         ),

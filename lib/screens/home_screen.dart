@@ -5,7 +5,7 @@ import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,10 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Variável para controlar qual conteúdo exibir abaixo do card
   String _selectedContent = 'Guarda';
 
-  // Variável para controlar a cor de fundo do card
   Color _cardBackgroundColor = Colors.white;
 
   @override
@@ -100,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // Alternando entre a cor de alerta e a cor padrão
                                   _cardBackgroundColor =
                                       _cardBackgroundColor == Colors.red
                                           ? Colors.white
@@ -120,12 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(height: 20),
-          // Exibir conteúdo abaixo do card com base na seleção do usuário
           if (_selectedContent == 'Grupos') ...[
-            // Exibir grupos aqui
             Center(child: Text('Conteúdo dos Grupos')),
           ] else if (_selectedContent == 'Pontos') ...[
-            // Exibir pontos aqui
             Center(child: Text('Conteúdo dos Pontos')),
           ],
         ],

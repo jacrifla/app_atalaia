@@ -8,7 +8,7 @@ import 'switch_controller.dart';
 class SwitchEditScreen extends StatefulWidget {
   final String macAddress;
 
-  SwitchEditScreen({required this.macAddress});
+  const SwitchEditScreen({super.key, required this.macAddress});
 
   @override
   _SwitchEditScreenState createState() => _SwitchEditScreenState();
@@ -21,8 +21,6 @@ class _SwitchEditScreenState extends State<SwitchEditScreen> {
   @override
   void initState() {
     super.initState();
-    // Aqui você pode carregar os detalhes do switch com base no endereço MAC
-    // usando o método getSwitch do seu SwitchController
     loadSwitchDetails();
   }
 
@@ -44,7 +42,7 @@ class _SwitchEditScreenState extends State<SwitchEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Editar Switch'),
+      appBar: const Header(title: 'Editar Switch'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -59,16 +57,13 @@ class _SwitchEditScreenState extends State<SwitchEditScreen> {
               controller: wattsController,
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ButtonIcon(
               labelText: 'Salvar Alterações',
               onPressed: () {
-                // Aqui você pode obter os novos valores dos campos
                 final String name = nameController.text;
                 final double watts =
                     double.tryParse(wattsController.text) ?? 0.0;
-
-                // Em seguida, você pode chamar o método updateSwitch do seu SwitchController
                 updateSwitch(name, watts);
               },
               backgroundColor: Colors.blue,
@@ -81,14 +76,11 @@ class _SwitchEditScreenState extends State<SwitchEditScreen> {
 
   void updateSwitch(String name, double watts) async {
     try {
-      // Aqui você pode chamar o método updateSwitch do seu SwitchController
       await SwitchController.updateSwitch({
         'mac_address': widget.macAddress,
         'name': name,
         'watts': watts,
       });
-      // Após a atualização bem-sucedida, você pode exibir uma mensagem ou navegar de volta
-      // para a tela anterior, dependendo da sua lógica de navegação
     } catch (e) {
       print('Error updating switch: $e');
     }

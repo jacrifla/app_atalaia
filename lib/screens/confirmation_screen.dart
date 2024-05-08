@@ -7,11 +7,11 @@ class ConfirmationScreen extends StatelessWidget {
   final VoidCallback? onCancel;
 
   const ConfirmationScreen({
-    Key? key,
+    super.key,
     required this.question,
     this.onConfirm,
     this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +43,12 @@ class ConfirmationScreen extends StatelessWidget {
                 children: <Widget>[
                   ButtonIcon(
                     onPressed: onCancel,
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ButtonIcon(
                     onPressed: onConfirm,
-                    icon: Icon(Icons.check),
+                    icon: const Icon(Icons.check),
                   ),
                 ],
               ),

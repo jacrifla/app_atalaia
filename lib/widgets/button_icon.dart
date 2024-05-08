@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class ButtonIcon extends StatelessWidget {
@@ -11,14 +9,14 @@ class ButtonIcon extends StatelessWidget {
   final Color? color;
 
   const ButtonIcon({
-    Key? key,
+    super.key,
     this.labelText = '',
     this.onPressed,
     this.icon,
     this.backgroundColor,
     this.borderSide,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class ButtonIcon extends StatelessWidget {
         labelText,
         style: TextStyle(color: color ?? defaultColor),
       ),
-      icon: icon ?? SizedBox.shrink(),
+      icon: icon ?? const SizedBox.shrink(),
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(

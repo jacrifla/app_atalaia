@@ -6,16 +6,16 @@ import '../../widgets/menu.dart';
 import 'switch_create.dart';
 
 class SwitchScreen extends StatelessWidget {
+  const SwitchScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Pontos'),
-      endDrawer: MenuDrawer(),
-      body: SingleChildScrollView(
+      appBar: const Header(title: 'Pontos'),
+      endDrawer: const MenuDrawer(),
+      body: const SingleChildScrollView(
         child: Column(
-          children: [
-            // Seu conteúdo aqui...
-          ],
+          children: [],
         ),
       ),
       floatingActionButton: Column(
@@ -32,18 +32,14 @@ class SwitchScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => SwitchCreateScreen()),
                 );
               },
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
           ),
           ButtonIcon(
             labelText: 'Atualizar Pontos',
-            onPressed: () {
-              // Lógica para atualizar os pontos
-              // Chame uma função para buscar os pontos do banco de dados ou algo similar
-              // Atualize o estado ou os dados conforme necessário
-            },
-            icon: Icon(Icons.refresh),
+            onPressed: () {},
+            icon: const Icon(Icons.refresh),
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
           ),
         ],

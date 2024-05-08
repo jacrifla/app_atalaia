@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import '../../widgets/menu.dart';
 import '../../widgets/build_input.dart';
@@ -9,6 +11,8 @@ class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController macController = TextEditingController();
   final TextEditingController wattsController = TextEditingController();
+
+  SwitchCreateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,19 +53,16 @@ class SwitchCreateScreen extends StatelessWidget {
             ButtonIcon(
               labelText: 'Adicionar',
               onPressed: () async {
-                // Extrair os valores dos controllers
                 String name = nameController.text;
                 String macAddress = macController.text;
                 String watts = wattsController.text;
 
-                // Chamar a função na controller para criar um novo ponto
                 bool success = await SwitchController.createSwitch(
                   name: name,
                   macAddress: macAddress,
                   watts: watts,
                 );
 
-                // Exibir uma mensagem de acordo com o resultado
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

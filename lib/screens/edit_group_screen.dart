@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'group_screen.dart';
+import 'group_switch/group_screen.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final GroupInfo groupInfo;
 
-  const EditGroupScreen({Key? key, required this.groupInfo}) : super(key: key);
+  const EditGroupScreen({super.key, required this.groupInfo});
 
   @override
   _EditGroupScreenState createState() => _EditGroupScreenState();
@@ -14,7 +14,6 @@ class EditGroupScreen extends StatefulWidget {
 class _EditGroupScreenState extends State<EditGroupScreen> {
   late TextEditingController _groupNameController;
   late bool _groupCommon;
-  // Adicione os outros campos conforme necessário
 
   @override
   void initState() {
@@ -22,7 +21,6 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
     _groupNameController =
         TextEditingController(text: widget.groupInfo.groupName);
     _groupCommon = widget.groupInfo.groupCommon;
-    // Inicialize outros campos aqui conforme necessário
   }
 
   @override
@@ -35,7 +33,7 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Grupo'),
+        title: const Text('Editar Grupo'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -44,12 +42,12 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
           children: [
             TextField(
               controller: _groupNameController,
-              decoration: InputDecoration(labelText: 'Nome do Grupo'),
+              decoration: const InputDecoration(labelText: 'Nome do Grupo'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
-                Text('Grupo Comum: '),
+                const Text('Grupo Comum: '),
                 Switch(
                   value: _groupCommon,
                   onChanged: (value) {
@@ -60,16 +58,13 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                 ),
               ],
             ),
-            // Adicione outros campos de edição aqui conforme necessário
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Salvar as alterações e retornar para a tela anterior
                 final editedGroupInfo = GroupInfo(
                   groupName: _groupNameController.text,
                   groupIcon: widget.groupInfo.groupIcon,
                   groupCommon: _groupCommon,
-                  // Passe outros campos editados aqui
                   randomTime: widget.groupInfo.randomTime,
                   keepActive: widget.groupInfo.keepActive,
                   keepActiveHours: widget.groupInfo.keepActiveHours,
@@ -79,7 +74,7 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                 );
                 Navigator.pop(context, editedGroupInfo);
               },
-              child: Text('Salvar Alterações'),
+              child: const Text('Salvar Alterações'),
             ),
           ],
         ),

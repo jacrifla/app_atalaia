@@ -9,7 +9,7 @@ import 'screens/login/login_screen.dart';
 import 'screens/recover_screen.dart';
 import 'screens/signup/signup_screen.dart';
 import 'screens/switch/switch_screen.dart';
-import 'screens/group_screen.dart';
+import 'screens/group_switch/group_screen.dart';
 import 'theme.dart';
 
 class MyApp extends StatelessWidget {

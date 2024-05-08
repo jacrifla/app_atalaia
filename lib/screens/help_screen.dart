@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import '../widgets/header.dart';
@@ -49,9 +51,9 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Ajuda'),
+      appBar: const Header(title: 'Ajuda'),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -63,11 +65,11 @@ class _HelpScreenState extends State<HelpScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Pesquisar',
                   prefixIcon: Icon(Icons.search),
                 ),
@@ -77,7 +79,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             for (var topic in filteredTopics)
               GestureDetector(
                 onTap: () {
@@ -98,7 +100,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Visibility(
                         visible: false,
                         child: Text(
