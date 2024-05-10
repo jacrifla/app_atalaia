@@ -4,7 +4,7 @@ import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      endDrawer: MenuDrawer(),
+      endDrawer: const MenuDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Card(
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 });
                                 // Implementar lógica para ativar a guarda aqui
                               },
-                              child: Text('Ativar Guarda Agora'),
+                              child: const Text('Ativar Guarda Agora'),
                             ),
                           ],
                         ),
@@ -126,11 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           if (_selectedContent == 'Grupos') ...[
-            Center(child: Text('Conteúdo dos Grupos')),
+            const Center(child: Text('Conteúdo dos Grupos')),
           ] else if (_selectedContent == 'Pontos') ...[
-            Center(child: Text('Conteúdo dos Pontos')),
+            const Center(child: Text('Conteúdo dos Pontos')),
           ],
         ],
       ),

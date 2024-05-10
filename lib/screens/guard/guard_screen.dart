@@ -11,11 +11,13 @@ class GuardManagementScreen extends StatelessWidget {
     SwitchCardModel(name: 'Switch 3', isActive: true),
   ];
 
+  GuardManagementScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Gerenciamento da Guarda'),
-      endDrawer: MenuDrawer(),
+      appBar: const Header(title: 'Gerenciamento da Guarda'),
+      endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView.builder(
@@ -27,7 +29,7 @@ class GuardManagementScreen extends StatelessWidget {
                   ? Theme.of(context).colorScheme.onSecondary
                   : Theme.of(context).colorScheme.primary,
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

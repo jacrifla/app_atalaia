@@ -2,7 +2,7 @@ import 'package:app_atalaia/screens/switch/switch_controller.dart';
 import 'package:flutter/material.dart';
 
 class GuardManagementProvider extends ChangeNotifier {
-  List<SwitchController> _guardPoints = [];
+  final List<SwitchController> _guardPoints = [];
 
   List<SwitchController> get guardPoints => _guardPoints;
 

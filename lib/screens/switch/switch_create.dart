@@ -12,13 +12,13 @@ class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController macController = TextEditingController();
   final TextEditingController wattsController = TextEditingController();
 
-  SwitchCreateScreen({Key? key}) : super(key: key);
+  SwitchCreateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Adicionar Ponto'),
-      endDrawer: MenuDrawer(),
+      appBar: const Header(title: 'Adicionar Ponto'),
+      endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
