@@ -4,7 +4,7 @@ import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 import '../../widgets/menu.dart';
 import 'switch_create.dart';
-import 'switch_model.dart'; // Importe o modelo SwitchModel
+import 'switch_model.dart';
 
 class SwitchScreen extends StatelessWidget {
   const SwitchScreen({super.key});
@@ -60,11 +60,12 @@ class SwitchScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Exluir
+                        print('excloi');
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.close,
-                        color: Colors.red,
+                        color: Theme.of(context).colorScheme.error,
+                        size: 30,
                       ),
                     ),
                   ],

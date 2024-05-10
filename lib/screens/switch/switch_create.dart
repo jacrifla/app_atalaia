@@ -1,11 +1,15 @@
+import 'package:app_atalaia/utils/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/menu.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
-// import '../error_screen.dart';
+
+import '../error_screen.dart';
 import '../success_screen.dart';
+import 'switch_provider.dart';
 
 class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -16,6 +20,9 @@ class SwitchCreateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: const Header(title: 'Adicionar Ponto'),
       endDrawer: const MenuDrawer(),
@@ -35,6 +42,7 @@ class SwitchCreateScreen extends StatelessWidget {
               ),
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 BuildInput(
                   labelText: 'Nome',
@@ -57,20 +65,34 @@ class SwitchCreateScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ButtonIcon(
               labelText: 'Adicionar',
-              onPressed: () {
-                // String name = nameController.text;
-                // String macAddress = macController.text;
-                // int watts = int.tryParse(wattsController.text) ?? 0;
-
-                // Simulação de sucesso
-                bool success = true;
-
-                if (success) {
-                  Navigator.pushReplacement(
+              onPressed: () async {
+                final userId = authProvider.userId;
+                if (userId != null) {
+                  await switchProvider.createSwitch(
+                    nameController.text,
+                    wattsController.text,
+                    macController.text,
+                    userId,
+                  );
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SuccessScreen(
-                        message: 'Ponto adicionado com sucesso',
+                      builder: (context) => SuccessScreen(
+                        message: 'Ponto salvo com sucesso',
+                        onOKPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  );
+                  print('USER SWITCH sim: $userId');
+                } else {
+                  print('USER SWITCH nao: $userId');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ErrorScreen(
+                        message: 'Erro',
+                        errorDescription: 'Não foi possível salvar o ponto',
+                        onOKPressed: () => Navigator.pop(context),
                       ),
                     ),
                   );
