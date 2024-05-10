@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/auth_provider.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/build_row.dart';
 import '../../widgets/button_icon.dart';
 import '../../utils/utils.dart';
 import 'login_controller.dart';
+import 'login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _loginController = LoginController();
+  late final LoginProvider loginProvider; // Mudei para late
+  late final LoginController _loginController; // Mudei para late
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
@@ -22,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    loginProvider = LoginProvider(AuthProvider());
+    loginProvider.initDio();
+    _loginController = LoginController(loginProvider, AuthProvider());
     _clearTextFields();
   }
 
@@ -103,12 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         _inputEmail.text.trim().toLowerCase(),
                         _inputPassword.text.trim(),
                       );
-                      // Navigator.pushNamed(context, '/home');
                     }
                   },
                   icon: const Icon(Icons.check),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

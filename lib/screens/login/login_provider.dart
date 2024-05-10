@@ -1,19 +1,20 @@
 import 'package:dio/dio.dart';
 
+import '../../utils/auth_provider.dart';
 import '../../utils/config.dart';
 
 class LoginProvider {
   final Dio _dio = Dio();
-  String? _userUuid;
+  final AuthProvider _authProvider;
 
-  String? get userUuid => _userUuid;
+  LoginProvider(this._authProvider);
 
   initDio() {
     _dio.options.connectTimeout = const Duration(seconds: 5);
     _dio.options.receiveTimeout = const Duration(seconds: 3);
   }
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}login',
@@ -24,8 +25,9 @@ class LoginProvider {
       );
 
       if (response.statusCode == 200) {
-        _userUuid = response.data['dados']['uuid'];
-        return response.data;
+        final userUuid = response.data['dados']['uuid'];
+        _authProvider.setUserId(userUuid);
+        print('UUID PROVIDER: $userUuid');
       } else if (response.statusCode == 401) {
         throw Exception('Falha na Credencial');
       } else if (response.statusCode == 404) {
