@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../widgets/header.dart';
+import '../../widgets/header.dart';
 import 'topic_content_screen.dart';
 
 class HelpScreen extends StatefulWidget {
@@ -141,8 +141,4 @@ class _HelpScreenState extends State<HelpScreen> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(home: HelpScreen()));
 }
