@@ -2,7 +2,7 @@
 import 'package:app_atalaia/screens/guard/guard_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/help_screen.dart';
+import 'screens/help/help_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/perfil_screen.dart';
 import 'screens/recover_confirmation_screen.dart';
