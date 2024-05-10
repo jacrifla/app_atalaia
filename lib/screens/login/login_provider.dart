@@ -8,9 +8,14 @@ class LoginProvider {
 
   String? get userUuid => _userUuid;
 
+  initDio() {
+    _dio.options.connectTimeout = const Duration(seconds: 5);
+    _dio.options.receiveTimeout = const Duration(seconds: 3);
+  }
+
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      Response response = await _dio.post(
+      final response = await _dio.post(
         '${Config.apiUrl}login',
         data: {
           'email': email,
@@ -19,8 +24,7 @@ class LoginProvider {
       );
 
       if (response.statusCode == 200) {
-        _userUuid = response.data['uuid'];
-        print('UUID recebido após o login: $userUuid');
+        _userUuid = response.data['dados']['uuid'];
         return response.data;
       } else if (response.statusCode == 401) {
         throw Exception('Falha na Credencial');
