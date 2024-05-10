@@ -46,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Column(
                   children: [
@@ -93,6 +94,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
+                ButtonIcon(
+                  labelText: 'Entrar',
+                  onPressed: () {
+                    if (_formState.currentState!.validate()) {
+                      _loginController.loginUser(
+                        context,
+                        _inputEmail.text.trim().toLowerCase(),
+                        _inputPassword.text.trim(),
+                      );
+                      // Navigator.pushNamed(context, '/home');
+                    }
+                  },
+                  icon: const Icon(Icons.check),
+                ),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -118,19 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                    ),
-                    ButtonIcon(
-                      labelText: 'Entrar',
-                      onPressed: () {
-                        if (_formState.currentState!.validate()) {
-                          _loginController.loginUser(
-                            context,
-                            _inputEmail.text.trim().toLowerCase(),
-                            _inputPassword.text.trim(),
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.check),
                     ),
                   ],
                 ),
