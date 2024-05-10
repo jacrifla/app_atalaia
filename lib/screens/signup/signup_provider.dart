@@ -3,17 +3,17 @@ import 'package:dio/dio.dart';
 import '../../utils/config.dart';
 
 class SignupProvider {
-  final Dio dio = Dio();
+  final Dio _dio = Dio();
 
   initDio() {
-    dio.options.connectTimeout = const Duration(seconds: 5);
-    dio.options.receiveTimeout = const Duration(seconds: 3);
+    _dio.options.connectTimeout = const Duration(seconds: 5);
+    _dio.options.receiveTimeout = const Duration(seconds: 3);
   }
 
   Future<Map<String, dynamic>> createUser(
       String name, String email, String phone, String password) async {
     try {
-      final response = await dio.post(
+      final response = await _dio.post(
         '${Config.apiUrl}register',
         data: {
           'name': name,
