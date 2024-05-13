@@ -71,6 +71,7 @@ class SwitchCreateScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ButtonIcon(
+            height: 50,
             icon: const Icon(Icons.add),
             labelText: 'Adicionar',
             onPressed: () async {
