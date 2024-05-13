@@ -1,6 +1,6 @@
 class SwitchModel {
   final String? id;
-  final String uuid;
+  final String? uuid;
   final String? userId;
   final String? iconName;
   final String? groupId;
@@ -9,20 +9,20 @@ class SwitchModel {
   final bool isActive;
   final String? lastTimeActive;
   final int watts;
-  final bool keepActive;
-  final bool scheduleActive;
+  final bool? keepActive;
+  final bool? scheduleActive;
   final String? scheduleLastActivation;
   final String? scheduleStart;
   final String? scheduleEnd;
-  final String createdAt;
+  final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
-  final bool guardActive;
+  final bool? guardActive;
 
   SwitchModel({
     this.id,
-    required this.uuid,
-    required this.userId,
+    this.uuid,
+    this.userId,
     this.iconName,
     this.groupId,
     required this.macAddress,
@@ -30,15 +30,15 @@ class SwitchModel {
     required this.isActive,
     this.lastTimeActive,
     required this.watts,
-    required this.keepActive,
-    required this.scheduleActive,
+    this.keepActive,
+    this.scheduleActive,
     this.scheduleLastActivation,
     this.scheduleStart,
     this.scheduleEnd,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
     this.deletedAt,
-    required this.guardActive,
+    this.guardActive,
   });
 
   factory SwitchModel.fromJson(Map<String, dynamic> json) {
