@@ -9,6 +9,7 @@ import 'screens/recover_confirmation_screen.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/recover_screen.dart';
 import 'screens/signup/signup_screen.dart';
+import 'screens/switch/switch_create.dart';
 import 'screens/switch/switch_screen.dart';
 import 'screens/group_switch/group_screen.dart';
 import 'theme.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/recover_confirmation': (context) => RecoverConfirmationScreen(),
         '/signup': (context) => SignupScreen(),
         '/switch': (context) => SwitchScreen(),
+        '/switch_create': (context) => SwitchCreateScreen(),
         '/guard': (context) => GuardManagementScreen(),
       },
 
