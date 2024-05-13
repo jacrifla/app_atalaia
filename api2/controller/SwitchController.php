@@ -17,7 +17,7 @@ class SwitchController
             $user            = UserModel::getUserByUUID($data['user_id']);
             $data['user_id'] = $user['id'];
             //$macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
-            //$switchExists    = SwitchModel::checkSwitchExists($data);
+            $switchExists    = SwitchModel::checkSwitchExists($data);
             
             
             if($switchExists){
