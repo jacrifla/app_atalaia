@@ -63,45 +63,58 @@ class SwitchCreateScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            ButtonIcon(
-              labelText: 'Adicionar',
-              onPressed: () async {
-                final userId = authProvider.userId;
-                if (userId != null) {
-                  await switchProvider.createSwitch(
-                    nameController.text,
-                    wattsController.text,
-                    macController.text,
-                    userId,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SuccessScreen(
-                        message: 'Ponto salvo com sucesso',
-                        onOKPressed: () => Navigator.pop(context),
-                      ),
-                    ),
-                  );
-                  print('USER SWITCH sim: $userId');
-                } else {
-                  print('USER SWITCH nao: $userId');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ErrorScreen(
-                        message: 'Erro',
-                        errorDescription: 'Não foi possível salvar o ponto',
-                        onOKPressed: () => Navigator.pop(context),
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
           ],
         ),
       ),
+      floatingActionButton: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ButtonIcon(
+            icon: const Icon(Icons.add),
+            labelText: 'Adicionar',
+            onPressed: () async {
+              final userId = authProvider.userId;
+              print('USER SWITCH sim: $userId');
+              if (userId != null) {
+                await switchProvider.createSwitch(
+                  nameController.text,
+                  wattsController.text,
+                  macController.text,
+                  userId,
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SuccessScreen(
+                      message: 'Ponto salvo com sucesso',
+                      onOKPressed: () {
+                        nameController.clear();
+                        macController.clear();
+                        wattsController.clear();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                print('USER SWITCH nao: $userId');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ErrorScreen(
+                      message: 'Erro',
+                      errorDescription: 'Não foi possível salvar o ponto',
+                      onOKPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
