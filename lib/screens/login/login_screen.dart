@@ -101,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 ButtonIcon(
+                  height: 50,
                   labelText: 'Entrar',
                   onPressed: () {
                     if (_formState.currentState!.validate()) {
