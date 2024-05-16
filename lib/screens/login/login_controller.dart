@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
-import 'package:app_atalaia/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/auth_provider.dart';
-import 'login_provider.dart';
 import '../../screens/error_screen.dart';
+import 'login_provider.dart';
 
 class LoginController {
   final LoginProvider _loginProvider;
