@@ -9,15 +9,15 @@ import 'login_controller.dart';
 import 'login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final LoginProvider loginProvider; // Mudei para late
-  late final LoginController _loginController; // Mudei para late
+  late final LoginProvider loginProvider;
+  late final LoginController _loginController;
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
