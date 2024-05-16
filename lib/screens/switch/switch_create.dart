@@ -79,9 +79,9 @@ class SwitchCreateScreen extends StatelessWidget {
               print('USER SWITCH sim: $userId');
               if (userId != null) {
                 await switchProvider.createSwitch(
-                  nameController.text,
+                  nameController.text.toLowerCase(),
                   wattsController.text,
-                  macController.text,
+                  macController.text.toUpperCase(),
                   userId,
                 );
                 Navigator.pushReplacement(
