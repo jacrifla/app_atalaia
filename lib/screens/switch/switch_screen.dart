@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../utils/auth_provider.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 import '../../widgets/menu.dart';
+import '../../widgets/switch_card.dart';
+import 'switch_controller.dart';
 import 'switch_create.dart';
 import 'switch_model.dart';
 
@@ -11,68 +15,39 @@ class SwitchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lista de pontos fictícios
-    final List<SwitchModel> switches = [
-      SwitchModel(
-          name: 'Switch 1',
-          macAddress: '00:11:22:33:44:55',
-          watts: 100,
-          isActive: true),
-      SwitchModel(
-          name: 'Switch 2',
-          macAddress: '11:22:33:44:55:66',
-          watts: 150,
-          isActive: false),
-      SwitchModel(
-          name: 'Switch 3',
-          macAddress: '22:33:44:55:66:77',
-          watts: 200,
-          isActive: true),
-    ];
+    final authProvider = Provider.of<AuthProvider>(context);
+    final userId = authProvider.userId;
 
     return Scaffold(
       appBar: const Header(title: 'Pontos'),
       endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView.builder(
-          itemCount: switches.length,
-          itemBuilder: (context, index) {
-            final switchModel = switches[index];
-            return Card(
-              color: switchModel.isActive
-                  ? Theme.of(context).colorScheme.onSecondary
-                  : Theme.of(context).colorScheme.primary,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        switchModel.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.background,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('excloi');
+        child: Column(
+          children: [
+            Expanded(
+              child: FutureBuilder<List<SwitchModel>>(
+                future: SwitchController().getSwitches(userId!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Erro: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                        child: Text('Nenhum switch cadastrado'));
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return SwitchCard(switchModel: snapshot.data![index]);
                       },
-                      child: Icon(
-                        Icons.close,
-                        color: Theme.of(context).colorScheme.error,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
+                    );
+                  }
+                },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
       floatingActionButton: Column(
@@ -95,7 +70,10 @@ class SwitchScreen extends StatelessWidget {
           ),
           ButtonIcon(
             labelText: 'Atualizar Pontos',
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<SwitchController>(context, listen: false)
+                  .getSwitches(userId);
+            },
             icon: const Icon(Icons.refresh),
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
           ),
