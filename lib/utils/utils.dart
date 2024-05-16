@@ -10,3 +10,18 @@ bool isValidPhoneNumber(String phoneNumber) {
   // Verifica se o número de telefone tem exatamente 11 dígitos (incluindo o DDD)
   return numericPhone.length == 11;
 }
+
+String toCapitalizeWords(String input) {
+  if (input.isEmpty) return '';
+
+  List<String> words = input.split(' ');
+  List<String> capitalizedWords = words.map((word) {
+    if (word.isNotEmpty) {
+      return '${word[0].toUpperCase()}${word.substring(1)}';
+    } else {
+      return '';
+    }
+  }).toList();
+
+  return capitalizedWords.join(' ');
+}
