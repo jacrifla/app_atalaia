@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
+import 'package:app_atalaia/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/auth_provider.dart';
@@ -20,7 +21,7 @@ class LoginController {
       await _loginProvider.login(email, password);
       print('UUID após o login: ${_authProvider.userId}');
 
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, '/loading');
     } catch (error) {
       await Navigator.push(
         context,
