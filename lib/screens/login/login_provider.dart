@@ -27,21 +27,14 @@ class LoginProvider {
       if (response.statusCode == 200) {
         final userUuid = response.data['dados']['uuid'];
         _authProvider.setUserId(userUuid);
-        print('UUID PROVIDER: $userUuid');
-      } else if (response.statusCode == 401) {
-        throw Exception('Falha na Credencial');
       } else if (response.statusCode == 404) {
-        throw Exception('Not found');
+        throw Exception('Usuário não encontrado');
       } else {
         throw Exception(
             'Failed to connect to the server. Status code: ${response.statusCode}');
       }
-    } catch (error) {
-      if (error is DioError) {
-        throw Exception('Failed to connect to the server.');
-      } else {
-        throw Exception('Failed to log in: $error');
-      }
+    } on DioException catch (error) {
+      throw Exception('Failed to log in: $error');
     }
   }
 }
