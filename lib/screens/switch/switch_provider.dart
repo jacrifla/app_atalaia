@@ -7,27 +7,12 @@ import 'switch_model.dart';
 class SwitchProvider extends ChangeNotifier {
   final Dio _dio = Dio();
 
-  Future<List<dynamic>> fetchSwitches(String userId) async {
-    print('USER ID PROVIDER: $userId');
-    try {
-      final response =
-          await _dio.get('${Config.apiUrl}switches', data: {'user_id': userId}
-              // queryParameters: {'user_id': userId},
-              );
-      print('STATUS CODE: ${response.statusCode}');
-      if (response.statusCode == 200) {
-        print('entrou?');
-        final data = response.data['dados'];
-        // return {'status': 'success', 'data': response.data['dados']};
+  List<SwitchModel> _switches = [];
+  List<SwitchModel> get switches => _switches;
 
-        // return data.map((json) => SwitchModel.fromJson(json)).toList();
-        return data;
-      } else {
-        throw Exception('Failed to fetch switches');
-      }
-    } on Exception catch (error) {
-      throw Exception('ERRO PROVIDER: $error');
-    }
+  set switches(List<SwitchModel> value) {
+    _switches = value;
+    notifyListeners();
   }
 
   Future<Map<String, dynamic>> createSwitch(
@@ -51,9 +36,9 @@ class SwitchProvider extends ChangeNotifier {
 
   Future<List<SwitchModel>> getSwitches(String userId) async {
     try {
-      final response = await _dio.get(
+      final response = await _dio.post(
         '${Config.apiUrl}switches',
-        queryParameters: {'user_id': userId},
+        data: {'user_id': userId},
       );
 
       if (response.statusCode == 200) {
@@ -79,7 +64,7 @@ class SwitchProvider extends ChangeNotifier {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}switches/getone',
-        queryParameters: {'mac_address': macAddress},
+        data: {'mac_address': macAddress},
       );
 
       if (response.statusCode == 200) {
@@ -148,14 +133,6 @@ class SwitchProvider extends ChangeNotifier {
   Map<String, dynamic> _handleResponse(Response response) {
     if (response.statusCode == 200) {
       return {'status': 'success', 'data': response.data};
-    } else {
-      throw Exception('Erro ao processar a requisição: ${response.data}');
-    }
-  }
-
-  List<Map<String, dynamic>> _handleResponseList(Response response) {
-    if (response.statusCode == 200) {
-      return List<Map<String, dynamic>>.from(response.data['data']);
     } else {
       throw Exception('Erro ao processar a requisição: ${response.data}');
     }
