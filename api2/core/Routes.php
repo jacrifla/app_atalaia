@@ -2,7 +2,7 @@
 
 require_once 'Http.php';
 
-Http::get('/switches', 'SwitchController@getSwitches');
+Http::post('/switches', 'SwitchController@getSwitches');
 Http::post('/switches/getone', 'SwitchController@getSwitch');
 // Http::get('/switchgroup', 'GroupSwitchController@getGroups');
 Http::post('/login', 'LoginController@login');
