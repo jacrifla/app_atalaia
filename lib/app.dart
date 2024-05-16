@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:app_atalaia/screens/guard/guard_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'screens/guard/guard_screen.dart';
+import 'screens/loading_screen.dart';
 import 'screens/help/help_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/perfil_screen.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/switch': (context) => SwitchScreen(),
         '/switch_create': (context) => SwitchCreateScreen(),
         '/guard': (context) => GuardManagementScreen(),
+        '/loading': (context) => LoadingScreen(),
       },
 
       initialRoute: '/',
