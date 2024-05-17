@@ -8,6 +8,7 @@ class BuildInput extends StatelessWidget {
   final bool isPassword;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final String Function()? emptyFieldHandler;
 
   const BuildInput({
     super.key,
@@ -18,6 +19,7 @@ class BuildInput extends StatelessWidget {
     this.isPassword = false,
     this.validator,
     this.keyboardType,
+    this.emptyFieldHandler,
   });
 
   @override
@@ -34,6 +36,11 @@ class BuildInput extends StatelessWidget {
             hintText: hintText,
             prefixIcon: icon,
           ),
+          onChanged: (value) {
+            if (value.isEmpty && emptyFieldHandler != null) {
+              controller!.text = emptyFieldHandler!();
+            }
+          },
         ),
         const SizedBox(height: 35),
       ],

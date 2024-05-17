@@ -48,17 +48,30 @@ class SwitchCreateScreen extends StatelessWidget {
                   labelText: 'Nome',
                   controller: nameController,
                   icon: const Icon(Icons.polyline),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Digite o nome do ponto';
+                    }
+                    return null;
+                  },
                 ),
                 BuildInput(
                   labelText: 'Endereço MAC',
                   controller: macController,
                   icon: const Icon(Icons.network_ping),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Digite o endereco de MAC';
+                    }
+                    return null;
+                  },
                 ),
                 BuildInput(
                   labelText: 'Watts',
                   controller: wattsController,
                   keyboardType: TextInputType.number,
                   icon: const Icon(Icons.flash_on),
+                  emptyFieldHandler: () => '0',
                 ),
               ],
             ),

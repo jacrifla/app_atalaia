@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/button_icon.dart';
+import '../screens/switch/switch_screen.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String message;
@@ -52,7 +52,14 @@ class ErrorScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               ButtonIcon(
-                onPressed: onOKPressed,
+                onPressed: onOKPressed ??
+                    () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const SwitchScreen()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
                 icon: const Icon(Icons.check),
               ),
             ],
