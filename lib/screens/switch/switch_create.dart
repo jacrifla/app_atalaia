@@ -89,7 +89,7 @@ class SwitchCreateScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const SuccessScreen(
                       message: 'Ponto salvo com sucesso',
-                      screen: '/screen',
+                      screen: '/switch',
                     ),
                   ),
                 );
