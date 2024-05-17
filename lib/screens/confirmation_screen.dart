@@ -43,12 +43,12 @@ class ConfirmationScreen extends StatelessWidget {
                 children: <Widget>[
                   ButtonIcon(
                     onPressed: onCancel,
-                    icon: const Icon(Icons.arrow_back),
+                    labelText: 'Cancelar',
                   ),
-                  const SizedBox(width: 20),
                   ButtonIcon(
+                    labelText: 'Confirmar',
                     onPressed: onConfirm,
-                    icon: const Icon(Icons.check),
+                    backgroundColor: Theme.of(context).colorScheme.error,
                   ),
                 ],
               ),
