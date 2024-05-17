@@ -29,7 +29,7 @@ class SwitchController extends ChangeNotifier {
   Future<bool> updateSwitch(Map<String, dynamic> data) async {
     try {
       final result = await _switchProvider.updateSwitch(data);
-      return result['status'] == 'success';
+      return result;
     } catch (error) {
       return false;
     }
