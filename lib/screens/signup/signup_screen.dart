@@ -54,7 +54,11 @@ class _SignupScreenState extends State<SignupScreen> {
         _showSuccessScreen('Usuário criado com sucesso!');
         _clearInputs();
       } else {
-        _showErrorDialog('Erro', response['message']);
+        if (response['message'] != null) {
+          _showErrorDialog('Erro', response['message']);
+        } else {
+          _showErrorDialog('Erro', 'Ocorreu um erro desconhecido.');
+        }
       }
     }
   }
@@ -78,7 +82,7 @@ class _SignupScreenState extends State<SignupScreen> {
       MaterialPageRoute(
         builder: (context) => SuccessScreen(
           message: message,
-          onOKPressed: () => Navigator.pop(context),
+          screen: '/',
         ),
       ),
     );
