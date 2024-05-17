@@ -5,12 +5,12 @@ import '../widgets/button_icon.dart';
 
 class SuccessScreen extends StatelessWidget {
   final String message;
-  final VoidCallback? onOKPressed;
+  final String screen;
 
   const SuccessScreen({
     super.key,
     required this.message,
-    this.onOKPressed,
+    required this.screen,
   });
 
   @override
@@ -38,7 +38,12 @@ class SuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               ButtonIcon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.popUntil(
+                    context,
+                    ModalRoute.withName(screen),
+                  );
+                },
                 icon: Icon(Icons.check),
               ),
             ],
