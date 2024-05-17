@@ -25,9 +25,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       MaterialPageRoute(
         builder: (context) => SuccessScreen(
           message: 'Perfil alterado com sucesso',
-          onOKPressed: () {
-            Navigator.of(context).pop();
-          },
+          screen: '/perfil',
         ),
       ),
     );
@@ -93,7 +91,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           _navegarParaSucesso();
                         }
                       },
-                      icon: Icon(Icons.check),
+                      labelText: 'Confirmar',
                     ),
                   ],
                 ),

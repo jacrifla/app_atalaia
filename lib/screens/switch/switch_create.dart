@@ -87,14 +87,9 @@ class SwitchCreateScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SuccessScreen(
+                    builder: (context) => const SuccessScreen(
                       message: 'Ponto salvo com sucesso',
-                      onOKPressed: () {
-                        nameController.clear();
-                        macController.clear();
-                        wattsController.clear();
-                        Navigator.pop(context);
-                      },
+                      screen: '/screen',
                     ),
                   ),
                 );

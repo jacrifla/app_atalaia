@@ -147,6 +147,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     MaterialPageRoute(
                       builder: (context) => SuccessScreen(
                         message: 'Grupo Criado com sucesso',
+                        screen: '/group_switch',
                       ),
                     ),
                   );
