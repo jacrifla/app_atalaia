@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,18 +7,45 @@ import '../../utils/auth_provider.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 import '../../widgets/menu.dart';
-import '../../widgets/switch_card.dart';
+import 'switch_card_delete.dart';
 import 'switch_controller.dart';
 import 'switch_create.dart';
 import 'switch_model.dart';
 
-class SwitchScreen extends StatelessWidget {
+class SwitchScreen extends StatefulWidget {
   const SwitchScreen({super.key});
+
+  @override
+  _SwitchScreenState createState() => _SwitchScreenState();
+}
+
+class _SwitchScreenState extends State<SwitchScreen> {
+  late Future<List<SwitchModel>> _switchesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userId = authProvider.userId;
+    if (userId != null) {
+      _switchesFuture = SwitchController().getSwitches(userId);
+    } else {
+      _switchesFuture = Future.error('User ID is null');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final userId = authProvider.userId;
+
+    if (userId == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Erro: usuário não autenticado'),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: const Header(title: 'Pontos'),
@@ -27,7 +56,7 @@ class SwitchScreen extends StatelessWidget {
           children: [
             Expanded(
               child: FutureBuilder<List<SwitchModel>>(
-                future: SwitchController().getSwitches(userId!),
+                future: _switchesFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -40,7 +69,9 @@ class SwitchScreen extends StatelessWidget {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return SwitchCard(switchModel: snapshot.data![index]);
+                        return SwitchCardDelete(
+                          switchModel: snapshot.data![index],
+                        );
                       },
                     );
                   }
@@ -71,8 +102,9 @@ class SwitchScreen extends StatelessWidget {
           ButtonIcon(
             labelText: 'Atualizar Pontos',
             onPressed: () {
-              Provider.of<SwitchController>(context, listen: false)
-                  .getSwitches(userId);
+              setState(() {
+                _switchesFuture = SwitchController().getSwitches(userId);
+              });
             },
             icon: const Icon(Icons.refresh),
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
