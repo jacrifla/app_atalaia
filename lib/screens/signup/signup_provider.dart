@@ -26,17 +26,17 @@ class SignupProvider {
       if (response.statusCode == 201) {
         return {'status': 'success', 'data': response.data};
       } else {
-        throw Exception('Failed to create user: ${response.data['msg']}');
+        throw 'Failed to create user: ${response.data['msg']}';
       }
     } catch (e) {
       if (e is DioError) {
         if (e.response != null) {
-          throw Exception('Failed to create user: ${e.response!.data['msg']}');
+          throw 'Failed to create user: ${e.response!.data['msg']}';
         } else {
-          throw Exception('Failed to connect to the server.');
+          throw 'Failed to connect to the server.';
         }
       } else {
-        throw Exception('Unknown error occurred.');
+        throw 'Unknown error occurred.';
       }
     }
   }
