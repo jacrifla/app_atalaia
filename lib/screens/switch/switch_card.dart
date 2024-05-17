@@ -1,6 +1,6 @@
 import 'package:app_atalaia/utils/utils.dart';
 import 'package:flutter/material.dart';
-import '../screens/switch/switch_model.dart';
+import 'switch_model.dart';
 
 class SwitchCard extends StatefulWidget {
   final SwitchModel switchModel;
@@ -32,7 +32,11 @@ class _SwitchCardState extends State<SwitchCard> {
           children: [
             Text(
               toCapitalizeWords(widget.switchModel.name),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.background,
+              ),
             ),
             GestureDetector(
               onTap: () {
