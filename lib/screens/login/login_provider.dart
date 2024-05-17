@@ -27,14 +27,19 @@ class LoginProvider {
       if (response.statusCode == 200) {
         final userUuid = response.data['dados']['uuid'];
         _authProvider.setUserId(userUuid);
-      } else if (response.statusCode == 404) {
-        throw Exception('Usuário não encontrado');
-      } else {
-        throw Exception(
-            'Failed to connect to the server. Status code: ${response.statusCode}');
       }
-    } on DioException catch (error) {
-      throw Exception('Failed to log in: $error');
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response?.statusCode == 401) {
+          throw 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.';
+        } else if (error.response?.statusCode == 404) {
+          throw 'Usuário não encontrado. Por favor, verifique seu e-mail.';
+        } else {
+          throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else {
+        throw 'Erro inesperado. Por favor, tente novamente mais tarde.';
+      }
     }
   }
 }
