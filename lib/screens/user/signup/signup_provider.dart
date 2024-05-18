@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../utils/config.dart';
+import '../../../utils/config.dart';
 
 class SignupProvider {
   final Dio _dio = Dio();

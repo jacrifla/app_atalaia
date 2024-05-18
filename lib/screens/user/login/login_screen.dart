@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/auth_provider.dart';
-import '../../widgets/build_input.dart';
-import '../../widgets/build_row.dart';
-import '../../widgets/button_icon.dart';
-import '../../utils/utils.dart';
+import '../../../utils/auth_provider.dart';
+import '../../../widgets/build_input.dart';
+import '../../../widgets/build_row.dart';
+import '../../../widgets/button_icon.dart';
+import '../../../utils/utils.dart';
 import 'login_controller.dart';
 import 'login_provider.dart';
 

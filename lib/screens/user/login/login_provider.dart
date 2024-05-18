@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../utils/auth_provider.dart';
-import '../../utils/config.dart';
+import '../../../utils/auth_provider.dart';
+import '../../../utils/config.dart';
 
 class LoginProvider {
   final Dio _dio = Dio();
