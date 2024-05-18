@@ -1,11 +1,16 @@
-import 'package:app_atalaia/utils/utils.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../utils/auth_provider.dart';
+import '../../utils/utils.dart';
 import 'switch_model.dart';
+import 'switch_controller.dart';
 
 class SwitchCard extends StatefulWidget {
   final SwitchModel switchModel;
 
-  const SwitchCard({Key? key, required this.switchModel}) : super(key: key);
+  const SwitchCard({super.key, required this.switchModel});
 
   @override
   _SwitchCardState createState() => _SwitchCardState();
@@ -22,6 +27,14 @@ class _SwitchCardState extends State<SwitchCard> {
 
   @override
   Widget build(BuildContext context) {
+    final switchController = Provider.of<SwitchController>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+    final userId = authProvider.userId;
+
+    if (userId == null) {
+      return const Text('User not authenticated');
+    }
+
     return Card(
       color: Theme.of(context).colorScheme.onSecondary,
       elevation: 3,
@@ -39,10 +52,22 @@ class _SwitchCardState extends State<SwitchCard> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  isActive = !isActive;
-                });
+              onTap: () async {
+                print(
+                    'Toggling switch with MAC address: ${widget.switchModel.macAddress}');
+                bool success = await switchController.toggleSwitch(
+                  widget.switchModel.macAddress,
+                  !isActive,
+                  userId,
+                );
+                if (success) {
+                  print('Toggle successful, updating state.');
+                  setState(() {
+                    isActive = !isActive;
+                  });
+                } else {
+                  print('Toggle failed.');
+                }
               },
               child: Icon(
                 Icons.lightbulb,
