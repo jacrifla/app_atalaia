@@ -12,6 +12,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => SwitchController()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<SwitchProvider>(create: (_) => SwitchProvider()),
         ChangeNotifierProvider<SwitchController>(
