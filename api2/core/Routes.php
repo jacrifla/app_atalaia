@@ -1,12 +1,15 @@
 <?php
 
 require_once 'Http.php';
-
-Http::post('/switches', 'SwitchController@getSwitches');
-Http::post('/switches/getone', 'SwitchController@getSwitch');
-// Http::get('/switchgroup', 'GroupSwitchController@getGroups');
+// User
 Http::post('/login', 'LoginController@login');
 Http::post('/register', 'RegisterController@createUser');
+Http::put('/user/update', 'UserController@updateUser');
+Http::put('/user/delete', 'UserController@deleteUser');
+// Switches
+// Http::get('/switchgroup', 'GroupSwitchController@getGroups');
+Http::post('/switches', 'SwitchController@getSwitches');
+Http::post('/switches/getone', 'SwitchController@getSwitch');
 Http::post('/switches/new', 'SwitchController@createSwitch');
 Http::put('/switches/edit', 'SwitchController@updateSwitch');
 Http::put('/switches/toggle', 'SwitchController@toggleSwitch');
