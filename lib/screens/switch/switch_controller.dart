@@ -44,9 +44,11 @@ class SwitchController extends ChangeNotifier {
     }
   }
 
-  Future<bool> toggleSwitch(String macAddress) async {
+  Future<bool> toggleSwitch(
+      String macAddress, bool isActive, String userId) async {
     try {
-      final result = await _switchProvider.toggleSwitch(macAddress);
+      final result =
+          await _switchProvider.toggleSwitch(macAddress, isActive, userId);
       return result['status'] == 'success';
     } catch (error) {
       return false;
