@@ -144,16 +144,33 @@ class SwitchProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> toggleSwitch(String macAddress) async {
+  Future<Map<String, dynamic>> toggleSwitch(
+      String macAddress, bool isActive, String userId) async {
     try {
       final response = await _dio.put(
         '${Config.apiUrl}switches/toggle',
-        data: {'mac_address': macAddress},
+        data: {
+          'mac_address': macAddress,
+          'user_id': userId,
+          'is_active': isActive,
+        },
       );
 
-      return _handleResponse(response);
+      if (response.statusCode == 200) {
+        return {'status': 'success', 'dados': response.data};
+      } else {
+        return {'status': 'error', 'msg': 'Unexpected Error'};
+      }
     } catch (error) {
-      return _handleError(error);
+      if (error is DioError && error.response != null) {
+        final statusCode = error.response!.statusCode;
+        if (statusCode == 400) {
+          return {'status': 'error', 'msg': 'Bad Request'};
+        } else if (statusCode == 500) {
+          return {'status': 'error', 'msg': 'Internal Server Error'};
+        }
+      }
+      return {'status': 'error', 'msg': error.toString()};
     }
   }
 
