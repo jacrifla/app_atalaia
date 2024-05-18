@@ -1,16 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-
 import '../widgets/button_icon.dart';
 
 class SuccessScreen extends StatelessWidget {
   final String message;
-  final String screen;
+  final String? screen;
+  final String? alternativeRoute;
 
   const SuccessScreen({
     super.key,
     required this.message,
-    required this.screen,
+    this.screen,
+    this.alternativeRoute,
   });
 
   @override
@@ -39,10 +40,14 @@ class SuccessScreen extends StatelessWidget {
               const SizedBox(height: 60),
               ButtonIcon(
                 onPressed: () {
-                  Navigator.popUntil(
-                    context,
-                    ModalRoute.withName(screen),
-                  );
+                  if (alternativeRoute != null) {
+                    Navigator.pushNamed(context, alternativeRoute!);
+                  } else {
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(screen!),
+                    );
+                  }
                 },
                 icon: Icon(Icons.check),
               ),
