@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../widgets/menu.dart';
-import '../widgets/button_icon.dart';
+import '../utils/auth_provider.dart';
+import 'switch/switch_card.dart';
+import 'switch/switch_controller.dart';
+import 'switch/switch_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,11 +16,34 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String _selectedContent = 'Guarda';
-  String _guardaStatusText = 'Sua guarda não está ativa no momento.';
+  int _selectedIndex = 0;
 
-  Color _cardBackgroundColor = Colors.white;
-  Color _iconColor = Colors.black;
+  late Future<List<SwitchModel>> _switchesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSwitches();
+  }
+
+  void _loadSwitches() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userId = authProvider.userId;
+    if (userId != null) {
+      _switchesFuture = SwitchController().getSwitches(userId);
+    } else {
+      _switchesFuture = Future.error('User ID is null');
+    }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (_selectedIndex == 1) {
+        _loadSwitches();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,101 +64,134 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       endDrawer: const MenuDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ButtonIcon(
-                labelText: 'Grupos',
-                onPressed: () {
-                  setState(() {
-                    _selectedContent = 'Grupos';
-                  });
-                },
-              ),
-              ButtonIcon(
-                labelText: 'Pontos',
-                onPressed: () {
-                  setState(() {
-                    _selectedContent = 'Pontos';
-                  });
-                },
-              ),
-            ],
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const GuardaCard(),
+            const SizedBox(height: 20),
+            Expanded(
+              child: _buildSelectedContent(),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Grupos',
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Card(
-              elevation: 3,
-              color: _cardBackgroundColor,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb),
+            label: 'Pontos',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildSelectedContent() {
+    if (_selectedIndex == 0) {
+      return const Center(child: Text('Conteúdo dos Grupos'));
+    } else if (_selectedIndex == 1) {
+      return FutureBuilder<List<SwitchModel>>(
+        future: _switchesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Erro: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Nenhum switch cadastrado'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return SwitchCard(switchModel: snapshot.data![index]);
+              },
+            );
+          }
+        },
+      );
+    }
+    return Container();
+  }
+}
+
+class GuardaCard extends StatefulWidget {
+  const GuardaCard({super.key});
+
+  @override
+  _GuardaCardState createState() => _GuardaCardState();
+}
+
+class _GuardaCardState extends State<GuardaCard> {
+  String _guardaStatusText = 'Sua guarda não está ativa no momento.';
+  Color _cardBackgroundColor = Colors.white;
+  Color _iconColor = Colors.black;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3,
+      color: _cardBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.security,
+                  size: 50,
+                  color: _iconColor,
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.security,
-                          size: 50,
-                          color: _iconColor,
-                        ),
-                        const SizedBox(width: 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Guarda',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              _guardaStatusText,
-                            ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _cardBackgroundColor =
-                                      _cardBackgroundColor == Colors.red
-                                          ? Colors.white
-                                          : Colors.red;
-                                  _iconColor =
-                                      _cardBackgroundColor == Colors.red
-                                          ? Colors.white
-                                          : Colors.black;
-                                  _guardaStatusText = _cardBackgroundColor ==
-                                          Colors.red
-                                      ? 'Sua guarda está ativa no momento.'
-                                      : 'Sua guarda não está ativa no momento.';
-                                });
-                                // Implementar lógica para ativar a guarda aqui
-                              },
-                              child: const Text('Ativar Guarda Agora'),
-                            ),
-                          ],
-                        ),
-                      ],
+                    const Text(
+                      'Guarda',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      _guardaStatusText,
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _cardBackgroundColor =
+                              _cardBackgroundColor == Colors.red
+                                  ? Colors.white
+                                  : Colors.red;
+                          _iconColor = _cardBackgroundColor == Colors.red
+                              ? Colors.white
+                              : Colors.black;
+                          _guardaStatusText = _cardBackgroundColor == Colors.red
+                              ? 'Sua guarda está ativa no momento.'
+                              : 'Sua guarda não está ativa no momento.';
+                        });
+                        // Implementar lógica para ativar a guarda aqui
+                      },
+                      child: const Text('Ativar Guarda Agora'),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-          if (_selectedContent == 'Grupos') ...[
-            const Center(child: Text('Conteúdo dos Grupos')),
-          ] else if (_selectedContent == 'Pontos') ...[
-            const Center(child: Text('Conteúdo dos Pontos')),
           ],
-        ],
+        ),
       ),
     );
   }
