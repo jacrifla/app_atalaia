@@ -26,15 +26,14 @@ class UserController with ChangeNotifier {
     }
   }
 
-  Future<void> softDeleteUser(String userId) async {
+  Future<bool> softDeleteUser(String userId) async {
     _setLoading(true);
     try {
-      bool success = await _userProvider.softDelete(userId);
-      if (!success) {
-        _setErrorMessage('Failed to delete user');
-      }
+      final bool success = await _userProvider.softDelete(userId);
+      return success;
     } catch (e) {
-      _setErrorMessage(e.toString());
+      _setErrorMessage('Erro ao excluir usuário: $e');
+      return false;
     } finally {
       _setLoading(false);
     }
