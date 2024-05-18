@@ -22,7 +22,7 @@ class SwitchController extends ChangeNotifier {
     try {
       return await _switchProvider.getSwitches(userId);
     } catch (error) {
-      throw Exception('Erro ao obter switches: $error');
+      throw 'Erro ao obter switches: $error';
     }
   }
 
