@@ -25,7 +25,7 @@ class UserProvider {
     try {
       final response = await _dio.put(
         '${Config.apiUrl}user/delete',
-        data: {'userId': userId},
+        data: {'user_id': userId},
       );
 
       if (response.statusCode == 200) {
