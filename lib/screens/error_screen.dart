@@ -22,10 +22,11 @@ class ErrorScreen extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Icon(
-                Icons.warning_amber,
-                size: 150,
+                Icons.warning_amber_rounded,
+                size: 250,
                 color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(height: 40),
@@ -61,7 +62,8 @@ class ErrorScreen extends StatelessWidget {
                       //   (Route<dynamic> route) => false,
                       // );
                     },
-                icon: const Icon(Icons.check),
+                labelText: 'Voltar',
+                height: 50,
               ),
             ],
           ),
