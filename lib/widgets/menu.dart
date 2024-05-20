@@ -1,11 +1,31 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+
+import '../screens/confirmation_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
 
+  void showConfirmationDialog(
+      BuildContext context, String question, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationScreen(
+          question: question,
+          onConfirm: onConfirm,
+        );
+      },
+    );
+  }
+
   void logout(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/');
+    showConfirmationDialog(
+      context,
+      'Tem certeza que deseja sair?',
+      () {
+        Navigator.pushReplacementNamed(context, '/');
+      },
+    );
   }
 
   @override
@@ -16,10 +36,11 @@ class MenuDrawer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         // Espaçamento no topo do Drawer
-        SizedBox(height: 82),
+        const SizedBox(height: 82),
         Container(
           width: MediaQuery.of(context).size.width * 0.6,
-          height: screenHeight * 0.6,
+          // altura do menu
+          height: screenHeight * 0.62,
           color: Theme.of(context).colorScheme.background,
           child: Column(
             children: <Widget>[
@@ -33,45 +54,52 @@ class MenuDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ItemMenu(
                 label: 'Home',
-                icon: Icon(Icons.home_outlined),
+                icon: const Icon(Icons.home_outlined),
                 onTap: () {
                   Navigator.pushNamed(context, '/home');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Grupos',
-                icon: Icon(Icons.tune),
+                icon: const Icon(Icons.tune),
                 onTap: () {
                   Navigator.pushNamed(context, '/group_switch');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Pontos',
-                icon: Icon(Icons.lightbulb_outline),
+                icon: const Icon(Icons.lightbulb_outline),
                 onTap: () {
                   Navigator.pushNamed(context, '/switch');
                 },
               ),
               ItemMenu(
                 label: 'Gerenciar Guarda',
-                icon: Icon(Icons.shield_outlined),
+                icon: const Icon(Icons.shield_outlined),
                 onTap: () {
                   Navigator.pushNamed(context, '/guard');
                 },
               ),
               ItemMenu(
                 label: 'Perfil',
-                icon: Icon(Icons.person_outline),
+                icon: const Icon(Icons.person_outline),
                 onTap: () {
                   Navigator.pushNamed(context, '/perfil');
                 },
               ),
               ItemMenu(
+                label: 'Monitoramento',
+                icon: const Icon(Icons.bar_chart_outlined),
+                onTap: () {
+                  Navigator.pushNamed(context, '/monitor');
+                },
+              ),
+              ItemMenu(
                 label: 'Ajuda',
-                icon: Icon(Icons.question_mark_outlined),
+                icon: const Icon(Icons.question_mark_outlined),
                 onTap: () {
                   Navigator.pushNamed(context, '/help');
                 },
@@ -80,7 +108,7 @@ class MenuDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSecondary,
                 child: ItemMenu(
                   label: 'Sair',
-                  colorText: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.background,
                   icon: Icon(
                     Icons.logout,
                     color: Theme.of(context).colorScheme.background,
@@ -103,27 +131,30 @@ class ItemMenu extends StatelessWidget {
   final Icon icon;
   final VoidCallback? onTap;
   final Color? tileColor;
-  final Color? colorText;
+  final Color? color;
 
   const ItemMenu({
     super.key,
     required this.label,
     required this.icon,
     this.tileColor,
-    this.colorText,
+    this.color,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: tileColor,
-      leading: icon,
-      iconColor: Theme.of(context).colorScheme.primary,
+      leading: Icon(
+        icon.icon,
+        color: color ?? Theme.of(context).colorScheme.primary,
+      ),
       title: Text(
         label,
         style: TextStyle(
-          color: colorText,
+          color: color ?? Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w400,
+          fontSize: 18,
         ),
       ),
       onTap: onTap,
