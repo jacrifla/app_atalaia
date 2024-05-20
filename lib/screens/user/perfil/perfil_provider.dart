@@ -17,7 +17,7 @@ class UserProvider {
             'Falha ao atualizar usuário. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      throw Exception('Erro ao atualizar usuário: $error');
+      throw 'Erro ao atualizar usuário: $error';
     }
   }
 
@@ -29,7 +29,7 @@ class UserProvider {
       );
 
       if (response.statusCode == 200) {
-        return response.data['success'];
+        return response.data['dados'];
       } else {
         throw 'Falha ao excluir usuário. Status code: ${response.statusCode}';
       }

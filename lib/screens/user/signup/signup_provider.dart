@@ -29,7 +29,7 @@ class SignupProvider {
         throw 'Failed to create user: ${response.data['msg']}';
       }
     } catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null) {
           throw 'Failed to create user: ${e.response!.data['msg']}';
         } else {

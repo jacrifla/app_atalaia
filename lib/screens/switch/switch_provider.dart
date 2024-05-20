@@ -50,7 +50,7 @@ class SwitchProvider extends ChangeNotifier {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == 400) {
           throw 'Erro interno: $error';
         } else if (error.response?.statusCode == 500) {
@@ -77,7 +77,7 @@ class SwitchProvider extends ChangeNotifier {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == 400) {
           throw 'Erro interno: ${error.response?.data['msg']}';
         } else if (error.response?.statusCode == 500) {
@@ -104,7 +104,7 @@ class SwitchProvider extends ChangeNotifier {
         throw 'O servidor retornou uma resposta inesperada. Por favor, tente novamente mais tarde. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == 400) {
           throw 'Não foi possível processar a solicitação.';
         } else if (error.response?.statusCode == 500) {
@@ -130,7 +130,7 @@ class SwitchProvider extends ChangeNotifier {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == 400) {
           throw 'Erro interno: ${error.response?.data['msg']}';
         } else if (error.response?.statusCode == 500) {
@@ -160,7 +160,7 @@ class SwitchProvider extends ChangeNotifier {
         return {'status': 'error', 'msg': 'Unexpected Error'};
       }
     } catch (error) {
-      if (error is DioError && error.response != null) {
+      if (error is DioException && error.response != null) {
         final statusCode = error.response!.statusCode;
         if (statusCode == 400) {
           return {'status': 'error', 'msg': 'Bad Request'};

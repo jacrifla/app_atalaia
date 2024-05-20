@@ -29,7 +29,7 @@ class LoginProvider {
         _authProvider.setUserId(userUuid);
       }
     } catch (error) {
-      if (error is DioError) {
+      if (error is DioException) {
         if (error.response?.statusCode == 401) {
           throw 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.';
         } else if (error.response?.statusCode == 404) {

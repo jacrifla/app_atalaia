@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'user_provider.dart';
+import 'perfil_provider.dart';
 
 class UserController with ChangeNotifier {
   final UserProvider _userProvider = UserProvider();
@@ -17,10 +17,10 @@ class UserController with ChangeNotifier {
       bool success =
           await _userProvider.updateUserInfo(name, userId, email, phone);
       if (!success) {
-        _setErrorMessage('Failed to update user info');
+        _setErrorMessage('Falha ao atualizar as informações do usuário');
       }
-    } catch (e) {
-      _setErrorMessage(e.toString());
+    } catch (error) {
+      _setErrorMessage(error.toString());
     } finally {
       _setLoading(false);
     }
@@ -31,8 +31,8 @@ class UserController with ChangeNotifier {
     try {
       final bool success = await _userProvider.softDelete(userId);
       return success;
-    } catch (e) {
-      _setErrorMessage('Erro ao excluir usuário: $e');
+    } catch (error) {
+      _setErrorMessage('Erro ao excluir usuário: $error');
       return false;
     } finally {
       _setLoading(false);

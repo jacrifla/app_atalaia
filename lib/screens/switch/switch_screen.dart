@@ -7,7 +7,7 @@ import '../../utils/auth_provider.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 import '../../widgets/menu.dart';
-import 'switch_card_delete.dart';
+import '../../widgets/switch_content.dart';
 import 'switch_controller.dart';
 import 'switch_create.dart';
 import 'switch_model.dart';
@@ -48,34 +48,17 @@ class _SwitchScreenState extends State<SwitchScreen> {
     }
 
     return Scaffold(
-      appBar: const Header(title: 'Pontos'),
+      appBar: const Header(title: 'Gerenciar Pontos'),
       endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<SwitchModel>>(
-                future: _switchesFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Erro: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                        child: Text('Nenhum switch cadastrado'));
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return SwitchCardDelete(
-                          switchModel: snapshot.data![index],
-                        );
-                      },
-                    );
-                  }
-                },
+              child: SwitchContent(
+                selectedIndex: 1,
+                switchesFuture: _switchesFuture,
+                isDeleting: true,
               ),
             ),
           ],
