@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +48,7 @@ class _SwitchScreenState extends State<SwitchScreen> {
     }
 
     return Scaffold(
-      appBar: const Header(title: 'Pontos'),
+      appBar: const Header(title: 'Gerenciar Pontos'),
       endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -56,6 +58,7 @@ class _SwitchScreenState extends State<SwitchScreen> {
               child: SwitchContent(
                 selectedIndex: 1,
                 switchesFuture: _switchesFuture,
+                isDeleting: true,
               ),
             ),
           ],

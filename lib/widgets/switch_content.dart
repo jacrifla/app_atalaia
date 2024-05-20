@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import '../screens/switch/switch_card.dart';
+import '../screens/switch/switch_card_delete.dart';
 import '../screens/switch/switch_model.dart';
 
 class SwitchContent extends StatelessWidget {
   final int selectedIndex;
   final Future<List<SwitchModel>> switchesFuture;
+  // Flag para determinar se estamos na tela de exclusão
+  final bool isDeleting;
 
   const SwitchContent({
     required this.selectedIndex,
     required this.switchesFuture,
+    // Por padrão, não estamos na tela de exclusão
+    this.isDeleting = false,
     super.key,
   });
 
@@ -28,7 +33,14 @@ class SwitchContent extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return SwitchCard(switchModel: snapshot.data![index]);
+                // Verificar se esta na tela de exclusão
+                if (isDeleting) {
+                  // Se sim, retornar o SwitchCardDelete
+                  return SwitchCardDelete(switchModel: snapshot.data![index]);
+                } else {
+                  // Se não, retorna o SwitchCard padrão
+                  return SwitchCard(switchModel: snapshot.data![index]);
+                }
               },
             );
           }
