@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../utils/auth_provider.dart';
-import '../confirmation_screen.dart';
-import 'user_controller.dart';
+import '../../../utils/auth_provider.dart';
+import '../../confirmation_screen.dart';
+import 'perfil_controller.dart';
 
-import '../../widgets/header.dart';
-import '../../widgets/menu.dart';
-import '../../widgets/build_input.dart';
-import '../../widgets/button_icon.dart';
-import '../success_screen.dart';
-import '../error_screen.dart';
+import '../../../widgets/header.dart';
+import '../../../widgets/menu.dart';
+import '../../../widgets/build_input.dart';
+import '../../../widgets/button_icon.dart';
+import '../../success_screen.dart';
+import '../../error_screen.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -81,12 +81,12 @@ class _PerfilScreenState extends State<PerfilScreen> {
           ),
         );
       }
-    } catch (e) {
+    } catch (error) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => ErrorScreen(
             message: 'Erro ao excluir conta',
-            errorDescription: e.toString(),
+            errorDescription: error.toString(),
           ),
         ),
       );
@@ -121,7 +121,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
           MaterialPageRoute(
             builder: (context) => const SuccessScreen(
               message: 'Perfil alterado com sucesso',
-              screen: '/perfil',
+              alternativeRoute: '/perfil',
             ),
           ),
         );
