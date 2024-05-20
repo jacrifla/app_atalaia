@@ -1,18 +1,5 @@
-// ignore_for_file: prefer_const_constructors
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-
-import 'screens/guard/guard_screen.dart';
-import 'screens/loading_screen.dart';
-import 'screens/help/help_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/user/perfil_screen.dart';
-import 'screens/recover_confirmation_screen.dart';
-import 'screens/user/login/login_screen.dart';
-import 'screens/recover_screen.dart';
-import 'screens/user/signup/signup_screen.dart';
-import 'screens/switch/switch_create.dart';
-import 'screens/switch/switch_screen.dart';
-import 'screens/group_switch/group_screen.dart';
 import 'theme.dart';
 
 class MyApp extends StatelessWidget {
@@ -24,22 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Atalaia App',
       theme: AppTheme.lightTheme(),
-      // theme: AppTheme.darkTheme(),
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/group_switch': (context) => GroupScreen(),
-        '/help': (context) => HelpScreen(),
-        '/home': (context) => HomeScreen(),
-        '/perfil': (context) => PerfilScreen(),
-        '/recover': (context) => RecoverScreen(),
-        '/recover_confirmation': (context) => RecoverConfirmationScreen(),
-        '/signup': (context) => SignupScreen(),
-        '/switch': (context) => SwitchScreen(),
-        '/switch_create': (context) => SwitchCreateScreen(),
-        '/guard': (context) => GuardManagementScreen(),
-        '/loading': (context) => LoadingScreen(),
-      },
-
+      routes: AppRoutes.getRoutes(),
       initialRoute: '/',
     );
   }
