@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+import 'package:app_atalaia/widgets/header.dart';
+import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
-
-import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
-import '../../widgets/header.dart';
-import '../../widgets/menu.dart';
 import '../success_screen.dart';
+import 'dropdown_icons.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -15,40 +13,45 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
-  bool groupCommon = false;
-  bool randomTime = false;
-  bool keepActive = false;
-  bool autoActivationTime = false;
-  IconData selectedIcon = Icons.group;
-  final TextEditingController _inputNomeGrupo = TextEditingController();
+  late TextEditingController _inputNomeGrupo;
+  late bool randomTime;
+  late bool keepActive;
+  late bool autoActivationTime;
+  late IconData selectedIcon;
 
-  // Lista de ícones disponíveis
-  List<IconData> iconOptions = [
-    Icons.group,
-    Icons.home,
-    Icons.living_rounded,
-    Icons.kitchen,
-    Icons.dry_cleaning,
-    Icons.clean_hands,
-    Icons.report_problem_rounded,
-    Icons.cloud_outlined,
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _inputNomeGrupo = TextEditingController();
+    randomTime = false;
+    keepActive = false;
+    autoActivationTime = false;
+    selectedIcon = Icons.group;
+  }
+
+  @override
+  void dispose() {
+    _inputNomeGrupo.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Criar Grupo'),
-      endDrawer: MenuDrawer(),
+      appBar: const Header(title: 'Criar Grupo'),
+      endDrawer: const MenuDrawer(),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              BuildInput(
-                icon: Icon(Icons.face),
-                labelText: 'Nome',
+              TextFormField(
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.face),
+                  labelText: 'Nome',
+                ),
                 controller: _inputNomeGrupo,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -57,26 +60,19 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
-              Text('Selecione um Ícone:'),
-              SizedBox(height: 8.0),
-              DropdownButton<IconData>(
+              const SizedBox(height: 16.0),
+              const Text('Selecione um Ícone:'),
+              const SizedBox(height: 8.0),
+              IconDropdownOptions.buildDropdown(
                 value: selectedIcon,
-                onChanged: (IconData? newValue) {
+                onChanged: (newValue) {
                   setState(() {
                     selectedIcon = newValue!;
                   });
                 },
-                items: iconOptions
-                    .map<DropdownMenuItem<IconData>>((IconData icon) {
-                  return DropdownMenuItem<IconData>(
-                    value: icon,
-                    child: Icon(icon),
-                  );
-                }).toList(),
               ),
               CheckboxListTile(
-                title: Text('Horário Aleatório'),
+                title: const Text('Horário Aleatório'),
                 value: randomTime,
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {
@@ -88,18 +84,18 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               CheckboxListTile(
                 title: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text('Manter Ativo Por'),
                     ),
                     SizedBox(
                       width: 50.0,
                       child: TextFormField(
-                        decoration: InputDecoration(labelText: 'Tempo'),
+                        decoration: const InputDecoration(labelText: 'Tempo'),
                         keyboardType: TextInputType.number,
                         initialValue: '1',
                       ),
                     ),
-                    Text('hora(s)'),
+                    const Text('hora(s)'),
                   ],
                 ),
                 controlAffinity: ListTileControlAffinity.leading,
@@ -111,7 +107,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 },
               ),
               CheckboxListTile(
-                title: Text('Definir um Horário de Ativação Automática?'),
+                title: const Text('Definir um Horário de Ativação Automática?'),
                 value: autoActivationTime,
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {
@@ -125,29 +121,29 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        decoration: InputDecoration(labelText: 'De'),
+                        decoration: const InputDecoration(labelText: 'De'),
                         initialValue: '10h',
                       ),
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Expanded(
                       child: TextFormField(
-                        decoration: InputDecoration(labelText: 'Até'),
+                        decoration: const InputDecoration(labelText: 'Até'),
                         initialValue: '11h',
                       ),
                     ),
                   ],
                 ),
-              SizedBox(height: 30.0),
+              const SizedBox(height: 30.0),
               ButtonIcon(
-                labelText: 'Enviar',
+                labelText: 'Criar Grupo',
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SuccessScreen(
+                      builder: (context) => const SuccessScreen(
                         message: 'Grupo Criado com sucesso',
-                        screen: '/group_switch',
+                        alternativeRoute: '/group_switch',
                       ),
                     ),
                   );
@@ -158,16 +154,5 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         ),
       ),
     );
-  }
-
-  void saveGroupAndReturnToGroupScreen() {
-    Navigator.pop(context, {
-      'groupName': _inputNomeGrupo.text,
-      'groupIcon': selectedIcon,
-      'groupCommon': groupCommon,
-      'randomTime': randomTime,
-      'keepActive': keepActive,
-      'autoActivationTime': autoActivationTime,
-    });
   }
 }
