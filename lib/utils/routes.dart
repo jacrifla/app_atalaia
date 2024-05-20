@@ -1,3 +1,4 @@
+import 'package:app_atalaia/screens/control/monitor_switch_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/group_switch/group_screen.dart';
 import '../screens/guard/guard_screen.dart';
@@ -17,7 +18,7 @@ class AppRoutes {
     return {
       '/': (context) => const LoginScreen(),
       '/group_switch': (context) => const GroupScreen(),
-      '/help': (context) => HelpScreen(),
+      '/help': (context) => const HelpScreen(),
       '/home': (context) => const HomeScreen(),
       '/perfil': (context) => const PerfilScreen(),
       '/recover': (context) => const RecoverScreen(),
@@ -27,6 +28,7 @@ class AppRoutes {
       '/switch_create': (context) => SwitchCreateScreen(),
       '/guard': (context) => GuardManagementScreen(),
       '/loading': (context) => const LoadingScreen(),
+      '/monitor': (context) => const MonitorSwitchScreen()
     };
   }
 }
