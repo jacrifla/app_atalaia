@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/auth_provider.dart';
@@ -12,7 +14,7 @@ import '../../success_screen.dart';
 import '../../error_screen.dart';
 
 class PerfilScreen extends StatefulWidget {
-  const PerfilScreen({Key? key}) : super(key: key);
+  const PerfilScreen({super.key});
 
   @override
   State<PerfilScreen> createState() => _PerfilScreenState();
