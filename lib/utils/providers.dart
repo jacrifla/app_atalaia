@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/group_switch/group_controller.dart';
 import '../screens/switch/switch_controller.dart';
 import '../screens/switch/switch_provider.dart';
 import '../screens/user/perfil/perfil_controller.dart';
@@ -20,6 +21,8 @@ class MyAppProviders extends StatelessWidget {
         ChangeNotifierProvider<SwitchProvider>(create: (_) => SwitchProvider()),
         ChangeNotifierProvider<SwitchController>(
             create: (_) => SwitchController()),
+        ChangeNotifierProvider<GroupController>(
+            create: (_) => GroupController()),
       ],
       child: child,
     );
