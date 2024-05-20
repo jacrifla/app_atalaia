@@ -29,7 +29,7 @@ class UserProvider {
       );
 
       if (response.statusCode == 200) {
-        return response.data['success'];
+        return response.data['dados'];
       } else {
         throw 'Falha ao excluir usuário. Status code: ${response.statusCode}';
       }
