@@ -12,7 +12,7 @@ Http::post('/switches', 'SwitchController@getSwitches');
 Http::post('/switches/getone', 'SwitchController@getSwitch');
 Http::post('/switches/new', 'SwitchController@createSwitch');
 Http::put('/switches/edit', 'SwitchController@updateSwitch');
-Http::put('/switches/toggle', 'SwitchController@toggleSwitch');
+Http::post('/switches/toggle', 'SwitchController@toggleSwitch');
 Http::put('/switches/delete', 'SwitchController@deleteSwitch');
 
 //Rotas internas

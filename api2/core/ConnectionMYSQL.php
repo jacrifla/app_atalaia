@@ -1,17 +1,26 @@
 <?php
 
-define('SGBD'       , 'mysql'       );
-define('HOST'       , 'localhost'   );
-define('DBNAME'     , 'db_atalaia'  );
-define('CHARSET'    , 'utf8'        );
-define('USER'       , 'root'        );
-define('PASSWORD'   , ''            );
-define('SERVER'     , 'windows'     );
-define('PORTA_DB'   , 3306          );
+define('SGBD'       , 'mysql'     );
+define('HOST'       , 'localhost' );
+define('DBNAME'     , 'db_atalaia');
+define('CHARSET'    , 'utf8'      );
+define('USER'       , 'root'      );
+define('PASSWORD'   , ''          );
+define('SERVER'     , 'windows'   );
+define('PORTA_DB'   , 3306        );
+
+// define('SGBD'       , 'mysql'                );
+// define('HOST'       , 'localhost'            );
+// define('DBNAME'     , 'id22188715_db_atalaia');
+// define('CHARSET'    , 'utf8'                 );
+// define('USER'       , 'id22188715_root'      );
+// define('PASSWORD'   , 'Grupo1+2'             );
+// define('SERVER'     , 'windows'              );
+// define('PORTA_DB'   , 3306                   );
 
 class ConnectionMYSQL
 {
-    private static $pdo;
+    private static $pdo;/*  */
 
     private function __construct()
     {

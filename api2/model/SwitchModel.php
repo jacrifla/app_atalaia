@@ -7,6 +7,7 @@ class SwitchModel
 {
     public static function getSwitches($userId)
     {
+        
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
@@ -16,7 +17,7 @@ class SwitchModel
             WHERE u.uuid = ?            
             AND s.deleted_at IS NULL');
             $stmt->execute([$userId]);
-
+            var_dump($stmt);
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
@@ -46,10 +47,11 @@ class SwitchModel
     public static function toggleSwitch($data)
     {
         try {
-
             $pdo = ConnectionMYSQL::getInstance();
-            $stmt = $pdo->prepare('UPDATE tb_switch SET is_active = ? WHERE mac_address = ?');
-            $stmt->execute([$data['is_active'], $data['mac_address']]);
+            $stmt = $pdo->prepare('UPDATE tb_switch SET is_active = IF(is_active = 1, 0, 1) WHERE mac_address = ?');
+            // $stmt->bindParam(1, $data['is_active'], PDO::PARAM_INT); // Alterado para garantir que o PDO converta corretamente para BIT
+            $stmt->bindParam(1, $data['mac_address'], PDO::PARAM_STR);
+            $stmt->execute();
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
