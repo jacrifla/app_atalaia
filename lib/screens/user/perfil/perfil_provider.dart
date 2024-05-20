@@ -17,7 +17,7 @@ class UserProvider {
             'Falha ao atualizar usuário. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      throw Exception('Erro ao atualizar usuário: $error');
+      throw 'Erro ao atualizar usuário: $error';
     }
   }
 
