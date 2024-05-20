@@ -8,15 +8,21 @@ class GuardaCard extends StatefulWidget {
 }
 
 class _GuardaCardState extends State<GuardaCard> {
-  String _guardaStatusText = 'Sua guarda não está ativa no momento.';
-  Color _cardBackgroundColor = Colors.white;
-  Color _iconColor = Colors.black;
+  bool _guardaAtiva = false;
+
+  void _toggleGuarda() {
+    setState(() {
+      _guardaAtiva = !_guardaAtiva;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      color: _cardBackgroundColor,
+      color: _guardaAtiva
+          ? Theme.of(context).colorScheme.error
+          : Theme.of(context).colorScheme.background,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -28,7 +34,9 @@ class _GuardaCardState extends State<GuardaCard> {
                 Icon(
                   Icons.security,
                   size: 50,
-                  color: _iconColor,
+                  color: _guardaAtiva
+                      ? Theme.of(context).colorScheme.background
+                      : Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: 20),
                 Column(
@@ -43,25 +51,13 @@ class _GuardaCardState extends State<GuardaCard> {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      _guardaStatusText,
+                      _guardaAtiva
+                          ? 'Sua guarda está ativa no momento.'
+                          : 'Sua guarda não está ativa no momento.',
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _cardBackgroundColor =
-                              _cardBackgroundColor == Colors.red
-                                  ? Colors.white
-                                  : Colors.red;
-                          _iconColor = _cardBackgroundColor == Colors.red
-                              ? Colors.white
-                              : Colors.black;
-                          _guardaStatusText = _cardBackgroundColor == Colors.red
-                              ? 'Sua guarda está ativa no momento.'
-                              : 'Sua guarda não está ativa no momento.';
-                        });
-                        // Implementar lógica para ativar a guarda aqui
-                      },
+                      onPressed: _toggleGuarda,
                       child: const Text('Ativar Guarda Agora'),
                     ),
                   ],
