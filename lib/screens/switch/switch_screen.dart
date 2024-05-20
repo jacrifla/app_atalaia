@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +5,7 @@ import '../../utils/auth_provider.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 import '../../widgets/menu.dart';
-import 'switch_card_delete.dart';
+import '../../widgets/switch_content.dart';
 import 'switch_controller.dart';
 import 'switch_create.dart';
 import 'switch_model.dart';
@@ -55,27 +53,9 @@ class _SwitchScreenState extends State<SwitchScreen> {
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<SwitchModel>>(
-                future: _switchesFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Erro: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                        child: Text('Nenhum switch cadastrado'));
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return SwitchCardDelete(
-                          switchModel: snapshot.data![index],
-                        );
-                      },
-                    );
-                  }
-                },
+              child: SwitchContent(
+                selectedIndex: 1,
+                switchesFuture: _switchesFuture,
               ),
             ),
           ],
