@@ -1,5 +1,5 @@
-import 'package:app_atalaia/widgets/header.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/header.dart';
 
 class TopicContentScreen extends StatelessWidget {
   final String title;
@@ -14,14 +14,23 @@ class TopicContentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: title),
+      appBar: Header(
+        title: title,
+        icon: Icons.info_outline,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child: Text(
-          content,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              content,
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ],
         ),
       ),
     );
