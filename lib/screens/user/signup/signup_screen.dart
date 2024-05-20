@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:app_atalaia/screens/error_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -96,6 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -194,8 +197,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               ButtonIcon(
+                labelText: 'Criar Conta',
                 onPressed: _handleSubmit,
-                icon: const Icon(Icons.check),
+                height: 50,
               ),
             ],
           ),
