@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final IconData? icon;
 
   const Header({
     super.key,
     required this.title,
+    this.icon,
   });
 
   @override
@@ -14,13 +16,19 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-        title,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+      title: Row(
+        children: [
+          if (icon != null) Icon(icon),
+          if (icon != null) const SizedBox(width: 10),
+          Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
       iconTheme: IconThemeData(
         color: Theme.of(context).colorScheme.onPrimary,
