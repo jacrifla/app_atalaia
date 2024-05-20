@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/menu.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
-import 'create_group_screen.dart';
+import 'group_create_screen.dart';
 import 'group_card_delete.dart';
 import 'group_model.dart';
 
