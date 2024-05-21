@@ -1,5 +1,5 @@
 class SwitchModel {
-  final int id;
+  final String id;
   final String? uuid;
   final String? userId;
   final String? iconName;
@@ -54,7 +54,8 @@ class SwitchModel {
       lastTimeActive: json['last_time_active'],
       watts: int.tryParse(json['watts'].toString()) ?? 0,
       keepActive: json['keep_active'] == 1 || json['keep_active'] == "1",
-      scheduleActive: json['schedule_active'] == 1 || json['schedule_active'] == "1",
+      scheduleActive:
+          json['schedule_active'] == 1 || json['schedule_active'] == "1",
       scheduleLastActivation: json['schedule_last_activation'],
       scheduleStart: json['schedule_start'],
       scheduleEnd: json['schedule_end'],
