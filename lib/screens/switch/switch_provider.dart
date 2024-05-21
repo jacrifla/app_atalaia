@@ -17,7 +17,8 @@ class SwitchProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> createSwitch(String name, String watts, String macAddress, String userId) async {
+  Future<Map<String, dynamic>> createSwitch(
+      String name, String watts, String macAddress, String userId) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}switches/new',
@@ -145,7 +146,8 @@ class SwitchProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> toggleSwitch(String macAddress, bool isActive, String userId) async {
+  Future<Map<String, dynamic>> toggleSwitch(
+      String macAddress, bool isActive, String userId) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}switches/toggle',
