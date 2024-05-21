@@ -4,8 +4,8 @@ require_once 'Http.php';
 // User
 Http::post('/login', 'LoginController@login');
 Http::post('/register', 'RegisterController@createUser');
-Http::put('/user/update', 'UserController@updateUser');
-Http::put('/user/delete', 'UserController@deleteUser');
+Http::post('/user/update', 'UserController@updateUser');
+Http::post('/user/delete', 'UserController@deleteUser');
 
 // Switches
 Http::post('/switches', 'SwitchController@getSwitches');
