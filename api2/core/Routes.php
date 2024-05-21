@@ -11,9 +11,9 @@ Http::put('/user/delete', 'UserController@deleteUser');
 Http::post('/switches', 'SwitchController@getSwitches');
 Http::post('/switches/getone', 'SwitchController@getSwitch');
 Http::post('/switches/new', 'SwitchController@createSwitch');
-Http::put('/switches/edit', 'SwitchController@updateSwitch');
+Http::post('/switches/edit', 'SwitchController@updateSwitch');
 Http::post('/switches/toggle', 'SwitchController@toggleSwitch');
-Http::put('/switches/delete', 'SwitchController@deleteSwitch');
+Http::post('/switches/delete', 'SwitchController@deleteSwitch');
 
 //Groups
 // Http::post('/groups', 'GroupSwitchController@getGroups');
