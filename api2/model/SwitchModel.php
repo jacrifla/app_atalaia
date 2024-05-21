@@ -17,7 +17,6 @@ class SwitchModel
             WHERE u.uuid = ?            
             AND s.deleted_at IS NULL');
             $stmt->execute([$userId]);
-            var_dump($stmt);
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
