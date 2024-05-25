@@ -6,6 +6,7 @@ Http::post('/login', 'LoginController@login');
 Http::post('/register', 'RegisterController@createUser');
 Http::post('/user/update', 'UserController@updateUser');
 Http::post('/user/delete', 'UserController@deleteUser');
+Http::post('/user', 'UserController@getUserInfo');
 
 // Switches
 Http::post('/switches', 'SwitchController@getSwitches');

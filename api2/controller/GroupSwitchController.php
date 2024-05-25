@@ -8,61 +8,35 @@ require_once './model/UserModel.php';
 class GroupSwitchController
 {
     
-    public function createSwitch(Request $request, Response $response){
+    public function createGroup(Request $request, Response $response){
         try {
             
             $data            = $request->bodyJson();
             $mac_address     = $data['mac_address'];
-            $macAvailable    = MacModel::checkMacAddressAvailable($mac_address);
-            $switchExists    = SwitchModel::checkSwitchExists($data);
+            $user            = UserModel::getUserByUUID($data['user_id']);
+            $data['user_id'] = $user['id'];
+            $group           = GroupSwitchModel::createGroup($data);
+
+            if ($group) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $group
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
             
             
-            if($switchExists){
-                $data = SwitchModel::reactivateSwitch($data);
-                
-                if ($data) :
-                    $response::json([
-                        'status' => 'success',
-                        'dados' => $data
-                    ], 200);
-                    else :
-                        $response::json([
-                            'status' => 'error',
-                            'msg' => 'Internal Error'
-                        ], 400);
-                    endif;
-                }else if ($macAvailable){
-                    $user = UserModel::getUserByUUID($data['uuid']);
-                    $data['user_id'] = $user['id'];
-                    
-                    $reslt = SwitchModel::createSwitch($data);
-                    
-                    if ($reslt) :
-                        MacModel::updateMacAddressRecord($mac_address);
-                        $response::json([
-                            'status' => 'success',
-                            'dados' => $reslt
-                        ], 200);
-                        else :
-                            $response::json([
-                                'status' => 'error',
-                                'msg' => 'Internal Error'
-                            ], 400);
-                        endif;
-                        
-                    }else{
-                        $response::json([
-                            'status' => 'error',
-                            'msg' => 'Invalid Mac Address'
-                        ], 401);
-                    }
-                    
-                } catch (\Exception $e) {
-                    $response::json([
-                        'status' => 'error',
-                        'msg' => $e->getMessage()
-                    ], 500);
-                }
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+            
     }
             
     public function updateSwitch(Request $request, Response $response){
