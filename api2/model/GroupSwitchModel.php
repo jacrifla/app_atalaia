@@ -151,7 +151,7 @@ class GroupSwitchModel
 
            // Adiciona a cláusula WHERE para especificar o usuário a ser atualizado
            $sql .= ' WHERE uuid = :uuid';
-           $params[':uuid'] = $data['uuid'];
+           $params[':uuid'] = $data['group_id'];
 
            // Executa a query SQL
            $stmt = $pdo->prepare($sql);

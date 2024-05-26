@@ -39,12 +39,12 @@ class GroupSwitchController
             
     }
             
-    public function updateSwitch(Request $request, Response $response){
+    public function getSwitchesInGroup(Request $request, Response $response){
         try {
             
             $data = $request->bodyJson();
             
-            $data = SwitchModel::updateSwitchInfo($data);
+            $data = GroupSwitchModel::getSwitchesInGroup($data['group_id']);
             
             if ($data) {
                 $response::json([
@@ -68,12 +68,12 @@ class GroupSwitchController
     }
 
 
-    public function deleteSwitch(Request $request, Response $response){
+    public function getGroups(Request $request, Response $response){
         try {
             
             $data = $request->bodyJson();
             
-            $data = SwitchModel::softDelete($data['uuid']);
+            $data = GroupSwitchModel::getGroups($data['user_id']);
             
             if ($data) {
                 $response::json([
@@ -96,12 +96,12 @@ class GroupSwitchController
         }
     }
 
-    public function toggleSwitch(Request $request, Response $response){
+    public function checkSwitchInGroup(Request $request, Response $response){
         try {
             
             $data = $request->bodyJson();
             
-            $data = SwitchModel::toggleSwitch($data);
+            $data = GroupSwitchModel::checkSwitchInGroup($data['mac_address']);
             
             if ($data) {
                 $response::json([
@@ -124,12 +124,42 @@ class GroupSwitchController
         }
     }
 
-    public function getSwitches(Request $request, Response $response){
+    public function addSwitchToGroup(Request $request, Response $response){
         try {
             
             $data = $request->bodyJson();
-            //uuid do user
-            $data = SwitchModel::getSwitches($data['user_id']);
+            $data            = $request->bodyJson();
+            $user            = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
+            $data['group_id'] = $user['id'];
+            $group           = GroupSwitchModel::addSwitchToGroup($data);
+            
+            if ($group) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $group
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function removeSwitchFromGroup(Request $request, Response $response){
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::removeSwitchFromGroup($data['mac_address']);
             
             if ($data) {
                 $response::json([
@@ -151,6 +181,92 @@ class GroupSwitchController
             ], 500);
         }
     }
+
+    public function updateGroupInfo(Request $request, Response $response){
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::updateGroupInfo($data);
+            
+            if ($data) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $data
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function softDelete(Request $request, Response $response){
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::softDelete($data['group_id']);
+            
+            if ($data) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $data
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function removeAllSwitchesFromGroup(Request $request, Response $response){
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::removeAllSwitchesFromGroup($data['mac_addresses']);
+            
+            if ($data) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $data
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+   
     
         
         
