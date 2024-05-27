@@ -25,6 +25,25 @@ class GroupSwitchModel
         }
     }
 
+    public static function getGroup($groupId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT * 
+            FROM tb_group 
+            WHERE uuid = ?            
+            AND deleted_at IS NULL');
+            $stmt->execute([$groupId]);
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public static function getSwitchesInGroup($groupId)
     {
         try {
@@ -225,6 +244,28 @@ class GroupSwitchModel
             throw new \Exception($e->getMessage());
         }
 
+    }
+
+    public static function toggleGroup($groupId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('
+                UPDATE tb_switch
+                SET is_active = ?
+                WHERE group_id = ?
+            ');
+            $stmt->bindParam(1, $data['is_active'], PDO::PARAM_INT);
+            $stmt->bindParam(2, $data['group_id'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 //     public static function insertGroupInfo(array $data)

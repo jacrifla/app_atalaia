@@ -17,12 +17,16 @@ Http::post('/switches/toggle', 'SwitchController@toggleSwitch');
 Http::post('/switches/delete', 'SwitchController@deleteSwitch');
 
 //Groups
-// Http::post('/groups', 'GroupSwitchController@getGroups');
-// Http::post('/groups/getone', 'GroupSwitchController@getGroup');
-// Http::post('/groups/new', 'GroupSwitchController@createGroup');
-// Http::post('/groups/edit', 'GroupSwitchController@updateGroup');
-// Http::post('/groups/toggle', 'GroupSwitchController@toggleGroup');
-// Http::post('/groups/delete', 'GroupSwitchController@deleteGroup');
+Http::post('/groups', 'GroupSwitchController@getGroups');
+Http::post('/groups/getone', 'GroupSwitchController@getGroup');
+Http::post('/groups/switches', 'GroupSwitchController@getSwitchesInGroup');
+Http::post('/groups/checkswitch', 'GroupSwitchController@checkSwitchInGroup');
+Http::post('/groups/new', 'GroupSwitchController@createGroup');
+Http::post('/groups/newswitch', 'GroupSwitchController@addSwitchToGroup');
+Http::post('/groups/edit', 'GroupSwitchController@updateGroupInfo');
+Http::post('/groups/removeswitch', 'GroupSwitchController@removeSwitchFromGroup');
+Http::post('/groups/toggle', 'GroupSwitchController@toggleGroup');
+Http::post('/groups/delete', 'GroupSwitchController@deleteGroup');
 
 //Rotas internas
 Http::post('/macAddress', 'MacAddressController@insert');
