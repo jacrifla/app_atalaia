@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../themes/theme.dart';
 import '../utils/auth_provider.dart';
 import '../widgets/build_input.dart';
-import '../widgets/build_row.dart';
 import '../widgets/button_icon.dart';
 import '../utils/utils.dart';
 import '../controller/login_controller.dart';
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Image.asset('assets/images/logo.png'),
                     const SizedBox(height: 10),
-                    titleLogo(),
+                    titleLogo('Projeto Atalaia'),
                   ],
                 ),
                 Form(
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         labelText: 'E-mail',
                         hintText: 'example@example.com',
-                        icon: const Icon(Icons.account_circle_outlined),
+                        icon: const Icon(Icons.person),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Digite seu e-mail';
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _inputPassword,
                         labelText: 'Senha',
                         hintText: '******',
-                        icon: const Icon(Icons.key_outlined),
+                        icon: const Icon(Icons.lock),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Digite sua senha';
@@ -112,34 +112,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     }
                   },
-                  icon: const Icon(Icons.check),
+                  icon: const Icon(Icons.login),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          BuildRow(
-                            labelText: 'Criar Conta',
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/signup'),
-                          ),
-                          BuildRow(
-                            labelText: 'Esqueci Minha Senha',
-                            icon: const Icon(Icons.person_search_outlined),
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/recover'),
-                          ),
-                          BuildRow(
-                            labelText: 'Preciso de Ajuda',
-                            icon: const Icon(Icons.question_mark_outlined),
-                            onTap: () => Navigator.pushNamed(context, '/help'),
-                          ),
-                        ],
-                      ),
+                    buttonLine(
+                      icon: const Icon(Icons.person_add),
+                      onPressed: () => Navigator.pushNamed(context, '/signup'),
+                      label: 'Criar Conta',
+                    ),
+                    buttonLine(
+                      icon: const Icon(Icons.person_search),
+                      onPressed: () => Navigator.pushNamed(context, '/recover'),
+                      label: 'Esqueci Minha Senha',
+                    ),
+                    buttonLine(
+                      icon: const Icon(Icons.help_center_rounded),
+                      onPressed: () => Navigator.pushNamed(context, '/recover'),
+                      label: 'Preciso de Ajuda',
                     ),
                   ],
                 ),
@@ -151,14 +143,33 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget titleLogo() {
-    return Text(
-      'Projeto Atalaia'.toUpperCase(),
-      style: const TextStyle(
-        fontFamily: 'Montserrat Alternates',
-        fontSize: 30,
-        fontWeight: FontWeight.bold,
-      ),
+  Widget titleLogo(String title) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Text(
+          title.toUpperCase(),
+          style: TextStyle(
+            fontFamily: 'Montserrat Alternates',
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: appTheme.primaryColor,
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget buttonLine({
+    required Icon icon,
+    required VoidCallback onPressed,
+    required String label,
+  }) {
+    return TextButton.icon(
+      icon: icon,
+      label: Text(label),
+      onPressed: onPressed,
     );
   }
 }
