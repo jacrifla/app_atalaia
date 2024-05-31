@@ -1,7 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/constantes.dart';
 import '../utils/auth_provider.dart';
 import '../utils/utils.dart';
 import '../controller/group_controller.dart';
@@ -36,7 +35,6 @@ class _GroupCardState extends State<GroupCard> {
     }
 
     return Card(
-      color: Theme.of(context).colorScheme.onSecondary,
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -53,25 +51,25 @@ class _GroupCardState extends State<GroupCard> {
             ),
             GestureDetector(
               onTap: () async {
-                print('Toggling group: ${widget.groupInfo.groupName}');
+                print('Alternando grupo: ${widget.groupInfo.groupName}');
                 bool success = await groupController.toggleGroup(
                   widget.groupInfo.groupId,
                   !isActive,
                   userId,
                 );
                 if (success) {
-                  print('Toggle successful, updating state.');
+                  print('Alternância bem-sucedida, atualizando estado.');
                   setState(() {
                     isActive = !isActive;
                   });
                 } else {
-                  print('Toggle failed.');
+                  print('Alternância falhou.');
                 }
               },
               child: Icon(
                 Icons.group,
                 size: 40,
-                color: isActive ? Colors.yellowAccent : Colors.grey,
+                color: isActive ? activeColor : inactiveColor,
               ),
             ),
           ],

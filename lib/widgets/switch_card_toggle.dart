@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/constantes.dart';
 import '../utils/auth_provider.dart';
 import '../utils/utils.dart';
 import '../model/switch_model.dart';
@@ -36,7 +35,6 @@ class _SwitchCardState extends State<SwitchCard> {
     }
 
     return Card(
-      color: Theme.of(context).colorScheme.onSecondary,
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -54,25 +52,25 @@ class _SwitchCardState extends State<SwitchCard> {
             GestureDetector(
               onTap: () async {
                 print(
-                    'Toggling switch with MAC address: ${widget.switchModel.macAddress}');
+                    'Alternando switch com o MAC address: ${widget.switchModel.macAddress}');
                 bool success = await switchController.toggleSwitch(
                   widget.switchModel.macAddress,
                   !isActive,
                   userId,
                 );
                 if (success) {
-                  print('Toggle successful, updating state.');
+                  print('Alternância bem-sucedida, atualizando estado.');
                   setState(() {
                     isActive = !isActive;
                   });
                 } else {
-                  print('Toggle failed.');
+                  print('Alternância falhou.');
                 }
               },
               child: Icon(
                 Icons.lightbulb,
                 size: 40,
-                color: isActive ? Colors.yellow : Colors.grey,
+                color: isActive ? activeColor : inactiveColor,
               ),
             ),
           ],
