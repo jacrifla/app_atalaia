@@ -57,7 +57,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
             itemBuilder: (context, index) {
               SwitchModel switchItem = availableSwitches[index];
               return ListTile(
-                title: Text(switchItem.name),
+                title: Text(switchItem.name ?? 'Unknown'),
                 trailing: IconButton(
                   icon: selectedSwitches.contains(switchItem)
                       ? const Icon(Icons.check_box)
