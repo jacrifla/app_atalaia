@@ -21,7 +21,7 @@ class _SwitchCardState extends State<SwitchCard> {
   @override
   void initState() {
     super.initState();
-    isActive = widget.switchModel.isActive;
+    isActive = widget.switchModel.isActive ?? false;
   }
 
   @override
@@ -42,7 +42,7 @@ class _SwitchCardState extends State<SwitchCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              toCapitalizeWords(widget.switchModel.name),
+              toCapitalizeWords(widget.switchModel.name ?? 'Unknown'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -52,9 +52,9 @@ class _SwitchCardState extends State<SwitchCard> {
             GestureDetector(
               onTap: () async {
                 print(
-                    'Alternando switch com o MAC address: ${widget.switchModel.macAddress}');
+                    'Alternando switch com o MAC address: ${widget.switchModel.macAddress ?? ''}');
                 bool success = await switchController.toggleSwitch(
-                  widget.switchModel.macAddress,
+                  widget.switchModel.macAddress ?? '',
                   !isActive,
                   userId,
                 );
