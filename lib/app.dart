@@ -1,6 +1,6 @@
 import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'theme.dart';
+import 'themes/theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Atalaia App',
-      theme: AppTheme.lightTheme(),
+      theme: appTheme,
       routes: AppRoutes.getRoutes(),
       initialRoute: '/',
     );
