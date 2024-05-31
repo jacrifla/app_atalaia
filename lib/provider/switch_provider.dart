@@ -96,7 +96,7 @@ class SwitchProvider extends ChangeNotifier {
 
   Future<bool> updateSwitch(Map<String, dynamic> data) async {
     try {
-      final response = await _dio.put(
+      final response = await _dio.post(
         '${Config.apiUrl}switches/edit',
         data: data,
       );
@@ -122,7 +122,7 @@ class SwitchProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> deleteSwitch(String macAddress) async {
     try {
-      final response = await _dio.put(
+      final response = await _dio.post(
         '${Config.apiUrl}switches/delete',
         data: {'mac_address': macAddress},
       );
