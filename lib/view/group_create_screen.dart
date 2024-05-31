@@ -1,9 +1,10 @@
-import 'package:app_atalaia/widgets/header.dart';
-import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
-import '../widgets/button_icon.dart';
 import 'success_screen.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
+import '../widgets/button_icon.dart';
 import '../widgets/dropdown_icons.dart';
+import '../widgets/build_input.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -47,11 +48,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.face),
-                  labelText: 'Nome',
-                ),
+              BuildInput(
+                icon: const Icon(Icons.face),
+                labelText: 'Nome',
                 controller: _inputNomeGrupo,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -59,6 +58,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   }
                   return null;
                 },
+                maxLength: 20,
               ),
               const SizedBox(height: 16.0),
               const Text('Selecione um Ícone:'),
@@ -68,16 +68,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 onChanged: (newValue) {
                   setState(() {
                     selectedIcon = newValue!;
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('Horário Aleatório'),
-                value: randomTime,
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (value) {
-                  setState(() {
-                    randomTime = value ?? true;
                   });
                 },
               ),
@@ -134,25 +124,28 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     ),
                   ],
                 ),
-              const SizedBox(height: 30.0),
-              ButtonIcon(
-                labelText: 'Criar Grupo',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessScreen(
-                        message: 'Grupo Criado com sucesso',
-                        alternativeRoute: '/group_switch',
-                      ),
-                    ),
-                  );
-                },
-              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ButtonIcon(
+          labelText: 'Criar Grupo',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SuccessScreen(
+                  message: 'Grupo Criado com sucesso',
+                  alternativeRoute: '/group_switch',
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
