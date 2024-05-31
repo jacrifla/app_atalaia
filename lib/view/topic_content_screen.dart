@@ -18,17 +18,16 @@ class TopicContentScreen extends StatelessWidget {
         title: title,
         icon: Icons.info_outline,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               content,
-              style: TextStyle(
-                fontSize: 20,
-                color: Theme.of(context).primaryColor,
-              ),
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
             ),
           ],
         ),
