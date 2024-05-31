@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Atalaia App',
       theme: appTheme,
       routes: AppRoutes.getRoutes(),
-      initialRoute: '/',
+      initialRoute: AppRoutes.login,
     );
   }
 }
