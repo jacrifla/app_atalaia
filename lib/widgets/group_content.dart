@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'group_card_delete.dart';
+import 'group_card_actions.dart';
 import '../model/group_model.dart';
 
 class GroupContent extends StatelessWidget {
@@ -24,7 +24,7 @@ class GroupContent extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return GroupCard(groupInfo: snapshot.data![index]);
+              return GroupCardActions(groupInfo: snapshot.data![index]);
             },
           );
         }
