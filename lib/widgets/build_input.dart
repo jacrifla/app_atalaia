@@ -9,6 +9,7 @@ class BuildInput extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final String Function()? emptyFieldHandler;
+  final int? maxLength;
 
   const BuildInput({
     super.key,
@@ -20,6 +21,7 @@ class BuildInput extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.emptyFieldHandler,
+    this.maxLength,
   });
 
   @override
@@ -28,6 +30,7 @@ class BuildInput extends StatelessWidget {
       children: [
         TextFormField(
           validator: validator,
+          maxLength: maxLength,
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,
