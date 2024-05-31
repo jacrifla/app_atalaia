@@ -1,4 +1,4 @@
-import 'package:app_atalaia/screens/group_switch/group_model.dart';
+import 'package:app_atalaia/model/group_model.dart';
 import 'package:flutter/material.dart';
 
 class GroupProvider extends ChangeNotifier {

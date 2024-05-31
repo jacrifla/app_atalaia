@@ -4,11 +4,11 @@ import 'package:app_atalaia/view/success_screen.dart';
 import 'package:app_atalaia/widgets/header.dart';
 import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/build_input.dart';
-import '../../widgets/button_icon.dart';
-import '../../view/error_screen.dart';
-import '../../controller/switch_controller.dart';
-import 'switch_model.dart';
+import '../widgets/build_input.dart';
+import '../widgets/button_icon.dart';
+import 'error_screen.dart';
+import '../controller/switch_controller.dart';
+import '../model/switch_model.dart';
 
 class EditSwitchScreen extends StatefulWidget {
   final SwitchModel switchModel;

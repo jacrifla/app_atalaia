@@ -9,8 +9,8 @@ import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/switch_content.dart';
 import '../controller/switch_controller.dart';
-import '../screens/switch/switch_create.dart';
-import '../screens/switch/switch_model.dart';
+import 'switch_create_screen.dart';
+import '../model/switch_model.dart';
 
 class SwitchScreen extends StatefulWidget {
   const SwitchScreen({super.key});

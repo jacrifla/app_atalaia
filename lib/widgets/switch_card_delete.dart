@@ -2,12 +2,12 @@
 
 import 'package:app_atalaia/utils/utils.dart';
 import 'package:flutter/material.dart';
-import '../../view/confirmation_screen.dart';
-import '../../view/error_screen.dart';
-import '../../view/success_screen.dart';
-import 'switch_edit.dart';
-import 'switch_model.dart';
-import '../../controller/switch_controller.dart';
+import '../view/confirmation_screen.dart';
+import '../view/error_screen.dart';
+import '../view/success_screen.dart';
+import '../view/switch_edit_screen.dart';
+import '../model/switch_model.dart';
+import '../controller/switch_controller.dart';
 
 class SwitchCardDelete extends StatefulWidget {
   final SwitchModel switchModel;

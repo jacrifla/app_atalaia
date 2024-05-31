@@ -5,7 +5,7 @@ import '../widgets/menu.dart';
 import '../utils/auth_provider.dart';
 import '../widgets/switch_content.dart';
 import '../controller/switch_controller.dart';
-import '../screens/switch/switch_model.dart';
+import '../model/switch_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

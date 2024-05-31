@@ -3,7 +3,7 @@ import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
 import '../widgets/button_icon.dart';
 import 'success_screen.dart';
-import '../screens/group_switch/dropdown_icons.dart';
+import '../widgets/dropdown_icons.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});

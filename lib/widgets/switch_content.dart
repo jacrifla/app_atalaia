@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/switch/switch_card.dart';
-import '../screens/switch/switch_card_delete.dart';
-import '../screens/switch/switch_model.dart';
+import 'switch_card_toggle.dart';
+import 'switch_card_delete.dart';
+import '../model/switch_model.dart';
 
 class SwitchContent extends StatelessWidget {
   final int selectedIndex;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../screens/group_switch/group_card_delete.dart';
-import '../screens/group_switch/group_model.dart';
+import 'group_card_delete.dart';
+import '../model/group_model.dart';
 
 class GroupContent extends StatelessWidget {
   final Future<List<GroupModel>> groupsFuture;

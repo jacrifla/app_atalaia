@@ -1,38 +1,38 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print
+// ignore_for_file: avoid_print, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../utils/auth_provider.dart';
-import '../../utils/utils.dart';
-import '../../controller/group_controller.dart';
-import 'group_model.dart';
+import '../utils/auth_provider.dart';
+import '../utils/utils.dart';
+import '../model/switch_model.dart';
+import '../controller/switch_controller.dart';
 
-class GroupCard extends StatefulWidget {
-  final GroupModel groupInfo;
+class SwitchCard extends StatefulWidget {
+  final SwitchModel switchModel;
 
-  const GroupCard({super.key, required this.groupInfo});
+  const SwitchCard({super.key, required this.switchModel});
 
   @override
-  _GroupCardState createState() => _GroupCardState();
+  _SwitchCardState createState() => _SwitchCardState();
 }
 
-class _GroupCardState extends State<GroupCard> {
-  late bool isActive;
+class _SwitchCardState extends State<SwitchCard> {
+  bool isActive = false;
 
   @override
   void initState() {
     super.initState();
-    isActive = widget.groupInfo.isActive;
+    isActive = widget.switchModel.isActive;
   }
 
   @override
   Widget build(BuildContext context) {
-    final groupController = Provider.of<GroupController>(context);
+    final switchController = Provider.of<SwitchController>(context);
     final authProvider = Provider.of<AuthProvider>(context);
     final userId = authProvider.userId;
 
     if (userId == null) {
-      return const Text('Usuário não autenticado');
+      return const Text('User not authenticated');
     }
 
     return Card(
@@ -44,7 +44,7 @@ class _GroupCardState extends State<GroupCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              toCapitalizeWords(widget.groupInfo.groupName),
+              toCapitalizeWords(widget.switchModel.name),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -53,9 +53,10 @@ class _GroupCardState extends State<GroupCard> {
             ),
             GestureDetector(
               onTap: () async {
-                print('Toggling group: ${widget.groupInfo.groupName}');
-                bool success = await groupController.toggleGroup(
-                  widget.groupInfo.groupId,
+                print(
+                    'Toggling switch with MAC address: ${widget.switchModel.macAddress}');
+                bool success = await switchController.toggleSwitch(
+                  widget.switchModel.macAddress,
                   !isActive,
                   userId,
                 );
@@ -69,9 +70,9 @@ class _GroupCardState extends State<GroupCard> {
                 }
               },
               child: Icon(
-                Icons.group,
+                Icons.lightbulb,
                 size: 40,
-                color: isActive ? Colors.yellowAccent : Colors.grey,
+                color: isActive ? Colors.yellow : Colors.grey,
               ),
             ),
           ],

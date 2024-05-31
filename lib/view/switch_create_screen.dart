@@ -4,14 +4,14 @@ import 'package:app_atalaia/utils/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/menu.dart';
-import '../../widgets/build_input.dart';
-import '../../widgets/button_icon.dart';
-import '../../widgets/header.dart';
+import '../widgets/menu.dart';
+import '../widgets/build_input.dart';
+import '../widgets/button_icon.dart';
+import '../widgets/header.dart';
 
-import '../../view/error_screen.dart';
-import '../../view/success_screen.dart';
-import '../../provider/switch_provider.dart';
+import 'error_screen.dart';
+import 'success_screen.dart';
+import '../provider/switch_provider.dart';
 
 class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();

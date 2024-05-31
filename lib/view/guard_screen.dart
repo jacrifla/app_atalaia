@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/switch/switch_card_model.dart';
+import '../model/switch_card_model.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 

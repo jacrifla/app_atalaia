@@ -7,7 +7,7 @@ import '../view/home_screen.dart';
 import '../view/loading_screen.dart';
 import '../view/recover_confirmation_screen.dart';
 import '../view/recover_screen.dart';
-import '../screens/switch/switch_create.dart';
+import '../view/switch_create_screen.dart';
 import '../view/switch_screen.dart';
 import '../view/login_screen.dart';
 import '../view/perfil_screen.dart';

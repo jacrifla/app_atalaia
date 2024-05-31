@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
 import '../utils/config.dart';
-import '../screens/switch/switch_model.dart';
+import '../model/switch_model.dart';
 
 class SwitchProvider extends ChangeNotifier {
   final Dio _dio = Dio();

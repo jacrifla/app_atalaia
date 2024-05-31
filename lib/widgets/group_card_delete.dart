@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../view/group_edit_screen.dart';
-import 'group_model.dart';
+import '../view/group_edit_screen.dart';
+import '../model/group_model.dart';
 
 class GroupCard extends StatelessWidget {
   final GroupModel groupInfo;

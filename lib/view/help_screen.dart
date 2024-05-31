@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/header.dart';
 import 'topic_content_screen.dart';
-import '../screens/help/topics.dart';
+import '../utils/topics.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});

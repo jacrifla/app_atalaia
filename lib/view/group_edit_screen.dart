@@ -5,7 +5,7 @@ import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import 'success_screen.dart';
-import '../screens/group_switch/group_model.dart';
+import '../model/group_model.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final GroupModel groupInfo;
