@@ -1,7 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
-import 'package:app_atalaia/utils/utils.dart';
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
+import '../utils/utils.dart';
 import '../view/confirmation_screen.dart';
 import '../view/error_screen.dart';
 import '../view/success_screen.dart';
@@ -28,8 +27,9 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
       MaterialPageRoute(
         builder: (context) => ConfirmationScreen(
           question: 'Tem certeza que deseja excluir este ponto?',
-          onConfirm: () {
-            _handleDelete();
+          onConfirm: () async {
+            await _handleDelete();
+            // Navigator.popUntil(context, ModalRoute.withName('/switch'));
           },
           onCancel: () {
             Navigator.pop(context);
@@ -39,21 +39,23 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
     );
 
     if (confirmed == true) {
-      _handleDelete();
+      await _handleDelete();
+      Navigator.pushNamed(context, AppRoutes.switchScreen);
     }
   }
 
   Future<void> _handleDelete() async {
     SwitchController switchController = SwitchController();
-    bool success =
-        await switchController.deleteSwitch(widget.switchModel.macAddress);
+    bool success = await switchController
+        .deleteSwitch(widget.switchModel.macAddress ?? '');
     if (success) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SuccessScreen(
             message: 'Switch excluído com sucesso!',
-            screen: '/switch',
+
+            // screen: '/switch',
           ),
         ),
       );
@@ -94,7 +96,7 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                toCapitalizeWords(widget.switchModel.name),
+                toCapitalizeWords(widget.switchModel.name ?? 'Unknown'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

@@ -11,8 +11,7 @@ import '../model/switch_model.dart';
 class EditSwitchScreen extends StatefulWidget {
   final SwitchModel switchModel;
 
-  const EditSwitchScreen({Key? key, required this.switchModel})
-      : super(key: key);
+  const EditSwitchScreen({super.key, required this.switchModel});
 
   @override
   _EditSwitchScreenState createState() => _EditSwitchScreenState();
@@ -93,11 +92,9 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
                         guardActive: widget.switchModel.guardActive,
                       );
 
-                      // Prepare data to update the switch
                       Map<String, dynamic> updateData =
                           updatedSwitchModel.toJson();
 
-                      // Update the switch
                       bool success =
                           await SwitchController().updateSwitch(updateData);
 
