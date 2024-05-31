@@ -56,4 +56,7 @@ final appTheme = ThemeData(
     foregroundColor: backgroundColor,
   ),
   useMaterial3: true,
+  cardTheme: const CardTheme(
+    color: cardsColor,
+  ),
 );
