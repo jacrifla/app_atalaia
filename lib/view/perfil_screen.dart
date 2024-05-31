@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/auth_provider.dart';
 import 'confirmation_screen.dart';
-import '../screens/user/perfil/perfil_controller.dart';
+import '../controller/perfil_controller.dart';
 
 import '../widgets/header.dart';
 import '../widgets/menu.dart';

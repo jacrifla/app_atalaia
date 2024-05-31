@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
 import '../../view/error_screen.dart';
-import 'switch_controller.dart';
+import '../../controller/switch_controller.dart';
 import 'switch_model.dart';
 
 class EditSwitchScreen extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/auth_provider.dart';
 import '../../utils/utils.dart';
-import 'group_controller.dart';
+import '../../controller/group_controller.dart';
 import 'group_model.dart';
 
 class GroupCard extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../utils/auth_provider.dart';
 import '../../utils/utils.dart';
 import 'switch_model.dart';
-import 'switch_controller.dart';
+import '../../controller/switch_controller.dart';
 
 class SwitchCard extends StatefulWidget {
   final SwitchModel switchModel;

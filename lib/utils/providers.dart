@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/group_switch/group_controller.dart';
-import '../screens/switch/switch_controller.dart';
+import '../controller/group_controller.dart';
+import '../controller/switch_controller.dart';
 import '../screens/switch/switch_provider.dart';
-import '../screens/user/perfil/perfil_controller.dart';
+import '../controller/perfil_controller.dart';
 import 'auth_provider.dart';
 
 class MyAppProviders extends StatelessWidget {

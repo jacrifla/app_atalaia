@@ -8,7 +8,7 @@ import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import 'success_screen.dart';
-import '../screens/user/signup/signup_controller.dart';
+import '../controller/signup_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

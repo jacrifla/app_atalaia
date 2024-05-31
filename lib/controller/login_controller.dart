@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 import 'package:flutter/material.dart';
 
-import '../../../utils/auth_provider.dart';
-import '../../../view/error_screen.dart';
-import 'login_provider.dart';
+import '../utils/auth_provider.dart';
+import '../view/error_screen.dart';
+import '../screens/user/login/login_provider.dart';
 
 class LoginController {
   final LoginProvider _loginProvider;

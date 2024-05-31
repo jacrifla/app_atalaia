@@ -8,7 +8,7 @@ import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/switch_content.dart';
-import '../screens/switch/switch_controller.dart';
+import '../controller/switch_controller.dart';
 import '../screens/switch/switch_create.dart';
 import '../screens/switch/switch_model.dart';
 

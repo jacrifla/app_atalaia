@@ -1,4 +1,4 @@
-import 'package:app_atalaia/screens/switch/switch_controller.dart';
+import 'package:app_atalaia/controller/switch_controller.dart';
 import 'package:flutter/material.dart';
 
 class GuardManagementProvider extends ChangeNotifier {

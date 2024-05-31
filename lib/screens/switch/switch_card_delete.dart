@@ -7,7 +7,7 @@ import '../../view/error_screen.dart';
 import '../../view/success_screen.dart';
 import 'switch_edit.dart';
 import 'switch_model.dart';
-import 'switch_controller.dart';
+import '../../controller/switch_controller.dart';
 
 class SwitchCardDelete extends StatefulWidget {
   final SwitchModel switchModel;
