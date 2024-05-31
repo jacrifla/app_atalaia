@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
@@ -61,21 +60,11 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                   }
                   return null;
                 },
+                maxLength: 20,
               ),
               const SizedBox(height: 16.0),
               const Text('Selecione um Ícone:'),
               const SizedBox(height: 8.0),
-              // Aqui você pode adicionar o dropdown de ícones
-              CheckboxListTile(
-                title: const Text('Horário Aleatório'),
-                value: randomTime,
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (value) {
-                  setState(() {
-                    randomTime = value ?? true;
-                  });
-                },
-              ),
               CheckboxListTile(
                 title: Row(
                   children: [
@@ -129,25 +118,28 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                     ),
                   ],
                 ),
-              const SizedBox(height: 30.0),
-              ButtonIcon(
-                labelText: 'Salvar Alterações',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessScreen(
-                        message: 'Alterações salvas com sucesso',
-                        screen: '/group_switch',
-                      ),
-                    ),
-                  );
-                },
-              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ButtonIcon(
+          labelText: 'Salvar Alterações',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SuccessScreen(
+                  message: 'Alterações salvas com sucesso',
+                  screen: '/group_switch',
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
