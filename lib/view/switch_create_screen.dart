@@ -4,6 +4,7 @@ import 'package:app_atalaia/utils/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/utils.dart';
 import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -17,6 +18,7 @@ class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController macController = TextEditingController();
   final TextEditingController wattsController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   SwitchCreateScreen({super.key});
 
@@ -30,55 +32,60 @@ class SwitchCreateScreen extends StatelessWidget {
       endDrawer: const MenuDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              'Nomeie o novo ponto e escolha entre os opções a seguir',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Nomeie o novo ponto e escolha entre os opções a seguir',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                BuildInput(
-                  labelText: 'Nome',
-                  controller: nameController,
-                  icon: const Icon(Icons.polyline),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Digite o nome do ponto';
-                    }
-                    return null;
-                  },
-                ),
-                BuildInput(
-                  labelText: 'Endereço MAC',
-                  controller: macController,
-                  icon: const Icon(Icons.network_ping),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Digite o endereco de MAC';
-                    }
-                    return null;
-                  },
-                ),
-                BuildInput(
-                  labelText: 'Watts',
-                  controller: wattsController,
-                  keyboardType: TextInputType.number,
-                  icon: const Icon(Icons.flash_on),
-                  emptyFieldHandler: () => '0',
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-          ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BuildInput(
+                    labelText: 'Nome',
+                    controller: nameController,
+                    icon: const Icon(Icons.polyline),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Digite o nome do ponto';
+                      }
+                      return null;
+                    },
+                  ),
+                  BuildInput(
+                    labelText: 'Endereço MAC',
+                    controller: macController,
+                    icon: const Icon(Icons.network_ping),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Digite o endereco de MAC';
+                      } else if (!isValidMacAddress(value)) {
+                        return 'Formato de endereço MAC inválido';
+                      }
+                      return null;
+                    },
+                  ),
+                  BuildInput(
+                    labelText: 'Watts',
+                    controller: wattsController,
+                    keyboardType: TextInputType.number,
+                    icon: const Icon(Icons.flash_on),
+                    emptyFieldHandler: () => '0',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
       floatingActionButton: SizedBox(
@@ -90,36 +97,38 @@ class SwitchCreateScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             labelText: 'Adicionar',
             onPressed: () async {
-              final userId = authProvider.userId;
-              print('USER SWITCH sim: $userId');
-              if (userId != null) {
-                await switchProvider.createSwitch(
-                  nameController.text.toLowerCase(),
-                  wattsController.text,
-                  macController.text.toUpperCase(),
-                  userId,
-                );
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SuccessScreen(
-                      message: 'Ponto salvo com sucesso',
-                      screen: '/switch',
+              if (_formKey.currentState!.validate()) {
+                final userId = authProvider.userId;
+                print('USER SWITCH sim: $userId');
+                if (userId != null) {
+                  await switchProvider.createSwitch(
+                    nameController.text.toLowerCase(),
+                    wattsController.text,
+                    macController.text.toUpperCase(),
+                    userId,
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SuccessScreen(
+                        message: 'Ponto salvo com sucesso',
+                        screen: '/switch',
+                      ),
                     ),
-                  ),
-                );
-              } else {
-                print('USER SWITCH nao: $userId');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ErrorScreen(
-                      message: 'Erro',
-                      errorDescription: 'Não foi possível salvar o ponto',
-                      onOKPressed: () => Navigator.pop(context),
+                  );
+                } else {
+                  print('USER SWITCH nao: $userId');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ErrorScreen(
+                        message: 'Erro',
+                        errorDescription: 'Não foi possível salvar o ponto',
+                        onOKPressed: () => Navigator.pop(context),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
             },
           ),
