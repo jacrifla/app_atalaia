@@ -22,14 +22,12 @@ class ButtonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultColor = Theme.of(context).colorScheme.primary;
     return SizedBox(
       height: height,
       child: ElevatedButton.icon(
         onPressed: onPressed,
         label: Text(
           labelText,
-          style: TextStyle(color: color ?? defaultColor),
         ),
         icon: icon ?? const SizedBox.shrink(),
         style: ButtonStyle(
@@ -38,7 +36,6 @@ class ButtonIcon extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          iconColor: MaterialStateProperty.all<Color>(color ?? defaultColor),
           side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
         ),
       ),
