@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../utils/auth_provider.dart';
-import '../../confirmation_screen.dart';
-import 'perfil_controller.dart';
+import '../utils/auth_provider.dart';
+import 'confirmation_screen.dart';
+import '../screens/user/perfil/perfil_controller.dart';
 
-import '../../../widgets/header.dart';
-import '../../../widgets/menu.dart';
-import '../../../widgets/build_input.dart';
-import '../../../widgets/button_icon.dart';
-import '../../success_screen.dart';
-import '../../error_screen.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
+import '../widgets/build_input.dart';
+import '../widgets/button_icon.dart';
+import 'success_screen.dart';
+import 'error_screen.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});

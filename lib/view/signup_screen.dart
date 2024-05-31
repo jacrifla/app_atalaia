@@ -1,14 +1,14 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:app_atalaia/screens/error_screen.dart';
+import 'package:app_atalaia/view/error_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/utils.dart';
-import '../../../widgets/build_input.dart';
-import '../../../widgets/button_icon.dart';
-import '../../../widgets/header.dart';
-import '../../success_screen.dart';
-import 'signup_controller.dart';
+import '../utils/utils.dart';
+import '../widgets/build_input.dart';
+import '../widgets/button_icon.dart';
+import '../widgets/header.dart';
+import 'success_screen.dart';
+import '../screens/user/signup/signup_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

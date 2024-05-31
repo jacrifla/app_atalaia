@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/confirmation_screen.dart';
+import '../view/confirmation_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});

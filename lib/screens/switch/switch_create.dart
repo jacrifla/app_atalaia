@@ -9,8 +9,8 @@ import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
 import '../../widgets/header.dart';
 
-import '../error_screen.dart';
-import '../success_screen.dart';
+import '../../view/error_screen.dart';
+import '../../view/success_screen.dart';
 import 'switch_provider.dart';
 
 class SwitchCreateScreen extends StatelessWidget {

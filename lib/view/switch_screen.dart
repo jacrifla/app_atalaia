@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/auth_provider.dart';
-import '../../widgets/button_icon.dart';
-import '../../widgets/header.dart';
-import '../../widgets/menu.dart';
-import '../../widgets/switch_content.dart';
-import 'switch_controller.dart';
-import 'switch_create.dart';
-import 'switch_model.dart';
+import '../utils/auth_provider.dart';
+import '../widgets/button_icon.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
+import '../widgets/switch_content.dart';
+import '../screens/switch/switch_controller.dart';
+import '../screens/switch/switch_create.dart';
+import '../screens/switch/switch_model.dart';
 
 class SwitchScreen extends StatefulWidget {
   const SwitchScreen({super.key});

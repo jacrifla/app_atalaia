@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import '../../widgets/header.dart';
+import '../widgets/header.dart';
 import 'topic_content_screen.dart';
-import 'topics.dart';
+import '../screens/help/topics.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});

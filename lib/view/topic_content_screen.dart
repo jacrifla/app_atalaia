@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/header.dart';
+import '../widgets/header.dart';
 
 class TopicContentScreen extends StatelessWidget {
   final String title;

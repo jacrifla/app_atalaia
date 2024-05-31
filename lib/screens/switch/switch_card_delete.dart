@@ -2,9 +2,9 @@
 
 import 'package:app_atalaia/utils/utils.dart';
 import 'package:flutter/material.dart';
-import '../confirmation_screen.dart';
-import '../error_screen.dart';
-import '../success_screen.dart';
+import '../../view/confirmation_screen.dart';
+import '../../view/error_screen.dart';
+import '../../view/success_screen.dart';
 import 'switch_edit.dart';
 import 'switch_model.dart';
 import 'switch_controller.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../switch/switch_card_model.dart';
-import '../../widgets/header.dart';
-import '../../widgets/menu.dart';
+import '../screens/switch/switch_card_model.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
 
 class GuardManagementScreen extends StatelessWidget {
   final List<SwitchCardModel> guardSwitches = [

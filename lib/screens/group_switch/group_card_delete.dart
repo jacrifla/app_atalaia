@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'group_edit_screen.dart';
+import '../../view/group_edit_screen.dart';
 import 'group_model.dart';
 
 class GroupCard extends StatelessWidget {

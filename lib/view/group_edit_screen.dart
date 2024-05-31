@@ -1,18 +1,22 @@
-import 'package:app_atalaia/widgets/header.dart';
-import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/button_icon.dart';
-import '../success_screen.dart';
-import 'dropdown_icons.dart';
 
-class CreateGroupScreen extends StatefulWidget {
-  const CreateGroupScreen({super.key});
+import '../widgets/build_input.dart';
+import '../widgets/button_icon.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
+import 'success_screen.dart';
+import '../screens/group_switch/group_model.dart';
+
+class EditGroupScreen extends StatefulWidget {
+  final GroupModel groupInfo;
+
+  const EditGroupScreen({super.key, required this.groupInfo});
 
   @override
-  State<CreateGroupScreen> createState() => _CreateGroupScreenState();
+  State<EditGroupScreen> createState() => _EditGroupScreenState();
 }
 
-class _CreateGroupScreenState extends State<CreateGroupScreen> {
+class _EditGroupScreenState extends State<EditGroupScreen> {
   late TextEditingController _inputNomeGrupo;
   late bool randomTime;
   late bool keepActive;
@@ -22,11 +26,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   @override
   void initState() {
     super.initState();
-    _inputNomeGrupo = TextEditingController();
-    randomTime = false;
-    keepActive = false;
-    autoActivationTime = false;
-    selectedIcon = Icons.group;
+    _inputNomeGrupo = TextEditingController(text: widget.groupInfo.groupName);
+    randomTime = widget.groupInfo.randomTime;
+    keepActive = widget.groupInfo.keepActive;
+    autoActivationTime = widget.groupInfo.autoActivationTime;
+    selectedIcon = widget.groupInfo.groupIcon;
   }
 
   @override
@@ -38,7 +42,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const Header(title: 'Criar Grupo'),
+      appBar: const Header(title: 'Editar Grupo'),
       endDrawer: const MenuDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -47,11 +51,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.face),
-                  labelText: 'Nome',
-                ),
+              BuildInput(
+                icon: const Icon(Icons.face),
+                labelText: 'Nome',
                 controller: _inputNomeGrupo,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -63,14 +65,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               const SizedBox(height: 16.0),
               const Text('Selecione um Ícone:'),
               const SizedBox(height: 8.0),
-              IconDropdownOptions.buildDropdown(
-                value: selectedIcon,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedIcon = newValue!;
-                  });
-                },
-              ),
+              // Aqui você pode adicionar o dropdown de ícones
               CheckboxListTile(
                 title: const Text('Horário Aleatório'),
                 value: randomTime,
@@ -136,14 +131,14 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 ),
               const SizedBox(height: 30.0),
               ButtonIcon(
-                labelText: 'Criar Grupo',
+                labelText: 'Salvar Alterações',
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const SuccessScreen(
-                        message: 'Grupo Criado com sucesso',
-                        alternativeRoute: '/group_switch',
+                        message: 'Alterações salvas com sucesso',
+                        screen: '/group_switch',
                       ),
                     ),
                   );

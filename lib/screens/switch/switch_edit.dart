@@ -1,12 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
-import 'package:app_atalaia/screens/success_screen.dart';
+import 'package:app_atalaia/view/success_screen.dart';
 import 'package:app_atalaia/widgets/header.dart';
 import 'package:app_atalaia/widgets/menu.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/build_input.dart';
 import '../../widgets/button_icon.dart';
-import '../error_screen.dart';
+import '../../view/error_screen.dart';
 import 'switch_controller.dart';
 import 'switch_model.dart';
 

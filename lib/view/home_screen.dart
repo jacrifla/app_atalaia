@@ -4,8 +4,8 @@ import '../widgets/guard_card.dart';
 import '../widgets/menu.dart';
 import '../utils/auth_provider.dart';
 import '../widgets/switch_content.dart';
-import 'switch/switch_controller.dart';
-import 'switch/switch_model.dart';
+import '../screens/switch/switch_controller.dart';
+import '../screens/switch/switch_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
