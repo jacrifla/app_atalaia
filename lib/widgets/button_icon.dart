@@ -22,7 +22,7 @@ class ButtonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultColor = Theme.of(context).colorScheme.onPrimary;
+    final defaultColor = Theme.of(context).colorScheme.primary;
     return SizedBox(
       height: height,
       child: ElevatedButton.icon(
@@ -37,9 +37,6 @@ class ButtonIcon extends StatelessWidget {
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(
-            backgroundColor ?? Theme.of(context).colorScheme.primary,
           ),
           iconColor: MaterialStateProperty.all<Color>(color ?? defaultColor),
           side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
