@@ -1,12 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-
 import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import 'group_create_screen.dart';
-import '../widgets/group_card_delete.dart';
+import '../widgets/group_card_actions.dart';
 import '../model/group_model.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -44,6 +43,19 @@ class _GroupScreenState extends State<GroupScreen> {
       activationEndTime: '12h',
       isActive: false,
     ),
+    GroupModel(
+      groupId: '2',
+      groupName: 'Grupo de Toda a Casa',
+      groupIcon: Icons.abc,
+      groupCommon: false,
+      randomTime: true,
+      keepActive: true,
+      keepActiveHours: 2,
+      autoActivationTime: true,
+      activationStartTime: '10h',
+      activationEndTime: '12h',
+      isActive: false,
+    ),
   ];
 
   @override
@@ -62,23 +74,28 @@ class _GroupScreenState extends State<GroupScreen> {
                 itemCount: userGroups.length,
                 itemBuilder: (context, index) {
                   final group = userGroups[index];
-                  return GroupCard(groupInfo: group);
+                  return GroupCardActions(groupInfo: group);
                 },
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: ButtonIcon(
-        icon: const Icon(Icons.add),
-        labelText: 'Criar Novo Grupo',
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
-          );
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: ButtonIcon(
+          icon: const Icon(Icons.add),
+          labelText: 'Criar Novo Grupo',
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CreateGroupScreen()),
+            );
+          },
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
