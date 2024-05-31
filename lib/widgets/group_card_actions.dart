@@ -25,72 +25,78 @@ class GroupCardActions extends StatelessWidget {
             ),
           ],
         ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(20),
-          leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                groupInfo.groupIcon,
-                color: Theme.of(context).colorScheme.primary,
-                size: 28,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                groupInfo.groupName,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          title: Container(),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.blue,
-                  size: 28,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditGroupScreen(
-                        groupInfo: groupInfo,
-                      ),
+              Row(
+                children: [
+                  Icon(
+                    groupInfo.groupIcon,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 28,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    groupInfo.groupName,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.green,
-                  size: 28,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SwitchSelectionScreen(),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.blue,
+                      size: 28,
                     ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                  size: 28,
-                ),
-                onPressed: () {
-                  // Implemente a lógica para excluir o grupo
-                },
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditGroupScreen(
+                            groupInfo: groupInfo,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.green,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SwitchSelectionScreen(
+                            groupName: groupInfo.groupName,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      // Implemente a lógica para excluir o grupo
+                    },
+                  ),
+                ],
               ),
             ],
           ),
