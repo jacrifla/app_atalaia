@@ -22,23 +22,21 @@ class ButtonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: onPressed,
-        label: Text(
-          labelText,
-        ),
-        icon: icon ?? const SizedBox.shrink(),
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      label: Text(
+        labelText,
+      ),
+      icon: icon ?? const SizedBox.shrink(),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
         ),
+        side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
+        minimumSize: MaterialStateProperty.all(
+            const Size(120, 50)), // Ajuste o tamanho aqui conforme necessário
       ),
     );
   }
