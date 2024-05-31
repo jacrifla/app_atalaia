@@ -51,17 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        iconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-        title: Text(
+        title: const Text(
           'Home',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       endDrawer: const MenuDrawer(),
       body: Padding(
