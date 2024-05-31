@@ -18,23 +18,12 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Row(
         children: [
-          if (icon != null) Icon(icon),
-          if (icon != null) const SizedBox(width: 10),
-          Text(
-            title,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          Expanded(
+            child: Text(title),
           ),
+          if (icon != null) Icon(icon),
         ],
       ),
-      iconTheme: IconThemeData(
-        color: Theme.of(context).colorScheme.onPrimary,
-        size: 30,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
     );
   }
 }

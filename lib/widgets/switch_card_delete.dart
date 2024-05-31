@@ -77,7 +77,6 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.onSecondary,
       elevation: 3,
       child: InkWell(
         onTap: () {
@@ -109,7 +108,7 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
                 child: Icon(
                   Icons.close,
                   size: 40,
-                  color: Theme.of(context).colorScheme.error,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ],
