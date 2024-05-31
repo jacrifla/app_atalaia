@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/auth_provider.dart';
 import '../view/error_screen.dart';
-import '../screens/user/login/login_provider.dart';
+import '../provider/login_provider.dart';
 
 class LoginController {
   final LoginProvider _loginProvider;

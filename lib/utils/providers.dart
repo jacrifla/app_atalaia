@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../controller/group_controller.dart';
 import '../controller/switch_controller.dart';
-import '../screens/switch/switch_provider.dart';
+import '../provider/switch_provider.dart';
 import '../controller/perfil_controller.dart';
 import 'auth_provider.dart';
 

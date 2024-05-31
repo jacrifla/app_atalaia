@@ -1,6 +1,6 @@
 import 'package:app_atalaia/controller/switch_controller.dart';
 
-import '../screens/guard/guard_provider.dart';
+import '../provider/guard_provider.dart';
 
 class GuardManagementController {
   final GuardManagementProvider _guardProvider = GuardManagementProvider();

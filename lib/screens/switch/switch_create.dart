@@ -11,7 +11,7 @@ import '../../widgets/header.dart';
 
 import '../../view/error_screen.dart';
 import '../../view/success_screen.dart';
-import 'switch_provider.dart';
+import '../../provider/switch_provider.dart';
 
 class SwitchCreateScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();

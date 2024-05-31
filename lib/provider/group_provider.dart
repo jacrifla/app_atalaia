@@ -1,14 +1,14 @@
+import 'package:app_atalaia/screens/group_switch/group_model.dart';
 import 'package:flutter/material.dart';
-import 'group_info.dart';
 
 class GroupProvider extends ChangeNotifier {
-  final List<GroupInfo> _groups = [];
+  final List<GroupModel> _groups = [];
 
   // Método para obter a lista de grupos
-  List<GroupInfo> get groups => _groups;
+  List<GroupModel> get groups => _groups;
 
   // Adicione um grupo à lista
-  void addGroup(GroupInfo group) {
+  void addGroup(GroupModel group) {
     _groups.add(group);
     notifyListeners(); // Notifica os ouvintes sobre a mudança
   }

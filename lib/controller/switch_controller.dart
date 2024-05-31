@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../screens/switch/switch_model.dart';
-import '../screens/switch/switch_provider.dart';
+import '../provider/switch_provider.dart';
 
 class SwitchController extends ChangeNotifier {
   final SwitchProvider _switchProvider = SwitchProvider();

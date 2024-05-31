@@ -1,4 +1,4 @@
-import '../screens/user/signup/signup_provider.dart';
+import '../provider/signup_provider.dart';
 
 class SignupController {
   final SignupProvider _signupProvider = SignupProvider();

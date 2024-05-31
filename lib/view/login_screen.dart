@@ -6,7 +6,7 @@ import '../widgets/build_row.dart';
 import '../widgets/button_icon.dart';
 import '../utils/utils.dart';
 import '../controller/login_controller.dart';
-import '../screens/user/login/login_provider.dart';
+import '../provider/login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/user/perfil/perfil_provider.dart';
+import '../provider/perfil_provider.dart';
 
 class UserController with ChangeNotifier {
   final UserProvider _userProvider = UserProvider();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/group_switch/group_provider.dart';
+import '../provider/group_provider.dart';
 
 class GroupController extends ChangeNotifier {
   final GroupProvider groupProvider;
