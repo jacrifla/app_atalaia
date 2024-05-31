@@ -53,10 +53,14 @@ class _GroupCardState extends State<GroupCard> {
               onTap: () async {
                 print('Alternando grupo: ${widget.groupInfo.groupName}');
                 bool success = await groupController.toggleGroup(
-                  widget.groupInfo.groupId,
-                  !isActive,
+                  context,
+                  {
+                    'group_id': widget.groupInfo.groupId,
+                    'is_active': !isActive,
+                  },
                   userId,
                 );
+
                 if (success) {
                   print('Alternância bem-sucedida, atualizando estado.');
                   setState(() {
