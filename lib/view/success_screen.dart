@@ -46,13 +46,12 @@ class SuccessScreen extends StatelessWidget {
                     if (alternativeRoute != null) {
                       Navigator.pushNamed(context, alternativeRoute!);
                     } else {
-                      Navigator.popUntil(
-                        context,
-                        ModalRoute.withName(screen!),
-                      );
+                      Navigator.pop(context);
                     }
                   },
-                  labelText: 'Voltar',
+                  labelText: alternativeRoute != null
+                      ? 'Ir para $alternativeRoute'
+                      : 'Voltar',
                 ),
               ],
             ),
