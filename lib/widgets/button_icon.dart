@@ -17,13 +17,14 @@ class ButtonIcon extends StatelessWidget {
     this.backgroundColor,
     this.borderSide,
     this.color,
-    this.height,
+    this.height = 50,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
+      width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: onPressed,
         label: Text(
