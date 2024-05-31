@@ -25,3 +25,10 @@ String toCapitalizeWords(String input) {
 
   return capitalizedWords.join(' ');
 }
+
+bool isValidMacAddress(String mac) {
+  final RegExp macRegExp = RegExp(
+    r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$|^([0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4})$|^([0-9A-Fa-f]{12})$',
+  );
+  return macRegExp.hasMatch(mac);
+}
