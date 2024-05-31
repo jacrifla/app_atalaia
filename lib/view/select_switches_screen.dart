@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../controller/switch_controller.dart';
 import '../model/switch_model.dart';
 import '../utils/auth_provider.dart';
+import '../widgets/button_icon.dart';
 
 class SwitchSelectionScreen extends StatefulWidget {
   final String? groupName;
@@ -76,11 +77,13 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: ButtonIcon(
         onPressed: () {
           Navigator.pop(context, selectedSwitches);
         },
-        child: const Icon(Icons.save),
+        labelText: 'Save',
+        icon: const Icon(Icons.save),
       ),
     );
   }
