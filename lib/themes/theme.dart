@@ -10,6 +10,7 @@ const disable = Color(0xFFCCCCCC);
 
 // Definindo o tema do aplicativo
 final appTheme = ThemeData(
+  iconTheme: const IconThemeData(color: principalColor),
   fontFamily: fontFamily,
   colorScheme: ColorScheme.fromSeed(seedColor: principalColor),
   scaffoldBackgroundColor: backgroundColor,
