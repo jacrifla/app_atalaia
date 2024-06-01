@@ -1,3 +1,4 @@
+import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/routes.dart';
 import '../view/confirmation_screen.dart';
@@ -21,7 +22,7 @@ class MenuDrawer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: appTheme.primaryColor,
                     ),
                   ),
                 ),
@@ -32,7 +33,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.home);
                   },
-                  context: context,
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Grupos',
@@ -40,7 +40,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.groupScreen);
                   },
-                  context: context,
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Pontos',
@@ -48,7 +47,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.switchScreen);
                   },
-                  context: context,
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Guarda',
@@ -56,7 +54,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.guard);
                   },
-                  context: context,
                 ),
                 _buildMenuItem(
                   label: 'Perfil',
@@ -64,7 +61,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.userProfile);
                   },
-                  context: context,
                 ),
                 // _buildMenuItem(
                 //   label: 'Monitoramento',
@@ -80,21 +76,19 @@ class MenuDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.help);
                   },
-                  context: context,
                 ),
                 Container(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: appTheme.primaryColor,
                   child: _buildMenuItem(
                     label: 'Sair',
                     icon: Icon(
                       Icons.logout,
-                      color: Theme.of(context).colorScheme.background,
+                      color: appTheme.backgroundColor,
                     ),
-                    color: Theme.of(context).colorScheme.background,
+                    color: appTheme.backgroundColor,
                     onTap: () {
                       _logout(context);
                     },
-                    context: context,
                   ),
                 ),
               ],
@@ -110,18 +104,17 @@ class MenuDrawer extends StatelessWidget {
     required Icon icon,
     VoidCallback? onTap,
     Color? color,
-    required BuildContext context,
   }) {
     return ListTile(
       leading: Icon(
         icon.icon,
-        color: color ?? Theme.of(context).colorScheme.primary,
+        color: color ?? appTheme.primaryColor,
       ),
       title: Text(
         label,
         style: TextStyle(
-          color: color ?? Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w400,
+          color: color ?? appTheme.primaryColor,
+          fontWeight: FontWeight.w500,
           fontSize: 18,
         ),
       ),
