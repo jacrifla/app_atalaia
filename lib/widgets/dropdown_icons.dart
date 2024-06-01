@@ -24,6 +24,7 @@ class IconDropdownOptions {
   }
 
   static List<IconData> icons = [
+    Icons.group,
     Icons.home_outlined,
     Icons.living_rounded,
     Icons.kitchen_outlined,
