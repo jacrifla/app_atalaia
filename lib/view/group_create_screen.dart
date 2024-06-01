@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'success_screen.dart';
 import '../widgets/header.dart';
@@ -5,6 +8,7 @@ import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/dropdown_icons.dart';
 import '../widgets/build_input.dart';
+import '../controller/group_controller.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -14,26 +18,55 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
-  late TextEditingController _inputNomeGrupo;
-  late bool randomTime;
-  late bool keepActive;
-  late bool autoActivationTime;
-  late IconData selectedIcon;
-
-  @override
-  void initState() {
-    super.initState();
-    _inputNomeGrupo = TextEditingController();
-    randomTime = false;
-    keepActive = false;
-    autoActivationTime = false;
-    selectedIcon = Icons.group;
-  }
+  final GroupController _groupController = GroupController();
+  final TextEditingController _inputGroupName = TextEditingController();
+  bool randomTime = false;
+  bool keepActive = false;
+  bool autoActivationTime = false;
+  IconData selectedIcon = Icons.group;
 
   @override
   void dispose() {
-    _inputNomeGrupo.dispose();
+    _inputGroupName.dispose();
     super.dispose();
+  }
+
+  Future<void> _createGroup(BuildContext context) async {
+    try {
+      await _groupController.createGroup(context, {
+        'name': _inputGroupName.text,
+        'icon': selectedIcon,
+        'keepActive': keepActive,
+        'autoActivationTime': autoActivationTime,
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SuccessScreen(
+            message: 'Grupo Criado com sucesso',
+            alternativeRoute: AppRoutes.groupScreen,
+          ),
+        ),
+      );
+    } catch (error) {
+      _showErrorDialog(context, 'Erro ao criar grupo: $error');
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Erro'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -49,9 +82,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               BuildInput(
-                icon: const Icon(Icons.face),
+                icon: const Icon(Icons.group),
                 labelText: 'Nome',
-                controller: _inputNomeGrupo,
+                controller: _inputGroupName,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome do grupo.';
@@ -132,17 +165,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ButtonIcon(
           labelText: 'Criar Grupo',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SuccessScreen(
-                  message: 'Grupo Criado com sucesso',
-                  alternativeRoute: '/group_switch',
-                ),
-              ),
-            );
-          },
+          onPressed: () => _createGroup(context),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
