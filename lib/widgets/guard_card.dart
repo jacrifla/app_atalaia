@@ -26,6 +26,7 @@ class _GuardaCardState extends State<GuardaCard> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -39,28 +40,32 @@ class _GuardaCardState extends State<GuardaCard> {
                       : Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Guarda',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Guarda',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      _guardaAtiva
-                          ? 'Sua guarda está ativa no momento.'
-                          : 'Sua guarda não está ativa no momento.',
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _toggleGuarda,
-                      child: const Text('Ativar Guarda Agora'),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Text(
+                        _guardaAtiva
+                            ? 'Sua guarda está ativa no momento.'
+                            : 'Sua guarda não está ativa no momento.',
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _toggleGuarda,
+                        child: Text(_guardaAtiva
+                            ? 'Desativar Guarda'
+                            : 'Ativar Guarda Agora'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
