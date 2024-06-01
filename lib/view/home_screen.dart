@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../widgets/guard_card.dart';
 import '../widgets/menu.dart';
-import '../utils/auth_provider.dart';
 import '../widgets/switch_content.dart';
 import '../controller/switch_controller.dart';
 import '../model/switch_model.dart';
@@ -15,40 +15,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   int _selectedIndex = 0;
   late Future<List<SwitchModel>> _switchesFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadSwitches();
-  }
-
-  void _loadSwitches() {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.userId;
-    if (userId != null) {
-      _switchesFuture = SwitchController().getSwitches(userId);
-    } else {
-      _switchesFuture = Future.error('User ID is null');
-    }
+    _switchesFuture =
+        Provider.of<SwitchController>(context, listen: false).getSwitches();
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (_selectedIndex == 1) {
-        _loadSwitches();
-      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
@@ -65,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const GuardaCard(),
+            const GuardCard(),
             const SizedBox(height: 20),
             Expanded(
               child: SwitchContent(
