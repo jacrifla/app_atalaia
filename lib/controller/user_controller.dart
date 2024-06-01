@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
 import '../utils/auth_provider.dart';
@@ -22,8 +25,7 @@ class UserController with ChangeNotifier {
     _setLoading(true);
     try {
       await _userProvider.login(email, password);
-      print('UUID após o login: ${_authProvider.userId}');
-      Navigator.pushNamed(context, '/loading');
+      Navigator.pushNamed(context, AppRoutes.loading);
     } catch (error) {
       await Navigator.push(
         context,
