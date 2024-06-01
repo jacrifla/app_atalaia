@@ -49,6 +49,8 @@ class SwitchProvider extends ChangeNotifier {
           switches.add(SwitchModel.fromJson(switchData));
         }
         return switches;
+      } else if (response.statusCode == 400) {
+        return [];
       } else {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
