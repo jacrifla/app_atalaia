@@ -1,24 +1,21 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:app_atalaia/view/error_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../controller/user_controller.dart';
 import '../utils/utils.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
-import 'success_screen.dart';
-import '../controller/signup_controller.dart';
+import '../view/success_screen.dart';
+import '../view/error_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final SignupController _signupController = SignupController();
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputName = TextEditingController();
   final TextEditingController _inputEmail = TextEditingController();
@@ -39,6 +36,8 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _handleSubmit() async {
+    final userController = Provider.of<UserController>(context, listen: false);
+
     if (!_arePasswordsEqual()) {
       _showErrorDialog('Erro', 'As senhas não correspondem.');
       return;
@@ -46,7 +45,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (_formState.currentState!.validate()) {
       _formState.currentState!.save();
-      final response = await _signupController.createUser(
+      final response = await userController.createUser(
         _inputName.text.toLowerCase(),
         _inputEmail.text.toLowerCase(),
         _inputPhone.text,
