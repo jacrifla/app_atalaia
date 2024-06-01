@@ -1,12 +1,12 @@
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../themes/theme.dart';
-import '../utils/auth_provider.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../utils/utils.dart';
-import '../controller/login_controller.dart';
-import '../provider/login_provider.dart';
+import '../controller/user_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,8 +16,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final LoginProvider loginProvider;
-  late final LoginController _loginController;
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
@@ -25,9 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    loginProvider = LoginProvider(AuthProvider());
-    loginProvider.initDio();
-    _loginController = LoginController(loginProvider, AuthProvider());
     _clearTextFields();
   }
 
@@ -45,6 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userController = Provider.of<UserController>(context, listen: false);
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -105,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: 'Entrar',
                   onPressed: () {
                     if (_formState.currentState!.validate()) {
-                      _loginController.loginUser(
+                      userController.loginUser(
                         context,
                         _inputEmail.text.trim().toLowerCase(),
                         _inputPassword.text.trim(),
@@ -120,17 +117,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     buttonLine(
                       icon: const Icon(Icons.person_add),
-                      onPressed: () => Navigator.pushNamed(context, '/signup'),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.signUp),
                       label: 'Criar Conta',
                     ),
                     buttonLine(
                       icon: const Icon(Icons.person_search),
-                      onPressed: () => Navigator.pushNamed(context, '/recover'),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.help),
                       label: 'Esqueci Minha Senha',
                     ),
                     buttonLine(
                       icon: const Icon(Icons.help_center_rounded),
-                      onPressed: () => Navigator.pushNamed(context, '/recover'),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.recover),
                       label: 'Preciso de Ajuda',
                     ),
                   ],
