@@ -28,7 +28,7 @@ class _SwitchScreenState extends State<SwitchScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final userId = authProvider.userId;
     if (userId != null) {
-      _switchesFuture = SwitchController().getSwitches(userId);
+      _switchesFuture = SwitchController().getSwitches();
     } else {
       _switchesFuture = Future.error('User ID is null');
     }
@@ -86,7 +86,7 @@ class _SwitchScreenState extends State<SwitchScreen> {
             labelText: 'Atualizar Pontos',
             onPressed: () {
               setState(() {
-                _switchesFuture = SwitchController().getSwitches(userId);
+                _switchesFuture = SwitchController().getSwitches();
               });
             },
             icon: const Icon(Icons.refresh),

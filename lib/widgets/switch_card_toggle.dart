@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../core/constantes.dart';
-import '../utils/auth_provider.dart';
 import '../utils/utils.dart';
 import '../model/switch_model.dart';
 import '../controller/switch_controller.dart';
@@ -12,11 +12,11 @@ class SwitchCard extends StatefulWidget {
   const SwitchCard({super.key, required this.switchModel});
 
   @override
-  _SwitchCardState createState() => _SwitchCardState();
+  State<SwitchCard> createState() => _SwitchCardState();
 }
 
 class _SwitchCardState extends State<SwitchCard> {
-  bool isActive = false;
+  late bool isActive;
 
   @override
   void initState() {
@@ -27,12 +27,6 @@ class _SwitchCardState extends State<SwitchCard> {
   @override
   Widget build(BuildContext context) {
     final switchController = Provider.of<SwitchController>(context);
-    final authProvider = Provider.of<AuthProvider>(context);
-    final userId = authProvider.userId;
-
-    if (userId == null) {
-      return const Text('User not authenticated');
-    }
 
     return Card(
       elevation: 3,
@@ -51,20 +45,19 @@ class _SwitchCardState extends State<SwitchCard> {
             ),
             GestureDetector(
               onTap: () async {
-                print(
-                    'Alternando switch com o MAC address: ${widget.switchModel.macAddress ?? ''}');
+                // print(
+                //     'Alternando switch com o MAC address: ${widget.switchModel.macAddress ?? ''}');
                 bool success = await switchController.toggleSwitch(
                   widget.switchModel.macAddress ?? '',
                   !isActive,
-                  userId,
                 );
                 if (success) {
-                  print('Alternância bem-sucedida, atualizando estado.');
+                  // print('Alternância bem-sucedida, atualizando estado.');
                   setState(() {
                     isActive = !isActive;
                   });
                 } else {
-                  print('Alternância falhou.');
+                  // print('Alternância falhou.');
                 }
               },
               child: Icon(
