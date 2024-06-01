@@ -10,4 +10,8 @@ class AuthProvider extends ChangeNotifier {
     box.write('uuid', userId);
     notifyListeners();
   }
+
+  bool isAuthenticated() {
+    return userId != null;
+  }
 }

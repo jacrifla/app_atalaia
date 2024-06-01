@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
 import '../utils/auth_provider.dart';
+import '../utils/utils.dart';
 import '../view/error_screen.dart';
 
 class UserController with ChangeNotifier {
@@ -113,5 +114,50 @@ class UserController with ChangeNotifier {
 
   void clearError() {
     _setErrorMessage(null);
+  }
+
+  bool arePasswordsEqual(String password, String confirmPassword) {
+    return password == confirmPassword;
+  }
+
+  bool validateEmail(String email) {
+    return isValidEmail(email);
+  }
+
+  bool validatePhoneNumber(String phoneNumber) {
+    return isValidPhoneNumber(phoneNumber);
+  }
+
+  bool validatePassword(String password) {
+    return password.length >= 8;
+  }
+
+  Future<Map<String, dynamic>> signUpUser(
+      String name, String email, String phone, String password) async {
+    if (!validateEmail(email)) {
+      return {'status': 'error', 'message': 'Email inválido'};
+    }
+
+    if (!validatePhoneNumber(phone)) {
+      return {'status': 'error', 'message': 'Número de telefone inválido'};
+    }
+
+    if (!validatePassword(password)) {
+      return {
+        'status': 'error',
+        'message': 'Senha deve ter no mínimo 8 caracteres'
+      };
+    }
+
+    if (!_authProvider.isAuthenticated()) {
+      return {'status': 'error', 'message': 'Usuário não autenticado'};
+    }
+
+    try {
+      final response = await createUser(name, email, phone, password);
+      return {'status': 'success', 'data': response};
+    } catch (error) {
+      return {'status': 'error', 'message': error.toString()};
+    }
   }
 }

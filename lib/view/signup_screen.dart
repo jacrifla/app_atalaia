@@ -23,10 +23,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _inputPassword = TextEditingController();
   final TextEditingController _inputPasswordCheck = TextEditingController();
 
-  bool _arePasswordsEqual() {
-    return _inputPassword.text == _inputPasswordCheck.text;
-  }
-
   void _clearInputs() {
     _inputName.clear();
     _inputEmail.clear();
@@ -38,14 +34,15 @@ class _SignupScreenState extends State<SignupScreen> {
   void _handleSubmit() async {
     final userController = Provider.of<UserController>(context, listen: false);
 
-    if (!_arePasswordsEqual()) {
+    if (!userController.arePasswordsEqual(
+        _inputPassword.text, _inputPasswordCheck.text)) {
       _showErrorDialog('Erro', 'As senhas não correspondem.');
       return;
     }
 
     if (_formState.currentState!.validate()) {
       _formState.currentState!.save();
-      final response = await userController.createUser(
+      final response = await userController.signUpUser(
         _inputName.text.toLowerCase(),
         _inputEmail.text.toLowerCase(),
         _inputPhone.text,
@@ -55,11 +52,7 @@ class _SignupScreenState extends State<SignupScreen> {
         _showSuccessScreen('Usuário criado com sucesso!');
         _clearInputs();
       } else {
-        if (response['message'] != null) {
-          _showErrorDialog('Erro', response['message']);
-        } else {
-          _showErrorDialog('Erro', 'Ocorreu um erro desconhecido.');
-        }
+        _showErrorDialog('Erro', response['message']);
       }
     }
   }
