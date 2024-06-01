@@ -11,7 +11,7 @@ import 'auth_provider.dart';
 class MyAppProviders extends StatelessWidget {
   final Widget child;
 
-  const MyAppProviders({required this.child, Key? key}) : super(key: key);
+  const MyAppProviders({required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {
