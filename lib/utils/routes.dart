@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../view/group_create_screen.dart';
 import '../view/group_screen.dart';
-import '../view/guard_screen.dart';
+import '../view/guard_management_screen.dart';
 import '../view/help_screen.dart';
 import '../view/home_screen.dart';
 import '../view/loading_screen.dart';
