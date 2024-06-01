@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../utils/utils.dart';
@@ -17,7 +19,7 @@ class SwitchCardDelete extends StatefulWidget {
   });
 
   @override
-  _SwitchCardDeleteState createState() => _SwitchCardDeleteState();
+  State<SwitchCardDelete> createState() => _SwitchCardDeleteState();
 }
 
 class _SwitchCardDeleteState extends State<SwitchCardDelete> {
@@ -29,7 +31,6 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
           question: 'Tem certeza que deseja excluir este ponto?',
           onConfirm: () async {
             await _handleDelete();
-            // Navigator.popUntil(context, ModalRoute.withName('/switch'));
           },
           onCancel: () {
             Navigator.pop(context);

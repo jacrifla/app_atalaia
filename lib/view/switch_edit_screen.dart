@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:app_atalaia/view/success_screen.dart';
 import 'package:app_atalaia/widgets/header.dart';
@@ -14,7 +16,7 @@ class EditSwitchScreen extends StatefulWidget {
   const EditSwitchScreen({super.key, required this.switchModel});
 
   @override
-  _EditSwitchScreenState createState() => _EditSwitchScreenState();
+  State<EditSwitchScreen> createState() => _EditSwitchScreenState();
 }
 
 class _EditSwitchScreenState extends State<EditSwitchScreen> {
