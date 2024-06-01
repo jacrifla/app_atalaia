@@ -12,7 +12,7 @@ class SwitchSelectionScreen extends StatefulWidget {
   const SwitchSelectionScreen({super.key, this.groupName});
 
   @override
-  _SwitchSelectionScreenState createState() => _SwitchSelectionScreenState();
+  State<SwitchSelectionScreen> createState() => _SwitchSelectionScreenState();
 }
 
 class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
@@ -25,7 +25,8 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final userId = authProvider.userId;
     if (userId != null) {
-      _switchesFuture = SwitchController().getSwitches(userId);
+      _switchesFuture =
+          Provider.of<SwitchController>(context, listen: false).getSwitches();
     } else {
       _switchesFuture = Future.error('User ID is null');
     }
