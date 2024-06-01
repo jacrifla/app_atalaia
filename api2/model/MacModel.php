@@ -5,8 +5,6 @@ require_once './core/ExceptionPdo.php';
 
 class MacModel
 {
-    
-   
     //checa se o endereço mac enviado pelo usuario existe na base de mac disponiveis ou se nao está em uso (serve para caso o mac seja digitado erroneamente)
     public static function checkMacAddressAvailable($mac_address){
         try {
@@ -70,7 +68,6 @@ class MacModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
     //USO INTERNO
@@ -97,15 +94,15 @@ class MacModel
     public static function update($id, $new_mac_address){
         try {
             $pdo = ConnectionMYSQL::getInstance();
-    
+
             $stmt = $pdo->prepare('
                 UPDATE tb_mac_address 
                 SET mac_address = ?
                 WHERE id = ?
             ');
-    
-            $stmt->execute([ $mac_address, $id]);
-    
+
+            $stmt->execute([ $new_mac_address, $id]);
+
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
@@ -113,6 +110,4 @@ class MacModel
             throw new \Exception($e->getMessage());
         }
     }
-    
-
 }

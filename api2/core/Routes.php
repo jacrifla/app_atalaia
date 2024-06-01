@@ -18,7 +18,7 @@ Http::post('/switches/delete', 'SwitchController@deleteSwitch');
 
 //Groups
 Http::post('/groups', 'GroupSwitchController@getGroups');
-Http::post('/groups/getone', 'GroupSwitchController@getGroup');
+Http::post('/groups/getone', 'GroupSwitchController@getOneGroup');
 Http::post('/groups/switches', 'GroupSwitchController@getSwitchesInGroup');
 Http::post('/groups/checkswitch', 'GroupSwitchController@checkSwitchInGroup');
 Http::post('/groups/new', 'GroupSwitchController@createGroup');

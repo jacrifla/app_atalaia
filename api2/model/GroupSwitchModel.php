@@ -25,25 +25,25 @@ class GroupSwitchModel
         }
     }
 
-    public static function getGroup($groupId)
+    public static function getOneGroup($groupId)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-
+    
             $stmt = $pdo->prepare('SELECT * 
             FROM tb_group 
             WHERE uuid = ?            
             AND deleted_at IS NULL');
             $stmt->execute([$groupId]);
-
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+            return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
-
+    
     public static function getSwitchesInGroup($groupId)
     {
         try {
@@ -64,14 +64,13 @@ class GroupSwitchModel
         }
     }
 
-
     public static function createGroup(array $data)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();            
             $stmt = $pdo->prepare('
             INSERT INTO tb_group (uuid, name, is_active, schedule_active, schedule_start, schedule_end, user_id) 
-            VALUES (UUID(), ?, ?, ?, ?, ?)'
+            VALUES (UUID(), ?, ?, ?, ?, ?, ?)'
         );
 
         $stmt->execute([$data['name'], $data['is_active'],$data['schedule_active'], $data['schedule_start'], $data['schedule_end'], $data['user_id']]);
@@ -97,7 +96,8 @@ class GroupSwitchModel
         }
     }
 
-    public static function checkSwitchInGroup($mac_address){
+    public static function checkSwitchInGroup($mac_address)
+    {
         try{
             $pdo = ConnectionMYSQL::getInstance();
 
@@ -113,7 +113,8 @@ class GroupSwitchModel
 
     }
 
-    public static function addSwitchToGroup(array $data){
+    public static function addSwitchToGroup(array $data)
+    {
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
@@ -129,7 +130,8 @@ class GroupSwitchModel
 
     }
 
-    public static function removeSwitchFromGroup($mac_address){
+    public static function removeSwitchFromGroup($mac_address)
+    {
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
@@ -144,8 +146,6 @@ class GroupSwitchModel
         }
 
     }
-
-
 
     public static function updateGroupInfo(array $data)
     {
@@ -191,7 +191,7 @@ class GroupSwitchModel
             $pdo = ConnectionMYSQL::getInstance();
             $stmt = $pdo->prepare('UPDATE tb_group SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
             $stmt->execute([$groupId]);
-
+    
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
@@ -223,50 +223,50 @@ class GroupSwitchModel
         }
     }
 
-    public static function removeAllSwitchesFromGroup(array $mac_address){
+    public static function removeAllSwitchesFromGroupByGroupId($groupId)
+    {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-
-            // Construir a cláusula IN com placeholders
-            $placeholders = implode(',', array_fill(0, count($mac_addresses), '?'));
-    
-            // Preparar a consulta SQL
-            $sql = "UPDATE tb_switch SET group_id = NULL WHERE mac_address IN ($placeholders)";
-            $stmt = $pdo->prepare($sql);
-    
-            // Executar a consulta com a lista de mac_addresses
-            $stmt->execute($mac_addresses);
-
+            
+            $stmt = $pdo->prepare('
+                UPDATE tb_switch AS s
+                JOIN tb_group AS g ON s.group_id = g.id
+                SET s.group_id = NULL 
+                WHERE g.uuid = ?
+            ');
+            
+            $stmt->execute([$groupId]);
+            
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
+    
+        
     public static function toggleGroup($groupId)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-
+    
             $stmt = $pdo->prepare('
-                UPDATE tb_switch
-                SET is_active = ?
-                WHERE group_id = ?
+                UPDATE tb_group
+                SET is_active = IF(is_active = 1, 0, 1)
+                WHERE uuid = ?
             ');
-            $stmt->bindParam(1, $data['is_active'], PDO::PARAM_INT);
-            $stmt->bindParam(2, $data['group_id'], PDO::PARAM_INT);
+            $stmt->bindParam(1, $groupId, PDO::PARAM_STR);
             $stmt->execute();
-
+    
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-    }
+    }    
 
 //     public static function insertGroupInfo(array $data)
 // {

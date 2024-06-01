@@ -8,11 +8,11 @@ require_once './model/UserModel.php';
 class GroupSwitchController
 {
     
-    public function createGroup(Request $request, Response $response){
+    public function createGroup(Request $request, Response $response)
+    {
         try {
             
             $data            = $request->bodyJson();
-            $mac_address     = $data['mac_address'];
             $user            = UserModel::getUserByUUID($data['user_id']);
             $data['user_id'] = $user['id'];
             $group           = GroupSwitchModel::createGroup($data);
@@ -38,8 +38,63 @@ class GroupSwitchController
         }
             
     }
+
+    public function getOneGroup(Request $request, Response $response)
+    {
+        try {
+            $data = $request->bodyJson();
+            $group = GroupSwitchModel::getOneGroup($data['group_id']);
             
-    public function getSwitchesInGroup(Request $request, Response $response){
+            if ($group) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $group
+                ], 200);
+            } else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Group not found'
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getGroups(Request $request, Response $response)
+    {
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::getGroups($data['user_id']);
+            
+            if ($data) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $data
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+            
+    public function getSwitchesInGroup(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -67,36 +122,8 @@ class GroupSwitchController
         }
     }
 
-
-    public function getGroups(Request $request, Response $response){
-        try {
-            
-            $data = $request->bodyJson();
-            
-            $data = GroupSwitchModel::getGroups($data['user_id']);
-            
-            if ($data) {
-                $response::json([
-                    'status' => 'success',
-                    'dados' => $data
-                ], 200);
-            }else {
-                $response::json([
-                    'status' => 'error',
-                    'msg' => 'Internal Error'
-                ], 400);
-            }
-            
-            
-        } catch (\Exception $e) {
-            $response::json([
-                'status' => 'error',
-                'msg' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function checkSwitchInGroup(Request $request, Response $response){
+    public function checkSwitchInGroup(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -124,7 +151,8 @@ class GroupSwitchController
         }
     }
 
-    public function addSwitchToGroup(Request $request, Response $response){
+    public function addSwitchToGroup(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -154,37 +182,35 @@ class GroupSwitchController
         }
     }
 
-    public function toggleGroup(Request $request, Response $response){
+    public function toggleGroup(Request $request, Response $response)
+    {
         try {
-            
             $data = $request->bodyJson();
-            $data             = $request->bodyJson();
-            $groupInfo        = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
-            $data['group_id'] = $groupInfo['id'];
-            $group            = GroupSwitchModel::toggleGroup($data);
+            $groupId = $data['group_id'];
             
-            if ($group) {
+            $success = GroupSwitchModel::toggleGroup($groupId);
+            
+            if ($success) {
                 $response::json([
                     'status' => 'success',
-                    'dados' => $group
+                    'msg' => $success
                 ], 200);
-            }else {
+            } else {
                 $response::json([
                     'status' => 'error',
                     'msg' => 'Internal Error'
                 ], 400);
             }
-            
-            
         } catch (\Exception $e) {
             $response::json([
                 'status' => 'error',
                 'msg' => $e->getMessage()
             ], 500);
         }
-    }
-
-    public function removeSwitchFromGroup(Request $request, Response $response){
+    }    
+    
+    public function removeSwitchFromGroup(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -212,7 +238,8 @@ class GroupSwitchController
         }
     }
 
-    public function updateGroupInfo(Request $request, Response $response){
+    public function updateGroupInfo(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -240,27 +267,30 @@ class GroupSwitchController
         }
     }
 
-    public function deleteGroup(Request $request, Response $response){
+    public function deleteGroup(Request $request, Response $response)
+    {
         try {
-            
             $data = $request->bodyJson();
+            $groupId = $data['group_id'];
             
-            $data = GroupSwitchModel::softDelete($data['group_id']);
-            $data = GroupSwitchModel::removeAllSwitchesFromGroup($data['mac_addresses']);
+            // Remover switches associados ao grupo
+            $successRemoveSwitches = GroupSwitchModel::removeAllSwitchesFromGroupByGroupId($groupId);
+            // var_dump($successRemoveSwitches);
             
-            if ($data) {
+            // Excluir o grupo
+            $successDeleteGroup = GroupSwitchModel::softDelete($groupId);
+    
+            if ($successDeleteGroup && $successRemoveSwitches) {
                 $response::json([
                     'status' => 'success',
-                    'dados' => $data
+                    'msg' => $successDeleteGroup
                 ], 200);
-            }else {
+            } else {
                 $response::json([
                     'status' => 'error',
-                    'msg' => 'Internal Error'
+                    'msg' => 'Failed to delete group and associated switches'
                 ], 400);
             }
-            
-            
         } catch (\Exception $e) {
             $response::json([
                 'status' => 'error',
@@ -268,11 +298,6 @@ class GroupSwitchController
             ], 500);
         }
     }
-
-  
-   
     
-        
-        
 }
         
