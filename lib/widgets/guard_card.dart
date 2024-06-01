@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class GuardaCard extends StatefulWidget {
-  const GuardaCard({super.key});
+class GuardCard extends StatefulWidget {
+  const GuardCard({super.key});
 
   @override
-  _GuardaCardState createState() => _GuardaCardState();
+  State<GuardCard> createState() => _GuardCardState();
 }
 
-class _GuardaCardState extends State<GuardaCard> {
+class _GuardCardState extends State<GuardCard> {
   bool _guardaAtiva = false;
 
   void _toggleGuarda() {
