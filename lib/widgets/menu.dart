@@ -83,9 +83,9 @@ class MenuDrawer extends StatelessWidget {
                     label: 'Sair',
                     icon: Icon(
                       Icons.logout,
-                      color: appTheme.backgroundColor,
+                      color: appTheme.colorScheme.background,
                     ),
-                    color: appTheme.backgroundColor,
+                    color: appTheme.colorScheme.background,
                     onTap: () {
                       _logout(context);
                     },
