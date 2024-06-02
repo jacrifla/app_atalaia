@@ -1,14 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
-
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'success_screen.dart';
+import '../utils/routes.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
-import '../widgets/dropdown_icons.dart';
-import '../widgets/build_input.dart';
 import '../controller/group_controller.dart';
+import 'success_screen.dart';
+import 'error_screen.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -20,10 +17,10 @@ class CreateGroupScreen extends StatefulWidget {
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
   final GroupController _groupController = GroupController();
   final TextEditingController _inputGroupName = TextEditingController();
-  bool randomTime = false;
   bool keepActive = false;
   bool autoActivationTime = false;
-  IconData selectedIcon = Icons.group;
+  TimeOfDay fromTime = TimeOfDay.now();
+  TimeOfDay toTime = TimeOfDay.now();
 
   @override
   void dispose() {
@@ -33,38 +30,83 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   Future<void> _createGroup(BuildContext context) async {
     try {
-      await _groupController.createGroup(context, {
+      await _groupController.createGroup({
         'name': _inputGroupName.text,
-        'icon': selectedIcon,
-        'keepActive': keepActive,
-        'autoActivationTime': autoActivationTime,
+        'is_active': true,
+        'schedule_active': true,
+        'schedule_start': _formatTimeOfDayToString(fromTime),
+        'schedule_end': _formatTimeOfDayToString(toTime),
+        'user_id': 'd449717b-0cc0-11ef-b9ce-00090ffe0001',
       });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SuccessScreen(
-            message: 'Grupo Criado com sucesso',
-            alternativeRoute: AppRoutes.groupScreen,
-          ),
-        ),
-      );
+      _navigateToSuccessScreen(context);
     } catch (error) {
-      _showErrorDialog(context, 'Erro ao criar grupo: $error');
+      _navigateToErrorScreen(context, error.toString());
     }
   }
 
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
+  String _formatTimeOfDayToString(TimeOfDay time) {
+    return '${time.hour}:${time.minute}';
+  }
+
+  void _navigateToSuccessScreen(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SuccessScreen(
+          message: 'Grupo Criado com sucesso',
+          alternativeRoute: AppRoutes.groupScreen,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToErrorScreen(BuildContext context, String errorMessage) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ErrorScreen(
+          message: 'Erro ao criar grupo',
+          errorDescription: errorMessage,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _selectTime(BuildContext context, bool isFromTime) async {
+    final TimeOfDay? picked = await showTimePicker(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Erro'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        if (isFromTime) {
+          fromTime = picked;
+        } else {
+          toTime = picked;
+        }
+      });
+    }
+  }
+
+  Widget _buildTimePickerField(BuildContext context, bool isFromTime) {
+    final TimeOfDay time = isFromTime ? fromTime : toTime;
+    return Expanded(
+      child: InkWell(
+        onTap: () => _selectTime(context, isFromTime),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: isFromTime ? 'De' : 'Até',
+            hintText: '${time.hour}:${time.minute}',
+            prefixIcon: Icon(Icons.access_time),
           ),
-        ],
+          child: Text('${time.hour}:${time.minute}'),
+        ),
       ),
     );
   }
@@ -81,10 +123,12 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              BuildInput(
-                icon: const Icon(Icons.group),
-                labelText: 'Nome',
+              TextFormField(
                 controller: _inputGroupName,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.group),
+                  labelText: 'Nome',
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome do grupo.';
@@ -94,34 +138,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 maxLength: 20,
               ),
               const SizedBox(height: 16.0),
-              const Text('Selecione um Ícone:'),
-              const SizedBox(height: 8.0),
-              IconDropdownOptions.buildDropdown(
-                value: selectedIcon,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedIcon = newValue!;
-                  });
-                },
-              ),
               CheckboxListTile(
-                title: Row(
-                  children: [
-                    const Expanded(
-                      child: Text('Manter Ativo Por'),
-                    ),
-                    SizedBox(
-                      width: 50.0,
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Tempo'),
-                        keyboardType: TextInputType.number,
-                        initialValue: '1',
-                      ),
-                    ),
-                    const Text('hora(s)'),
-                  ],
-                ),
-                controlAffinity: ListTileControlAffinity.leading,
+                title: const Text('Manter Ativo Por'),
                 value: keepActive,
                 onChanged: (value) {
                   setState(() {
@@ -132,7 +150,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               CheckboxListTile(
                 title: const Text('Definir um Horário de Ativação Automática?'),
                 value: autoActivationTime,
-                controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {
                   setState(() {
                     autoActivationTime = value ?? true;
@@ -142,19 +159,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               if (autoActivationTime)
                 Row(
                   children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'De'),
-                        initialValue: '10h',
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Até'),
-                        initialValue: '11h',
-                      ),
-                    ),
+                    _buildTimePickerField(context, true),
+                    const SizedBox(width: 8),
+                    _buildTimePickerField(context, false),
                   ],
                 ),
             ],
