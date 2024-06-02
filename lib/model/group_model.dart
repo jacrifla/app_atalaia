@@ -1,29 +1,50 @@
-import 'package:flutter/material.dart';
-
 class GroupModel {
-  final String groupId;
-  final String groupName;
-  final IconData groupIcon;
-  final bool? groupCommon;
-  final bool randomTime;
-  final bool keepActive;
-  final int? keepActiveHours;
-  final bool autoActivationTime;
-  final String? activationStartTime;
-  final String? activationEndTime;
-  final bool isActive;
+  String? groupId;
+  String? groupName;
+  bool? isActive;
+  bool? scheduleActive;
+  String? scheduleStart;
+  String? scheduleEnd;
+  String? userId;
+  String? macAddress;
 
   GroupModel({
-    required this.groupId,
-    required this.groupName,
-    required this.groupIcon,
-    this.groupCommon,
-    required this.randomTime,
-    required this.keepActive,
-    this.keepActiveHours,
-    required this.autoActivationTime,
-    this.activationStartTime,
-    this.activationEndTime,
-    this.isActive = false,
+    this.groupId,
+    this.groupName,
+    this.isActive,
+    this.scheduleActive,
+    this.scheduleStart,
+    this.scheduleEnd,
+    this.userId,
+    this.macAddress,
   });
+
+  GroupModel.fromJson(Map<String, dynamic> json) {
+    groupId = json['uuid'];
+    groupName = json['name'];
+    isActive = json['is_active'] == 1;
+    scheduleActive = json['schedule_active'] == 1;
+    scheduleStart = json['schedule_start'];
+    scheduleEnd = json['schedule_end'];
+    userId = json['user_id'];
+    macAddress = json['mac_address'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['uuid'] = groupId;
+    data['name'] = groupName;
+    data['is_active'] = isActive;
+    data['schedule_active'] = scheduleActive;
+    data['schedule_start'] = scheduleStart;
+    data['schedule_end'] = scheduleEnd;
+    data['user_id'] = userId;
+    data['mac_address'] = macAddress;
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'GroupModel(groupId: $groupId, groupName: $groupName, isActive: $isActive, scheduleActive: $scheduleActive, scheduleStart: $scheduleStart, scheduleEnd: $scheduleEnd, userId: $userId, macAddress: $macAddress)';
+  }
 }
