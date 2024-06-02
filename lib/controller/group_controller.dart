@@ -7,6 +7,11 @@ import '../utils/auth_provider.dart';
 class GroupController extends ChangeNotifier {
   final GroupProvider _groupProvider = GroupProvider();
   final AuthProvider _authProvider = AuthProvider();
+  String _userId = '';
+
+  GroupController() {
+    _userId = _authProvider.userId ?? '';
+  }
 
   Future<void> createGroup(Map<String, dynamic> data) async {
     try {
@@ -132,11 +137,7 @@ class GroupController extends ChangeNotifier {
   }
 
   Future<String> getUserId() async {
-    final userId = _authProvider.userId;
-    if (userId == null) {
-      throw 'Usuário não autenticado';
-    }
-    return userId;
+    return _userId;
   }
 
   void _checkResponse(Map<String, dynamic> response) {
