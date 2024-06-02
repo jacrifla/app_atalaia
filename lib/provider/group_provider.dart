@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../utils/config.dart';
 
-class GroupProvider {
+class GroupProvider extends ChangeNotifier {
   final Dio _dio = Dio();
 
   Future<Map<String, dynamic>> createGroup(Map<String, dynamic> data) async {
@@ -15,6 +16,18 @@ class GroupProvider {
       return response.data;
     } catch (error) {
       throw Exception('Failed to create group: $error');
+    }
+  }
+
+  Future<Map<String, dynamic>> getOneGroup(String groupId) async {
+    try {
+      Response response = await _dio.post(
+        '${Config.apiUrl}/groups/getone',
+        data: jsonEncode({'group_id': groupId}),
+      );
+      return response.data;
+    } catch (error) {
+      throw Exception('Failed to get group: $error');
     }
   }
 
@@ -73,7 +86,11 @@ class GroupProvider {
         '${Config.apiUrl}/groups/toggle',
         data: jsonEncode(data),
       );
-      return response.data;
+      if (response.data != null) {
+        return response.data;
+      } else {
+        throw Exception('Response data is null');
+      }
     } catch (error) {
       throw Exception('Failed to toggle group: $error');
     }
