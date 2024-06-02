@@ -7,85 +7,46 @@ import '../utils/config.dart';
 class GroupProvider extends ChangeNotifier {
   final Dio _dio = Dio();
 
-  Future<Map<String, dynamic>> createGroup(Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> _postData(String url, dynamic data) async {
     try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/new',
-        data: jsonEncode(data),
-      );
+      Response response = await _dio.post('$url', data: data);
       return response.data;
     } catch (error) {
-      throw Exception('Failed to create group: $error');
+      throw Exception('Failed to perform POST request: $error');
     }
+  }
+
+  Future<Map<String, dynamic>> createGroup(Map<String, dynamic> data) async {
+    return _postData('${Config.apiUrl}/groups/new', jsonEncode(data));
   }
 
   Future<Map<String, dynamic>> getOneGroup(String groupId) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/getone',
-        data: jsonEncode({'group_id': groupId}),
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to get group: $error');
-    }
+    return _postData(
+        '${Config.apiUrl}/groups/getone', jsonEncode({'group_id': groupId}));
   }
 
   Future<Map<String, dynamic>> getSwitchesInGroup(String groupId) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/switches',
-        data: {'group_id': groupId},
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to get switches in group: $error');
-    }
+    return _postData('${Config.apiUrl}/groups/switches', {'group_id': groupId});
   }
 
   Future<Map<String, dynamic>> getGroups(String userId) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups',
-        data: {'user_id': userId},
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to get groups: $error');
-    }
+    return _postData('${Config.apiUrl}/groups', {'user_id': userId});
   }
 
   Future<Map<String, dynamic>> checkSwitchInGroup(String macAddress) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/checkswitch',
-        data: {'mac_address': macAddress},
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to check switch in group: $error');
-    }
+    return _postData(
+        '${Config.apiUrl}/groups/checkswitch', {'mac_address': macAddress});
   }
 
   Future<Map<String, dynamic>> addSwitchToGroup(
       Map<String, dynamic> data) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/newswitch',
-        data: jsonEncode(data),
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to add switch to group: $error');
-    }
+    return _postData('${Config.apiUrl}/groups/newswitch', jsonEncode(data));
   }
 
   Future<Map<String, dynamic>> toggleGroup(Map<String, dynamic> data) async {
     try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/toggle',
-        data: jsonEncode(data),
-      );
+      Response response = await _dio.post('${Config.apiUrl}/groups/toggle',
+          data: jsonEncode(data));
       if (response.data != null) {
         return response.data;
       } else {
@@ -97,39 +58,16 @@ class GroupProvider extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> removeSwitchFromGroup(String macAddress) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/removeswitch',
-        data: {'mac_address': macAddress},
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to remove switch from group: $error');
-    }
+    return _postData(
+        '${Config.apiUrl}/groups/removeswitch', {'mac_address': macAddress});
   }
 
   Future<Map<String, dynamic>> updateGroupInfo(
       Map<String, dynamic> data) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/edit',
-        data: jsonEncode(data),
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to update group info: $error');
-    }
+    return _postData('${Config.apiUrl}/groups/edit', jsonEncode(data));
   }
 
   Future<Map<String, dynamic>> deleteGroup(String groupId) async {
-    try {
-      Response response = await _dio.post(
-        '${Config.apiUrl}/groups/delete',
-        data: {'group_id': groupId},
-      );
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to delete group: $error');
-    }
+    return _postData('${Config.apiUrl}/groups/delete', {'group_id': groupId});
   }
 }
