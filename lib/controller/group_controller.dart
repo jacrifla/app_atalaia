@@ -8,45 +8,57 @@ class GroupController extends ChangeNotifier {
   final GroupProvider _groupProvider = GroupProvider();
   final AuthProvider _authProvider = AuthProvider();
 
-  Future<void> createGroup(
-      BuildContext context, Map<String, dynamic> data) async {
+  Future<void> createGroup(Map<String, dynamic> data) async {
     try {
       final response = await _groupProvider.createGroup(data);
-      if (response['status'] == 'success') {
-        return response['dados']['id'];
-      } else {
-        throw response['msg'];
-      }
+      _checkResponse(response);
+      return response['dados']['id'];
     } catch (error) {
       throw error.toString();
     }
   }
 
-  Future<List<SwitchModel>> getSwitchesInGroup(
-      BuildContext context, String groupId) async {
+  Future<GroupModel> getOneGroup(String groupId) async {
+    try {
+      final response = await _groupProvider.getOneGroup(groupId);
+      _checkResponse(response);
+      return GroupModel.fromJson(response['dados']);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<bool> checkSwitchInGroup(String macAddress) async {
+    try {
+      final response = await _groupProvider.checkSwitchInGroup(macAddress);
+      _checkResponse(response);
+      return true;
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<List<SwitchModel>> getSwitchesInGroup(String groupId) async {
     try {
       final response = await _groupProvider.getSwitchesInGroup(groupId);
-      if (response['status'] == 'success') {
-        List<SwitchModel> switches = [];
-        return switches;
-      } else {
-        throw response['msg'];
-      }
+      _checkResponse(response);
+      return [];
     } catch (error) {
       throw error.toString();
     }
   }
 
-  Future<List<GroupModel>> getGroups(BuildContext context) async {
+  Future<List<GroupModel>> getGroups() async {
     try {
-      final userId = await _getUserId();
+      final userId = await getUserId();
       final response = await _groupProvider.getGroups(userId);
-      if (response['status'] == 'success') {
-        List<GroupModel> groups = [];
-        return groups;
-      } else {
-        throw response['msg'];
+      _checkResponse(response);
+      List<GroupModel> groups = [];
+      for (var groupData in response['dados']) {
+        final groupDetails = await getOneGroup(groupData['uuid']);
+        groups.add(groupDetails);
       }
+      return groups;
     } catch (error) {
       throw error.toString();
     }
@@ -55,21 +67,81 @@ class GroupController extends ChangeNotifier {
   Future<bool> toggleGroup(Map<String, dynamic> data) async {
     try {
       final response = await _groupProvider.toggleGroup(data);
-      if (response['status'] == 'success') {
-        return true;
+      _checkResponse(response);
+      if (response['msg'] is bool) {
+        return response['msg'];
       } else {
-        throw response['msg'];
+        return response['msg'] == 'active';
       }
     } catch (error) {
       throw error.toString();
     }
   }
 
-  Future<String> _getUserId() async {
+  Future<void> addSwitchToGroup(Map<String, dynamic> data) async {
+    try {
+      final response = await _groupProvider.addSwitchToGroup(data);
+      _checkResponse(response);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<void> removeSwitchFromGroup(String macAddress) async {
+    try {
+      final response = await _groupProvider.removeSwitchFromGroup(macAddress);
+      _checkResponse(response);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<void> updateGroupInfo(Map<String, dynamic> data) async {
+    try {
+      final response = await _groupProvider.updateGroupInfo(data);
+      _checkResponse(response);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<void> deleteGroup(String groupId) async {
+    try {
+      final response = await _groupProvider.deleteGroup(groupId);
+      _checkResponse(response);
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<List<GroupModel>> loadGroups() async {
+    try {
+      final userId = await getUserId();
+      final response = await _groupProvider.getGroups(userId);
+      _checkResponse(response);
+      List<GroupModel> groups = [];
+      for (var groupData in response['dados']) {
+        final groupId = groupData['uuid'];
+        final groupDetails = await getOneGroup(groupId);
+        groups.add(groupDetails);
+      }
+      return groups;
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<String> getUserId() async {
     final userId = _authProvider.userId;
     if (userId == null) {
       throw 'Usuário não autenticado';
     }
     return userId;
+  }
+
+  void _checkResponse(Map<String, dynamic> response) {
+    if (response['status'] != 'success') {
+      throw response['msg'];
+    }
   }
 }
