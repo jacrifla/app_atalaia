@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -11,8 +9,8 @@ Future<void> main() async {
   await GetStorage.init();
 
   runApp(
-    MyAppProviders(
-      child: const MyApp(),
+    const MyAppProviders(
+      child: MyApp(),
     ),
   );
 }
