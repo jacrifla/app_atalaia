@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class GroupModel {
   String? groupId;
   String? groupName;
@@ -41,6 +43,10 @@ class GroupModel {
     data['user_id'] = userId;
     data['mac_address'] = macAddress;
     return data;
+  }
+
+  String formatTimeOfDayToString(TimeOfDay time) {
+    return '${time.hour}:${time.minute}';
   }
 
   @override
