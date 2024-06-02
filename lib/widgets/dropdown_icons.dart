@@ -17,10 +17,21 @@ class IconDropdownOptions {
       items: uniqueIcons.map((icon) {
         return DropdownMenuItem<IconData>(
           value: icon,
-          child: Icon(icon),
+          child: Row(
+            children: [
+              Icon(icon),
+              const SizedBox(width: 8),
+              Text(_getIconName(icon)),
+            ],
+          ),
         );
       }).toList(),
     );
+  }
+
+  static String _getIconName(IconData icon) {
+    int index = icons.indexWhere((element) => element == icon);
+    return index != -1 ? iconNames[index] : 'Unknown';
   }
 
   static List<IconData> icons = [
@@ -43,5 +54,27 @@ class IconDropdownOptions {
     Icons.garage_outlined,
     Icons.stairs_outlined,
     Icons.plumbing_outlined,
+  ];
+
+  static List<String> iconNames = [
+    'Group',
+    'Home',
+    'Living',
+    'Kitchen',
+    'Dry Cleaning',
+    'Clean Hands',
+    'Bathtub',
+    'Bed',
+    'Chair',
+    'Lightbulb',
+    'TV',
+    'Speaker',
+    'Door Sliding',
+    'Window',
+    'Air',
+    'Fireplace',
+    'Garage',
+    'Stairs',
+    'Plumbing',
   ];
 }
