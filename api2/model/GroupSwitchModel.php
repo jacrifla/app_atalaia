@@ -69,11 +69,11 @@ class GroupSwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();            
             $stmt = $pdo->prepare('
-            INSERT INTO tb_group (uuid, name, is_active, schedule_active, schedule_start, schedule_end, user_id) 
-            VALUES (UUID(), ?, ?, ?, ?, ?, ?)'
+            INSERT INTO tb_group (uuid, name, is_active, schedule_active, schedule_start, schedule_end, user_id, keep_for) 
+            VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?)'
         );
 
-        $stmt->execute([$data['name'], $data['is_active'],$data['schedule_active'], $data['schedule_start'], $data['schedule_end'], $data['user_id']]);
+        $stmt->execute([$data['name'], $data['is_active'],$data['schedule_active'], $data['schedule_start'], $data['schedule_end'], $data['user_id'], $data['keep_for']]);
 
         if ($stmt->rowCount() > 0) {
             // Recupera o último ID inserido
