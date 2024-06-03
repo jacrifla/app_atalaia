@@ -12,11 +12,11 @@ class SwitchSelectionScreen extends StatefulWidget {
   final String? groupId; // Adicione o groupId como um parâmetro opcional
 
   const SwitchSelectionScreen({
-    Key? key,
+    super.key,
     required this.groupName,
     required this.addSwitchToGroup,
-    this.groupId, // Receba o groupId como um parâmetro opcional
-  }) : super(key: key);
+    this.groupId,
+  });
 
   @override
   State<SwitchSelectionScreen> createState() => _SwitchSelectionScreenState();
@@ -43,7 +43,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.groupName), // Corrigir a exibição do nome do grupo
+        title: Text(widget.groupName),
       ),
       body: FutureBuilder<List<SwitchModel>>(
         future: _switchesFuture,
