@@ -9,6 +9,7 @@ class GroupModel {
   String? scheduleEnd;
   String? userId;
   String? macAddress;
+  String? keepFor;
 
   GroupModel({
     this.groupId,
@@ -19,6 +20,7 @@ class GroupModel {
     this.scheduleEnd,
     this.userId,
     this.macAddress,
+    this.keepFor,
   });
 
   GroupModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class GroupModel {
     scheduleEnd = json['schedule_end'];
     userId = json['user_id'];
     macAddress = json['mac_address'];
+    keepFor = json['keep_for'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +45,7 @@ class GroupModel {
     data['schedule_end'] = scheduleEnd;
     data['user_id'] = userId;
     data['mac_address'] = macAddress;
+    data['keep_for'] = keepFor;
     return data;
   }
 
