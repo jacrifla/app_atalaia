@@ -13,8 +13,30 @@ class GroupController extends ChangeNotifier {
     _userId = _authProvider.userId ?? '';
   }
 
-  Future<void> createGroup(Map<String, dynamic> data) async {
+  Future<void> createGroup({
+    required String name,
+    required bool isActive,
+    required bool scheduleActive,
+    required String scheduleStart,
+    required String scheduleEnd,
+    required String keepFor,
+    int? activeHours,
+  }) async {
     try {
+      final Map<String, dynamic> data = {
+        'name': name,
+        'is_active': isActive,
+        'schedule_active': scheduleActive,
+        'schedule_start': scheduleStart,
+        'schedule_end': scheduleEnd,
+        'keep_for': keepFor,
+        'user_id': await getUserId(),
+      };
+
+      if (activeHours != null) {
+        data['active_hours'] = activeHours;
+      }
+
       final response = await _groupProvider.createGroup(data);
       _checkResponse(response);
       return response['dados']['id'];
