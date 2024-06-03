@@ -15,7 +15,7 @@ class UserProvider {
   Future<void> login(String email, String password) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}login',
+        '${Config.apiUrl}/login',
         data: {
           'email': email,
           'password_hash': password,
@@ -46,7 +46,7 @@ class UserProvider {
       String name, String email, String phone, String password) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}register',
+        '${Config.apiUrl}/register',
         data: {
           'name': name,
           'email': email,
@@ -95,7 +95,7 @@ class UserProvider {
       }
 
       final response =
-          await _dio.put('${Config.apiUrl}user/update', data: data);
+          await _dio.put('${Config.apiUrl}/user/update', data: data);
 
       if (response.statusCode == 200) {
         return response.data['success'];
@@ -112,7 +112,7 @@ class UserProvider {
   Future<bool> softDelete(String userId) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}user/delete',
+        '${Config.apiUrl}/user/delete',
         data: {'user_id': userId},
       );
 
