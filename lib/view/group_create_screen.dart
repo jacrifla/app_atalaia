@@ -17,6 +17,7 @@ class CreateGroupScreen extends StatefulWidget {
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
   final GroupController _groupController = GroupController();
   final TextEditingController _inputGroupName = TextEditingController();
+  final TextEditingController _inputActiveHours = TextEditingController();
   bool keepActive = false;
   bool autoActivationTime = false;
   TimeOfDay fromTime = TimeOfDay.now();
@@ -25,19 +26,19 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   @override
   void dispose() {
     _inputGroupName.dispose();
+    _inputActiveHours.dispose(); // Dispose the controller
     super.dispose();
   }
 
   Future<void> _createGroup(BuildContext context) async {
     try {
-      await _groupController.createGroup({
-        'name': _inputGroupName.text,
-        'is_active': true,
-        'schedule_active': true,
-        'schedule_start': _formatTimeOfDayToString(fromTime),
-        'schedule_end': _formatTimeOfDayToString(toTime),
-        'user_id': 'd449717b-0cc0-11ef-b9ce-00090ffe0001',
-      });
+      await _groupController.createGroup(
+          name: _inputGroupName.text.toLowerCase(),
+          isActive: false,
+          scheduleActive: keepActive,
+          scheduleStart: _formatTimeOfDayToString(fromTime),
+          scheduleEnd: _formatTimeOfDayToString(toTime),
+          keepFor: _inputActiveHours.text);
       _navigateToSuccessScreen(context);
     } catch (error) {
       _navigateToErrorScreen(context, error.toString());
@@ -103,7 +104,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           decoration: InputDecoration(
             labelText: isFromTime ? 'De' : 'Até',
             hintText: '${time.hour}:${time.minute}',
-            prefixIcon: Icon(Icons.access_time),
+            prefixIcon: const Icon(Icons.access_time),
           ),
           child: Text('${time.hour}:${time.minute}'),
         ),
@@ -147,6 +148,15 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   });
                 },
               ),
+              if (keepActive) // Show the input field only if keepActive is true
+                TextFormField(
+                  controller: _inputActiveHours,
+                  keyboardType:
+                      TextInputType.number, // Allow only numeric input
+                  decoration: const InputDecoration(
+                    labelText: 'Ativar por (horas)',
+                  ),
+                ),
               CheckboxListTile(
                 title: const Text('Definir um Horário de Ativação Automática?'),
                 value: autoActivationTime,
