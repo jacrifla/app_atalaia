@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../controller/group_controller.dart';
+import '../controller/switch_controller.dart';
+import '../model/group_model.dart';
+import '../model/switch_model.dart';
+import '../utils/auth_provider.dart';
+import '../widgets/group_content.dart';
 import '../widgets/guard_card.dart';
 import '../widgets/menu.dart';
 import '../widgets/switch_content.dart';
-import '../controller/switch_controller.dart';
-import '../model/switch_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,12 +21,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   late Future<List<SwitchModel>> _switchesFuture;
+  late Future<List<GroupModel>> _groupsFuture;
 
   @override
   void initState() {
     super.initState();
     _switchesFuture =
         Provider.of<SwitchController>(context, listen: false).getSwitches();
+    _loadGroups();
+  }
+
+  Future<void> _loadGroups() async {
+    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    if (userId != null) {
+      final groupController =
+          Provider.of<GroupController>(context, listen: false);
+      setState(() {
+        _groupsFuture = groupController.loadGroups();
+      });
+    } else {
+      _groupsFuture = Future.error('User ID is null');
+    }
   }
 
   void _onItemTapped(int index) {
@@ -53,10 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const GuardCard(),
             const SizedBox(height: 20),
             Expanded(
-              child: SwitchContent(
-                selectedIndex: _selectedIndex,
-                switchesFuture: _switchesFuture,
-              ),
+              child: _selectedIndex == 0
+                  ? GroupContent(groupsFuture: _groupsFuture)
+                  : SwitchContent(
+                      selectedIndex: _selectedIndex,
+                      switchesFuture: _switchesFuture),
             ),
           ],
         ),

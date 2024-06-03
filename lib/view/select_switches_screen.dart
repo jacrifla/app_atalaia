@@ -7,9 +7,16 @@ import '../utils/auth_provider.dart';
 import '../widgets/button_icon.dart';
 
 class SwitchSelectionScreen extends StatefulWidget {
-  final String? groupName;
+  final String groupName;
+  final Function(Map<String, dynamic>) addSwitchToGroup;
+  final String? groupId; // Adicione o groupId como um parâmetro opcional
 
-  const SwitchSelectionScreen({super.key, this.groupName});
+  const SwitchSelectionScreen({
+    Key? key,
+    required this.groupName,
+    required this.addSwitchToGroup,
+    this.groupId, // Receba o groupId como um parâmetro opcional
+  }) : super(key: key);
 
   @override
   State<SwitchSelectionScreen> createState() => _SwitchSelectionScreenState();
@@ -36,9 +43,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.groupName != null
-            ? '${widget.groupName}'
-            : 'Select Switches'),
+        title: Text(widget.groupName), // Corrigir a exibição do nome do grupo
       ),
       body: FutureBuilder<List<SwitchModel>>(
         future: _switchesFuture,
@@ -80,8 +85,19 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ButtonIcon(
-        onPressed: () {
-          Navigator.pop(context, selectedSwitches);
+        onPressed: () async {
+          Map<String, dynamic> data = {
+            'groupId': widget.groupId,
+            'switches': selectedSwitches
+                .map((switchModel) => switchModel.userId)
+                .toList(),
+          };
+          print(data);
+          try {
+            await widget.addSwitchToGroup(data);
+          } catch (error) {
+            print('Erro ao adicionar switches ao grupo: $error');
+          }
         },
         labelText: 'Save',
         icon: const Icon(Icons.save),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../controller/group_controller.dart';
 import '../view/group_edit_screen.dart';
 import '../view/select_switches_screen.dart';
 import '../model/group_model.dart';
@@ -33,13 +35,13 @@ class GroupCardActions extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    groupInfo.groupIcon,
+                    Icons.group,
                     color: Theme.of(context).colorScheme.primary,
                     size: 28,
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    groupInfo.groupName,
+                    groupInfo.groupName ?? 'Unknown',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -80,7 +82,12 @@ class GroupCardActions extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SwitchSelectionScreen(
-                            groupName: groupInfo.groupName,
+                            groupId:
+                                groupInfo.groupId, // Passando o groupId aqui
+                            addSwitchToGroup: (Map<String, dynamic> data) {
+                              data['groupId'] = groupInfo.groupId;
+                            },
+                            groupName: groupInfo.groupName ?? 'Unknown',
                           ),
                         ),
                       );
@@ -92,8 +99,19 @@ class GroupCardActions extends StatelessWidget {
                       color: Colors.red,
                       size: 28,
                     ),
-                    onPressed: () {
-                      // Implemente a lógica para excluir o grupo
+                    onPressed: () async {
+                      try {
+                        final groupId = groupInfo.groupId;
+                        if (groupId != null) {
+                          await Provider.of<GroupController>(context,
+                                  listen: false)
+                              .deleteGroup(groupId);
+                        } else {
+                          print('groupId is null. Cannot delete group.');
+                        }
+                      } catch (error) {
+                        print('Erro ao excluir o grupo: $error');
+                      }
                     },
                   ),
                 ],

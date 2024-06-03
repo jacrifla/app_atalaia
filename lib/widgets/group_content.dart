@@ -1,17 +1,14 @@
-import 'package:app_atalaia/widgets/group_card_toggle.dart';
 import 'package:flutter/material.dart';
-
-import 'group_card_actions.dart';
 import '../model/group_model.dart';
+import 'group_card_actions.dart';
+import 'group_card_toggle.dart';
 
 class GroupContent extends StatelessWidget {
   final Future<List<GroupModel>> groupsFuture;
-  // Flag para determinar se estamos na tela de exclusão
   final bool isDeleting;
 
   const GroupContent({
     required this.groupsFuture,
-    // Por padrão, não estamos na tela de exclusão
     this.isDeleting = false,
     super.key,
   });
@@ -25,16 +22,21 @@ class GroupContent extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text('Nenhum grupo cadastrado'));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Erro: ${snapshot.error}'));
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
+              final group = snapshot.data![index];
               if (isDeleting) {
-                // Se estamos na tela de exclusão, retorna o GroupCardDelete
-                return GroupCardActions(groupInfo: snapshot.data![index]);
+                return GroupCardActions(
+                  groupInfo: group,
+                );
               } else {
-                // Se não, retorna o GroupCardActions padrão
-                return GroupCardToggle(groupInfo: snapshot.data![index]);
+                return GroupCardToggle(
+                  groupInfo: group,
+                );
               }
             },
           );

@@ -1,15 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/constantes.dart';
-import '../utils/auth_provider.dart';
-import '../utils/utils.dart';
 import '../controller/group_controller.dart';
 import '../model/group_model.dart';
-import '../view/error_screen.dart';
-import '../view/success_screen.dart';
+import '../utils/utils.dart';
 
 class GroupCardToggle extends StatefulWidget {
   final GroupModel groupInfo;
@@ -22,71 +16,42 @@ class GroupCardToggle extends StatefulWidget {
 
 class _GroupCardToggleState extends State<GroupCardToggle> {
   late bool isActive;
+  late String groupName;
 
   @override
   void initState() {
     super.initState();
-    isActive = widget.groupInfo.isActive;
+    isActive = widget.groupInfo.isActive ?? true;
+    groupName = toCapitalizeWords(widget.groupInfo.groupName!);
   }
 
-  Future<void> _toggleGroup(
-      BuildContext context, GroupController groupController) async {
+  Future<void> _toggleGroup(BuildContext context) async {
+    final groupController =
+        Provider.of<GroupController>(context, listen: false);
     final groupId = widget.groupInfo.groupId;
+
+    print('Clicou na lâmpada do grupo com o ID: $groupId');
     final newStatus = !isActive;
 
     try {
-      bool success = await groupController
-          .toggleGroup({'group_id': groupId, 'is_active': newStatus});
-
-      if (!mounted) return;
+      bool success = await groupController.toggleGroup({
+        'group_id': groupId,
+        'is_active': newStatus,
+      });
 
       if (success) {
         setState(() {
           isActive = newStatus;
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SuccessScreen(
-              message: 'Grupo alternado com sucesso',
-              alternativeRoute: AppRoutes.groupScreen,
-            ),
-          ),
-        );
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ErrorScreen(
-              errorDescription: 'Erro',
-              message: 'Falha ao alternar grupo',
-            ),
-          ),
-        );
       }
     } catch (error) {
-      if (!mounted) return;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ErrorScreen(
-            errorDescription: 'Erro ao alternar grupo',
-            message: '$error',
-          ),
-        ),
-      );
+      // Handle error appropriately
+      print('Erro ao alternar grupo: $error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final groupController = Provider.of<GroupController>(context);
-    final userId = Provider.of<AuthProvider>(context).userId;
-
-    if (userId == null) {
-      return const Text('Usuário não autenticado');
-    }
-
     return Card(
       elevation: 3,
       child: Padding(
@@ -95,17 +60,16 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              toCapitalizeWords(widget.groupInfo.groupName),
-              style: TextStyle(
+              groupName,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.background,
               ),
             ),
             GestureDetector(
-              onTap: () => _toggleGroup(context, groupController),
+              onTap: () => _toggleGroup(context),
               child: Icon(
-                Icons.group,
+                Icons.lightbulb,
                 size: 40,
                 color: isActive ? activeColor : inactiveColor,
               ),

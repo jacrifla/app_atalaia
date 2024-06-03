@@ -5,6 +5,8 @@ import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import 'success_screen.dart';
 import '../model/group_model.dart';
+import '../controller/group_controller.dart';
+import 'error_screen.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final GroupModel groupInfo;
@@ -17,25 +19,69 @@ class EditGroupScreen extends StatefulWidget {
 
 class _EditGroupScreenState extends State<EditGroupScreen> {
   late TextEditingController _inputNomeGrupo;
-  late bool randomTime;
-  late bool keepActive;
-  late bool autoActivationTime;
-  late IconData selectedIcon;
+  late bool isActive;
+  late bool scheduleActive;
+  late TextEditingController _inputScheduleStart;
+  late TextEditingController _inputScheduleEnd;
+  late TextEditingController _inputMacAddress;
+  final GroupController _groupController = GroupController();
 
   @override
   void initState() {
     super.initState();
-    _inputNomeGrupo = TextEditingController(text: widget.groupInfo.groupName);
-    randomTime = widget.groupInfo.randomTime;
-    keepActive = widget.groupInfo.keepActive;
-    autoActivationTime = widget.groupInfo.autoActivationTime;
-    selectedIcon = widget.groupInfo.groupIcon;
+    _inputNomeGrupo =
+        TextEditingController(text: widget.groupInfo.groupName ?? '');
+    isActive = widget.groupInfo.isActive ?? false;
+    scheduleActive = widget.groupInfo.scheduleActive ?? false;
+    _inputScheduleStart =
+        TextEditingController(text: widget.groupInfo.scheduleStart ?? '');
+    _inputScheduleEnd =
+        TextEditingController(text: widget.groupInfo.scheduleEnd ?? '');
+    _inputMacAddress =
+        TextEditingController(text: widget.groupInfo.macAddress ?? '');
   }
 
   @override
   void dispose() {
     _inputNomeGrupo.dispose();
+    _inputScheduleStart.dispose();
+    _inputScheduleEnd.dispose();
+    _inputMacAddress.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveChanges() async {
+    final updatedGroup = {
+      'group_id': widget.groupInfo.groupId,
+      'name': _inputNomeGrupo.text,
+      'is_active': isActive,
+      'schedule_active': scheduleActive,
+      'schedule_start': _inputScheduleStart.text,
+      'schedule_end': _inputScheduleEnd.text,
+    };
+
+    try {
+      await _groupController.updateGroupInfo(updatedGroup);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SuccessScreen(
+            message: 'Alterações salvas com sucesso',
+            screen: '/group_switch',
+          ),
+        ),
+      );
+    } catch (error) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ErrorScreen(
+            message: 'Erro',
+            errorDescription: error.toString(),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -60,64 +106,48 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                   }
                   return null;
                 },
-                maxLength: 20,
+                maxLength: 24,
               ),
               const SizedBox(height: 16.0),
-              const Text('Selecione um Ícone:'),
-              const SizedBox(height: 8.0),
               CheckboxListTile(
-                title: Row(
-                  children: [
-                    const Expanded(
-                      child: Text('Manter Ativo Por'),
-                    ),
-                    SizedBox(
-                      width: 50.0,
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Tempo'),
-                        keyboardType: TextInputType.number,
-                        initialValue: '1',
-                      ),
-                    ),
-                    const Text('hora(s)'),
-                  ],
-                ),
+                title: const Text('Ativo'),
+                value: isActive,
                 controlAffinity: ListTileControlAffinity.leading,
-                value: keepActive,
                 onChanged: (value) {
                   setState(() {
-                    keepActive = value ?? true;
+                    isActive = value ?? false;
                   });
                 },
               ),
               CheckboxListTile(
-                title: const Text('Definir um Horário de Ativação Automática?'),
-                value: autoActivationTime,
+                title: const Text('Ativação Automática'),
+                value: scheduleActive,
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {
                   setState(() {
-                    autoActivationTime = value ?? true;
+                    scheduleActive = value ?? false;
                   });
                 },
               ),
-              if (autoActivationTime)
+              if (scheduleActive)
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(labelText: 'De'),
-                        initialValue: '10h',
+                        controller: _inputScheduleStart,
                       ),
                     ),
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(labelText: 'Até'),
-                        initialValue: '11h',
+                        controller: _inputScheduleEnd,
                       ),
                     ),
                   ],
                 ),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),
@@ -126,17 +156,7 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
         padding: const EdgeInsets.all(16.0),
         child: ButtonIcon(
           labelText: 'Salvar Alterações',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SuccessScreen(
-                  message: 'Alterações salvas com sucesso',
-                  screen: '/group_switch',
-                ),
-              ),
-            );
-          },
+          onPressed: _saveChanges,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
