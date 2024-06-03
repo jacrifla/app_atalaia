@@ -21,7 +21,7 @@ class SwitchProvider extends ChangeNotifier {
       String name, String watts, String macAddress, String userId) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}switches/new',
+        '${Config.apiUrl}/switches/new',
         data: {
           'name': name,
           'watts': watts,
@@ -30,76 +30,20 @@ class SwitchProvider extends ChangeNotifier {
         },
       );
 
-      return _handleResponse(response);
-    } catch (error) {
-      return _handleError(error);
-    }
-  }
-
-  Future<List<SwitchModel>> getSwitches(String userId) async {
-    try {
-      final response = await _dio.post(
-        '${Config.apiUrl}switches',
-        data: {'user_id': userId},
-      );
-
       if (response.statusCode == 200) {
-        List<SwitchModel> switches = [];
-        for (var switchData in response.data['dados']) {
-          switches.add(SwitchModel.fromJson(switchData));
-        }
-        return switches;
-      } else if (response.statusCode == 400) {
-        return [];
+        return _handleResponse(response);
       } else {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioException) {
-        if (error.response?.statusCode == 400) {
-          throw 'Erro interno: $error';
-        } else if (error.response?.statusCode == 500) {
-          throw 'Erro no servidor: $error';
-        } else {
-          throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.';
-        }
-      } else {
-        throw 'Erro inesperado. Por favor, tente novamente mais tarde.';
-      }
-    }
-  }
-
-  Future<Map<String, dynamic>> getSwitch(String macAddress) async {
-    try {
-      final response = await _dio.post(
-        '${Config.apiUrl}switches/getone',
-        data: {'mac_address': macAddress},
-      );
-
-      if (response.statusCode == 200) {
-        return {'status': 'success', 'data': response.data};
-      } else {
-        throw 'Erro desconhecido. Status code: ${response.statusCode}';
-      }
-    } catch (error) {
-      if (error is DioException) {
-        if (error.response?.statusCode == 400) {
-          throw 'Erro interno: ${error.response?.data['msg']}';
-        } else if (error.response?.statusCode == 500) {
-          throw 'Erro no servidor: ${error.response?.data['msg']}';
-        } else {
-          throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde. Status code: ${error.response?.statusCode}';
-        }
-      } else {
-        throw 'Erro ao conectar ao servidor: $error';
-      }
+      throw 'Erro ao conectar ao servidor: $error';
     }
   }
 
   Future<bool> updateSwitch(Map<String, dynamic> data) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}switches/edit',
+        '${Config.apiUrl}/switches/edit',
         data: data,
       );
 
@@ -109,23 +53,14 @@ class SwitchProvider extends ChangeNotifier {
         throw 'O servidor retornou uma resposta inesperada. Por favor, tente novamente mais tarde. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioException) {
-        if (error.response?.statusCode == 400) {
-          throw 'Não foi possível processar a solicitação.';
-        } else if (error.response?.statusCode == 500) {
-          throw 'Houve um problema ao processar a solicitação. Por favor, tente novamente mais tarde.';
-        } else {
-          print('Erro ao atualizar o switch: $error');
-        }
-      }
-      return false;
+      throw 'Erro ao conectar ao servidor: $error';
     }
   }
 
   Future<Map<String, dynamic>> deleteSwitch(String macAddress) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}switches/delete',
+        '${Config.apiUrl}/switches/delete',
         data: {'mac_address': macAddress},
       );
 
@@ -135,16 +70,45 @@ class SwitchProvider extends ChangeNotifier {
         throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioException) {
-        if (error.response?.statusCode == 400) {
-          throw 'Erro interno: ${error.response?.data['msg']}';
-        } else if (error.response?.statusCode == 500) {
-          throw 'Erro no servidor: ${error.response?.data['msg']}';
-        } else {
-          throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde. Status code: ${error.response?.statusCode}';
+      throw 'Erro ao conectar ao servidor: $error';
+    }
+  }
+
+  Future<List<SwitchModel>> getSwitches(String userId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/switches',
+        data: {'user_id': userId},
+      );
+
+      if (response.statusCode == 200) {
+        List<SwitchModel> switches = [];
+        for (var switchData in response.data['dados']) {
+          switches.add(SwitchModel.fromJson(switchData));
         }
+        return switches;
+      } else {
+        throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
-      return _handleError(error);
+    } catch (error) {
+      throw 'Erro ao conectar ao servidor: $error';
+    }
+  }
+
+  Future<Map<String, dynamic>> getSwitch(String macAddress) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/switches/getone',
+        data: {'mac_address': macAddress},
+      );
+
+      if (response.statusCode == 200) {
+        return {'status': 'success', 'data': response.data};
+      } else {
+        throw 'Erro desconhecido. Status code: ${response.statusCode}';
+      }
+    } catch (error) {
+      throw 'Erro ao conectar ao servidor: $error';
     }
   }
 
@@ -152,7 +116,7 @@ class SwitchProvider extends ChangeNotifier {
       String macAddress, bool isActive, String userId) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}switches/toggle',
+        '${Config.apiUrl}/switches/toggle',
         data: {
           'mac_address': macAddress,
           'user_id': userId,
@@ -161,20 +125,12 @@ class SwitchProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        return {'status': 'success', 'dados': response.data};
+        return _handleResponse(response);
       } else {
-        return {'status': 'error', 'msg': 'Unexpected Error'};
+        throw 'Erro desconhecido. Status code: ${response.statusCode}';
       }
     } catch (error) {
-      if (error is DioException && error.response != null) {
-        final statusCode = error.response!.statusCode;
-        if (statusCode == 400) {
-          return {'status': 'error', 'msg': 'Bad Request'};
-        } else if (statusCode == 500) {
-          return {'status': 'error', 'msg': 'Internal Server Error'};
-        }
-      }
-      return {'status': 'error', 'msg': error.toString()};
+      throw 'Erro ao conectar ao servidor: $error';
     }
   }
 
@@ -184,9 +140,5 @@ class SwitchProvider extends ChangeNotifier {
     } else {
       throw 'Erro ao processar a requisição: ${response.data}';
     }
-  }
-
-  Map<String, dynamic> _handleError(error) {
-    throw 'Erro ao processar a requisição: $error';
   }
 }
