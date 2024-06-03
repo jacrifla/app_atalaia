@@ -8,7 +8,7 @@ import '../widgets/menu.dart';
 import '../controller/group_controller.dart';
 import 'group_create_screen.dart';
 import '../model/group_model.dart';
-import '../widgets/group_card_actions.dart';
+import '../widgets/group_content.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -19,6 +19,7 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
   late Future<List<GroupModel>> _groupsFuture;
+  final GroupController _groupController = GroupController();
 
   @override
   void initState() {
@@ -27,13 +28,9 @@ class _GroupScreenState extends State<GroupScreen> {
   }
 
   void _loadGroups() {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.userId;
-    if (userId != null) {
-      _groupsFuture = GroupController().getGroups(context);
-    } else {
-      _groupsFuture = Future.error('User ID is null');
-    }
+    setState(() {
+      _groupsFuture = _groupController.loadGroups();
+    });
   }
 
   void _refreshGroups() {
@@ -42,7 +39,7 @@ class _GroupScreenState extends State<GroupScreen> {
     });
   }
 
-  void _navigateToCreateGroup() {
+  void _navigateToCreateGroup(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CreateGroupScreen()),
@@ -70,57 +67,34 @@ class _GroupScreenState extends State<GroupScreen> {
         child: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<GroupModel>>(
-                future: _groupsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Erro ao carregar grupos: ${snapshot.error}'),
-                    );
-                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    final groups = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: groups.length,
-                      itemBuilder: (context, index) {
-                        final group = groups[index];
-                        return GroupCardActions(groupInfo: group);
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text('Nenhum grupo encontrado.'),
-                    );
-                  }
-                },
+              child: GroupContent(
+                groupsFuture: _groupsFuture,
+                isDeleting: true,
               ),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ButtonIcon(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ButtonIcon(
               labelText: 'Criar Novo Grupo',
-              onPressed: _navigateToCreateGroup,
+              onPressed: () => _navigateToCreateGroup(context),
               icon: const Icon(Icons.add),
               backgroundColor: Theme.of(context).colorScheme.primary,
             ),
-          ),
-          ButtonIcon(
-            labelText: 'Atualizar Grupos',
-            onPressed: _refreshGroups,
-            icon: const Icon(Icons.refresh),
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-          ),
-        ],
+            ButtonIcon(
+              labelText: 'Atualizar Grupos',
+              onPressed: _refreshGroups,
+              icon: const Icon(Icons.refresh),
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+            ),
+          ],
+        ),
       ),
     );
   }
