@@ -1,11 +1,11 @@
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../themes/theme.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
+import '../utils/routes.dart';
 import '../utils/utils.dart';
+import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,12 +16,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final UserProvider userProvider = UserProvider();
+  late final UserController ctlUserController;
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
 
   @override
   void initState() {
+    ctlUserController = UserController(userProvider);
     super.initState();
     _clearTextFields();
   }
@@ -40,8 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userController = Provider.of<UserController>(context, listen: false);
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: 'Entrar',
                   onPressed: () {
                     if (_formState.currentState!.validate()) {
-                      userController.loginUser(
+                      ctlUserController.loginUser(
                         context,
                         _inputEmail.text.trim().toLowerCase(),
                         _inputPassword.text.trim(),
