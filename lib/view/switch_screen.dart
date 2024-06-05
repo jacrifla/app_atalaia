@@ -1,52 +1,43 @@
-// ignore_for_file: library_private_types_in_public_api
-
+import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../utils/auth_provider.dart';
+import '../provider/switch_provider.dart';
+import '../utils/routes.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/switch_content.dart';
 import '../controller/switch_controller.dart';
-import 'switch_create_screen.dart';
 import '../model/switch_model.dart';
 
 class SwitchScreen extends StatefulWidget {
   const SwitchScreen({super.key});
 
   @override
-  _SwitchScreenState createState() => _SwitchScreenState();
+  State<SwitchScreen> createState() => _SwitchScreenState();
 }
 
 class _SwitchScreenState extends State<SwitchScreen> {
+  final SwitchProvider switchProvider = SwitchProvider();
+  late final SwitchController ctlSwitchController;
   late Future<List<SwitchModel>> _switchesFuture;
 
   @override
   void initState() {
     super.initState();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.userId;
-    if (userId != null) {
-      _switchesFuture = SwitchController().getSwitches();
-    } else {
-      _switchesFuture = Future.error('User ID is null');
-    }
+    ctlSwitchController = SwitchController(switchProvider);
+    _loadSwitches();
+  }
+
+  void _loadSwitches() {
+    setState(() {
+      _switchesFuture = ctlSwitchController.getSwitches();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final userId = authProvider.userId;
-
-    if (userId == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('Erro: usuário não autenticado'),
-        ),
-      );
-    }
-
+    var width = MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
       appBar: const Header(title: 'Gerenciar Pontos'),
       endDrawer: const MenuDrawer(),
@@ -55,44 +46,65 @@ class _SwitchScreenState extends State<SwitchScreen> {
         child: Column(
           children: [
             Expanded(
-              child: SwitchContent(
-                selectedIndex: 1,
-                switchesFuture: _switchesFuture,
-                isDeleting: true,
+              child: AnimatedBuilder(
+                animation: ctlSwitchController,
+                builder: ((context, child) {
+                  return FutureBuilder<List<SwitchModel>>(
+                    future: _switchesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Erro: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                            child: Text('Nenhum ponto encontrado.'));
+                      } else {
+                        return SwitchContent(
+                          selectedIndex: 1,
+                          switchesFuture: _switchesFuture,
+                          isDeleting: true,
+                        );
+                      }
+                    },
+                  );
+                }),
               ),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ButtonIcon(
-              labelText: 'Adicionar Ponto',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SwitchCreateScreen()),
-                );
-              },
-              icon: const Icon(Icons.add),
-              backgroundColor: Theme.of(context).colorScheme.primary,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              width: width,
+              child: ButtonIcon(
+                labelText: 'Adicionar',
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.switchCreate)
+                      .then((_) {
+                    _loadSwitches();
+                  });
+                },
+                icon: const Icon(Icons.add),
+                backgroundColor: appTheme.colorScheme.primary,
+              ),
             ),
-          ),
-          ButtonIcon(
-            labelText: 'Atualizar Pontos',
-            onPressed: () {
-              setState(() {
-                _switchesFuture = SwitchController().getSwitches();
-              });
-            },
-            icon: const Icon(Icons.refresh),
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-          ),
-        ],
+            SizedBox(
+              width: width,
+              child: ButtonIcon(
+                labelText: 'Atualizar',
+                onPressed: _loadSwitches,
+                icon: const Icon(Icons.refresh),
+                backgroundColor: appTheme.colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
