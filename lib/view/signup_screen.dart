@@ -1,6 +1,8 @@
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import '../controller/user_controller.dart';
+import '../provider/user_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -16,12 +18,20 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final UserProvider userProvider = UserProvider();
+  late final UserController ctlUserController;
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final TextEditingController _inputName = TextEditingController();
   final TextEditingController _inputEmail = TextEditingController();
   final TextEditingController _inputPhone = TextEditingController();
   final TextEditingController _inputPassword = TextEditingController();
   final TextEditingController _inputPasswordCheck = TextEditingController();
+
+  @override
+  void initState() {
+    ctlUserController = UserController(userProvider);
+    super.initState();
+  }
 
   void _clearInputs() {
     _inputName.clear();
@@ -32,17 +42,14 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _handleSubmit() async {
-    final userController = Provider.of<UserController>(context, listen: false);
-
-    if (!userController.arePasswordsEqual(
+    if (!ctlUserController.arePasswordsEqual(
         _inputPassword.text, _inputPasswordCheck.text)) {
       _showErrorDialog('Erro', 'As senhas não correspondem.');
       return;
     }
 
     if (_formState.currentState!.validate()) {
-      _formState.currentState!.save();
-      final response = await userController.signUpUser(
+      final response = await ctlUserController.signUpUser(
         _inputName.text.toLowerCase(),
         _inputEmail.text.toLowerCase(),
         _inputPhone.text,
@@ -76,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
       MaterialPageRoute(
         builder: (context) => SuccessScreen(
           message: message,
-          screen: '/',
+          screen: AppRoutes.login,
         ),
       ),
     );
