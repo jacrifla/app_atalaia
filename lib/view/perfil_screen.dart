@@ -1,9 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
+import '../utils/routes.dart';
 
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
@@ -21,10 +20,20 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
+  final UserProvider userProvider = UserProvider();
+  late final UserController ctlUserController;
+
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
-  final TextEditingController _inputNome = TextEditingController();
-  final TextEditingController _inputEmail = TextEditingController();
-  final TextEditingController _inputCel = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    ctlUserController = UserController(userProvider);
+    _loadUserData();
+    super.initState();
+  }
 
   void _excluirConta() {
     Navigator.of(context).push(
@@ -44,8 +53,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
   }
 
   void _excluirContaConfirmed() async {
-    final userController = Provider.of<UserController>(context, listen: false);
-    final success = await userController.softDeleteUser();
+    final success = await ctlUserController.deleteUser();
     if (success) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -68,24 +76,15 @@ class _PerfilScreenState extends State<PerfilScreen> {
   }
 
   void _confirmarAlteracoes() async {
-    final userController = Provider.of<UserController>(context, listen: false);
-
-    final name = _inputNome.text.isNotEmpty ? _inputNome.text : null;
-    final email = _inputEmail.text.isNotEmpty ? _inputEmail.text : null;
-    final phone = _inputCel.text.isNotEmpty ? _inputCel.text : null;
-
-    if (name == null && email == null && phone == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhuma alteração para salvar')),
-      );
-      return;
-    }
+    final name = _nameController.text;
+    final email = _emailController.text;
+    final phone = _phoneController.text;
 
     try {
-      await userController.updateUserInfo(
-        name: name,
-        email: email,
-        phone: phone,
+      await ctlUserController.updateUserInfo(
+        name,
+        email,
+        phone,
       );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -104,6 +103,17 @@ class _PerfilScreenState extends State<PerfilScreen> {
           ),
         ),
       );
+    }
+  }
+
+  void _loadUserData() async {
+    try {
+      final userData = await ctlUserController.getUser();
+      _nameController.text = userData['name'];
+      _emailController.text = userData['email'];
+      _phoneController.text = userData['phone'];
+    } catch (e) {
+      print('Erro ao carregar dados do usuário: $e');
     }
   }
 
@@ -136,7 +146,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                         children: [
                           BuildInput(
                             labelText: 'Nome',
-                            controller: _inputNome,
+                            controller: _nameController,
                             validator: (value) {
                               return null;
                             },
@@ -144,7 +154,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           BuildInput(
                             labelText: 'E-mail',
                             icon: const Icon(Icons.email_outlined),
-                            controller: _inputEmail,
+                            controller: _emailController,
                             validator: (value) {
                               return null;
                             },
@@ -152,7 +162,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                           BuildInput(
                             labelText: 'Celular',
                             icon: const Icon(Icons.phone_outlined),
-                            controller: _inputCel,
+                            controller: _phoneController,
                             validator: (value) {
                               return null;
                             },
@@ -194,6 +204,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ctlUserController.deleteUser();
+          // userProvider.delete();
+        },
+        child: Text('Teste'),
       ),
     );
   }
