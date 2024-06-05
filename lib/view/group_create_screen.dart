@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
+import 'success_screen.dart';
+import 'error_screen.dart';
 import '../utils/routes.dart';
+import '../provider/group_provider.dart';
+import '../controller/group_controller.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/button_icon.dart';
-import '../controller/group_controller.dart';
-import 'success_screen.dart';
-import 'error_screen.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -15,7 +17,8 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
-  final GroupController _groupController = GroupController();
+  final GroupProvider groupProvider = GroupProvider();
+  late final GroupController ctlGroupController;
   final TextEditingController _inputGroupName = TextEditingController();
   final TextEditingController _inputActiveHours = TextEditingController();
   bool keepActive = false;
@@ -24,21 +27,28 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   TimeOfDay toTime = TimeOfDay.now();
 
   @override
+  void initState() {
+    ctlGroupController = GroupController(groupProvider);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _inputGroupName.dispose();
-    _inputActiveHours.dispose(); // Dispose the controller
+    _inputActiveHours.dispose();
     super.dispose();
   }
 
   Future<void> _createGroup(BuildContext context) async {
     try {
-      await _groupController.createGroup(
-          name: _inputGroupName.text.toLowerCase(),
-          isActive: false,
-          scheduleActive: keepActive,
-          scheduleStart: _formatTimeOfDayToString(fromTime),
-          scheduleEnd: _formatTimeOfDayToString(toTime),
-          keepFor: _inputActiveHours.text);
+      await ctlGroupController.createGroup(
+        name: _inputGroupName.text.toLowerCase(),
+        isActive: false,
+        scheduleActive: keepActive,
+        scheduleStart: _formatTimeOfDayToString(fromTime),
+        scheduleEnd: _formatTimeOfDayToString(toTime),
+        keepFor: _inputActiveHours.text,
+      );
       _navigateToSuccessScreen(context);
     } catch (error) {
       _navigateToErrorScreen(context, error.toString());
@@ -148,11 +158,10 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   });
                 },
               ),
-              if (keepActive) // Show the input field only if keepActive is true
+              if (keepActive)
                 TextFormField(
                   controller: _inputActiveHours,
-                  keyboardType:
-                      TextInputType.number, // Allow only numeric input
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Ativar por (horas)',
                   ),
