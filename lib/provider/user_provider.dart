@@ -4,16 +4,35 @@ import '../utils/config.dart';
 
 class UserProvider {
   final Dio _dio = Dio();
-  final AuthProvider _authProvider;
+  final AuthProvider _authProvider = AuthProvider();
 
-  UserProvider(this._authProvider) {
+  void initDio() {
     _dio.options.connectTimeout = const Duration(seconds: 5);
     _dio.options.receiveTimeout = const Duration(seconds: 3);
   }
 
-  // Login Method
+  String getUserId() {
+    return _authProvider.userId!;
+  }
+
+  Future<Map<String, dynamic>> getUser(String userId) async {
+    try {
+      initDio();
+      final response =
+          await _dio.post('${Config.apiUrl}/user', data: {'user_id': userId});
+      if (response.data['status'] == 'success') {
+        return response.data['dados'];
+      }
+    } on DioException {
+      rethrow;
+    }
+    return {};
+  }
+
   Future<void> login(String email, String password) async {
     try {
+      initDio();
+
       final response = await _dio.post(
         '${Config.apiUrl}/login',
         data: {
@@ -41,10 +60,11 @@ class UserProvider {
     }
   }
 
-  // Signup Method
   Future<Map<String, dynamic>> createUser(
       String name, String email, String phone, String password) async {
     try {
+      initDio();
+
       final response = await _dio.post(
         '${Config.apiUrl}/register',
         data: {
@@ -73,45 +93,44 @@ class UserProvider {
     }
   }
 
-  // Update User Info Method
-  Future<bool> updateUserInfo({
-    required String userId,
-    String? name,
-    String? email,
-    String? phone,
-  }) async {
+  Future<Map<String, dynamic>> updateUser(
+      String name, String email, String phone) async {
     try {
-      // Cria um mapa dos dados a serem atualizados
-      final Map<String, dynamic> data = {'uuid': userId};
+      initDio();
 
-      if (name != null) data['name'] = name;
-      if (email != null) data['email'] = email;
-      if (phone != null) data['phone'] = phone;
-
-      // Verifica se há algum dado para atualizar
-      if (data.length == 1) {
-        // Apenas o userId está presente, não há nada para atualizar
-        return false;
-      }
-
-      final response =
-          await _dio.put('${Config.apiUrl}/user/update', data: data);
+      final userId = getUserId();
+      final response = await _dio.post(
+        '${Config.apiUrl}/user/update',
+        data: {
+          'name': name,
+          'user_id': userId,
+          'email': email,
+          'phone': phone,
+        },
+      );
 
       if (response.statusCode == 200) {
-        return response.data['success'];
+        return response.data;
       } else {
-        throw Exception(
-            'Falha ao atualizar usuário. Status code: ${response.statusCode}');
+        throw 'Falha ao atualizar usuário. Status code: ${response.statusCode}';
       }
-    } catch (error) {
-      throw 'Erro ao atualizar usuário: $error';
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.';
+      } else if (error.response?.statusCode == 404) {
+        throw 'Usuário não encontrado. Por favor, verifique seu e-mail.';
+      } else {
+        throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.';
+      }
     }
   }
 
-  // Soft Delete User Method
-  Future<bool> softDelete(String userId) async {
+  Future<bool> deleteUser() async {
     try {
-      final response = await _dio.put(
+      initDio();
+      final userId = getUserId();
+
+      final response = await _dio.post(
         '${Config.apiUrl}/user/delete',
         data: {'user_id': userId},
       );
