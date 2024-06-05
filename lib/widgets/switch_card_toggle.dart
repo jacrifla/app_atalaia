@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../core/constantes.dart';
+import '../provider/switch_provider.dart';
+import '../themes/theme.dart';
 import '../utils/utils.dart';
 import '../model/switch_model.dart';
 import '../controller/switch_controller.dart';
@@ -16,18 +16,32 @@ class SwitchCard extends StatefulWidget {
 }
 
 class _SwitchCardState extends State<SwitchCard> {
+  final SwitchProvider switchProvider = SwitchProvider();
+  late final SwitchController ctlSwitchController;
   late bool isActive;
 
   @override
   void initState() {
     super.initState();
-    isActive = widget.switchModel.isActive ?? false;
+    ctlSwitchController = SwitchController(switchProvider);
+    isActive = widget.switchModel.isActive!;
+  }
+
+  Future<void> _toggleSwitch() async {
+    bool success = await ctlSwitchController.toggleSwitch(
+      isActive: !isActive,
+      macAddress: widget.switchModel.macAddress!,
+    );
+    if (success) {
+      setState(() {
+        isActive = !isActive;
+        widget.switchModel.isActive = isActive;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final switchController = Provider.of<SwitchController>(context);
-
     return Card(
       elevation: 3,
       child: Padding(
@@ -36,35 +50,25 @@ class _SwitchCardState extends State<SwitchCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              toCapitalizeWords(widget.switchModel.name ?? 'Unknown'),
+              toCapitalizeWords(widget.switchModel.name!),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.background,
+                color: appTheme.colorScheme.background,
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                // print(
-                //     'Alternando switch com o MAC address: ${widget.switchModel.macAddress ?? ''}');
-                bool success = await switchController.toggleSwitch(
-                  widget.switchModel.macAddress ?? '',
-                  !isActive,
+            AnimatedBuilder(
+              animation: ctlSwitchController,
+              builder: (_, child) {
+                return GestureDetector(
+                  onTap: _toggleSwitch,
+                  child: Icon(
+                    Icons.lightbulb,
+                    size: 40,
+                    color: isActive ? activeColor : inactiveColor,
+                  ),
                 );
-                if (success) {
-                  // print('Alternância bem-sucedida, atualizando estado.');
-                  setState(() {
-                    isActive = !isActive;
-                  });
-                } else {
-                  // print('Alternância falhou.');
-                }
               },
-              child: Icon(
-                Icons.lightbulb,
-                size: 40,
-                color: isActive ? activeColor : inactiveColor,
-              ),
             ),
           ],
         ),
