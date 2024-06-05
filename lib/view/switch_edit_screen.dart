@@ -1,14 +1,14 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:app_atalaia/view/success_screen.dart';
-import 'package:app_atalaia/widgets/header.dart';
-import 'package:app_atalaia/widgets/menu.dart';
+import 'error_screen.dart';
+import '../provider/switch_provider.dart';
+import '../controller/switch_controller.dart';
+import '../utils/routes.dart';
+import '../view/success_screen.dart';
+import '../model/switch_model.dart';
+import '../widgets/header.dart';
+import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
-import 'error_screen.dart';
-import '../controller/switch_controller.dart';
-import '../model/switch_model.dart';
 
 class EditSwitchScreen extends StatefulWidget {
   final SwitchModel switchModel;
@@ -20,6 +20,7 @@ class EditSwitchScreen extends StatefulWidget {
 }
 
 class _EditSwitchScreenState extends State<EditSwitchScreen> {
+  late final SwitchController ctlSwitchController;
   late TextEditingController _nameController;
   late TextEditingController _wattsController;
   final _formKey = GlobalKey<FormState>();
@@ -27,9 +28,10 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
   @override
   void initState() {
     super.initState();
+    ctlSwitchController = SwitchController(SwitchProvider());
     _nameController = TextEditingController(text: widget.switchModel.name);
     _wattsController =
-        TextEditingController(text: widget.switchModel.watts?.toString() ?? '');
+        TextEditingController(text: widget.switchModel.watts?.toString());
   }
 
   @override
@@ -37,6 +39,51 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
     _nameController.dispose();
     _wattsController.dispose();
     super.dispose();
+  }
+
+  Future<void> _updateSwitch() async {
+    if (_formKey.currentState!.validate()) {
+      String newName = _nameController.text.trim().toLowerCase();
+      String newWatts = _wattsController.text.trim();
+      try {
+        bool success = await ctlSwitchController.updateSwitch(
+          name: newName,
+          watts: newWatts,
+          macAddress: widget.switchModel.macAddress!,
+        );
+
+        if (success) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SuccessScreen(
+                message: 'Ponto Editado',
+                screen: AppRoutes.switchScreen,
+              ),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ErrorScreen(
+                message: 'Falha ao atualizar o switch.',
+                errorDescription: 'Tente novamente mais tarde.',
+              ),
+            ),
+          );
+        }
+      } catch (error) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ErrorScreen(
+              message: 'Ocorreu um erro.',
+              errorDescription: error.toString(),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -76,72 +123,17 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              ButtonIcon(
-                labelText: 'Salvar',
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    String newName = _nameController.text.trim();
-                    String newWatts = _wattsController.text.trim();
-                    try {
-                      SwitchModel updatedSwitchModel = SwitchModel(
-                        uuid: widget.switchModel.uuid,
-                        userId: widget.switchModel.userId,
-                        groupId: widget.switchModel.groupId,
-                        macAddress: widget.switchModel.macAddress,
-                        name: newName,
-                        isActive: widget.switchModel.isActive,
-                        watts: int.tryParse(newWatts),
-                        guardActive: widget.switchModel.guardActive,
-                      );
-
-                      Map<String, dynamic> updateData =
-                          updatedSwitchModel.toJson();
-
-                      bool success =
-                          await SwitchController().updateSwitch(updateData);
-
-                      if (success) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SuccessScreen(
-                              message: 'Ponto Editado',
-                              screen: '/switch',
-                            ),
-                          ),
-                        );
-                      } else {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ErrorScreen(
-                              message: 'Falha ao atualizar o switch.',
-                              errorDescription: 'Tente novamente mais tarde.',
-                            ),
-                          ),
-                        );
-                      }
-                    } catch (error) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ErrorScreen(
-                            message: 'Ocorreu um erro.',
-                            errorDescription: error.toString(),
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Por favor, insira valores válidos.'),
-                      ),
-                    );
-                  }
-                },
-              ),
             ],
           ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        width: 300,
+        child: ButtonIcon(
+          labelText: 'Salvar',
+          onPressed: _updateSwitch,
+          icon: const Icon(Icons.save),
         ),
       ),
     );
