@@ -1,7 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
+import '../provider/switch_provider.dart';
+import '../themes/theme.dart';
 import '../utils/utils.dart';
 import '../view/confirmation_screen.dart';
 import '../view/error_screen.dart';
@@ -23,17 +23,26 @@ class SwitchCardDelete extends StatefulWidget {
 }
 
 class _SwitchCardDeleteState extends State<SwitchCardDelete> {
-  Future<void> _confirmDelete(BuildContext context) async {
+  final SwitchProvider switchProvider = SwitchProvider();
+  late final SwitchController ctlSwitchController;
+
+  @override
+  void initState() {
+    super.initState();
+    ctlSwitchController = SwitchController(switchProvider);
+  }
+
+  Future<void> _confirmDelete() async {
     final confirmed = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ConfirmationScreen(
           question: 'Tem certeza que deseja excluir este ponto?',
-          onConfirm: () async {
-            await _handleDelete();
+          onConfirm: () {
+            Navigator.pop(context, true);
           },
           onCancel: () {
-            Navigator.pop(context);
+            Navigator.pop(context, false);
           },
         ),
       ),
@@ -41,22 +50,20 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
 
     if (confirmed == true) {
       await _handleDelete();
-      Navigator.pushNamed(context, AppRoutes.switchScreen);
     }
   }
 
   Future<void> _handleDelete() async {
-    SwitchController switchController = SwitchController();
-    bool success = await switchController
-        .deleteSwitch(widget.switchModel.macAddress ?? '');
+    bool success = await ctlSwitchController.deleteSwitch(
+      macAddress: widget.switchModel.macAddress!,
+    );
     if (success) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SuccessScreen(
-            message: 'Switch excluído com sucesso!',
-
-            // screen: '/switch',
+            message: 'Ponto excluído com sucesso!',
+            screen: AppRoutes.switchScreen,
           ),
         ),
       );
@@ -64,13 +71,10 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ErrorScreen(
-            message: 'Erro ao excluir o switch',
+          builder: (context) => const ErrorScreen(
+            message: 'Erro ao excluir o ponto.',
             errorDescription:
-                'Não foi possível excluir o switch. Por favor, tente novamente.',
-            onOKPressed: () {
-              Navigator.pop(context);
-            },
+                'Não foi possível excluir o ponto. Por favor, tente novamente.',
           ),
         ),
       );
@@ -97,21 +101,21 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                toCapitalizeWords(widget.switchModel.name ?? 'Unknown'),
+                toCapitalizeWords(widget.switchModel.name!),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.background,
+                  color: appTheme.colorScheme.background,
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  _confirmDelete(context);
+                  _confirmDelete();
                 },
                 child: Icon(
                   Icons.close,
                   size: 40,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: appTheme.primaryColor,
                 ),
               ),
             ],
