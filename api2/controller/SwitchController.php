@@ -154,37 +154,36 @@ class SwitchController
         }
     }
 
-    public function getSwitches(Request $request, Response $response){
+    public function getSwitches(Request $request, Response $response)
+    {
         try {
-            
             $data = $request->bodyJson();
-            //uuid do user
-            $data = SwitchModel::getSwitches($data['user_id']);
+            $userId = $data['user_id'];
             
-            if ($data) {
-                $response::json([
+            $switches = SwitchModel::getSwitches($userId);
+            
+            if ($switches) {
+                return $response::json([
                     'status' => 'success',
-                    'dados' => $data
+                    'data' => $switches
                 ], 200);
-            }else {
-                $response::json([
+            } else {
+                return $response::json([
                     'status' => 'error',
-                    'msg' => 'Internal Error'
-                ], 400);
+                    'message' => 'Nenhum ponto encontrado para o usuário',
+                ], 404);
             }
-            
-            
         } catch (\Exception $e) {
-            $response::json([
+            return $response::json([
                 'status' => 'error',
-                'msg' => $e->getMessage()
+                'message' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function getSwitch(Request $request, Response $response){
+    public function getSwitch(Request $request, Response $response)
+    {
         try {
-            
             $data = $request->bodyJson();
             $data = SwitchModel::getSwitch($data['mac_address']);
             
@@ -196,11 +195,9 @@ class SwitchController
             }else {
                 $response::json([
                     'status' => 'error',
-                    'msg' => 'Internal Error'
-                ], 400);
+                    'msg' => 'Ponto não encontrado'
+                ], 404);
             }
-            
-            
         } catch (\Exception $e) {
             $response::json([
                 'status' => 'error',
@@ -208,8 +205,5 @@ class SwitchController
             ], 500);
         }
     }
-    
-        
-        
 }
         
