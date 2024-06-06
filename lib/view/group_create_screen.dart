@@ -44,7 +44,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       await ctlGroupController.createGroup(
         name: _inputGroupName.text.toLowerCase(),
         isActive: false,
-        scheduleActive: keepActive,
+        scheduleActive: autoActivationTime,
         scheduleStart: _formatTimeOfDayToString(fromTime),
         scheduleEnd: _formatTimeOfDayToString(toTime),
         keepFor: _inputActiveHours.text,
@@ -150,11 +150,12 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               ),
               const SizedBox(height: 16.0),
               CheckboxListTile(
-                title: const Text('Manter Ativo Por'),
+                title: const Text('Ativo quantas horas?'),
                 value: keepActive,
                 onChanged: (value) {
                   setState(() {
-                    keepActive = value ?? true;
+                    keepActive = value ?? false;
+                    autoActivationTime = !keepActive;
                   });
                 },
               ),
@@ -171,7 +172,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 value: autoActivationTime,
                 onChanged: (value) {
                   setState(() {
-                    autoActivationTime = value ?? true;
+                    autoActivationTime = value ?? false;
+                    keepActive = !autoActivationTime;
                   });
                 },
               ),
