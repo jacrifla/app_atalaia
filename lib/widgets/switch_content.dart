@@ -6,13 +6,11 @@ import '../model/switch_model.dart';
 class SwitchContent extends StatelessWidget {
   final int selectedIndex;
   final Future<List<SwitchModel>> switchesFuture;
-  // Flag para determinar se estamos na tela de exclusão
   final bool isDeleting;
 
   const SwitchContent({
     required this.selectedIndex,
     required this.switchesFuture,
-    // Por padrão, não estamos na tela de exclusão
     this.isDeleting = false,
     super.key,
   });
