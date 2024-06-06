@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import '../widgets/build_input.dart';
+
+import '../utils/routes.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
-import 'success_screen.dart';
 import '../model/group_model.dart';
+import '../provider/group_provider.dart';
 import '../controller/group_controller.dart';
 import 'error_screen.dart';
+import 'success_screen.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final GroupModel groupInfo;
@@ -18,27 +20,27 @@ class EditGroupScreen extends StatefulWidget {
 }
 
 class _EditGroupScreenState extends State<EditGroupScreen> {
-  late TextEditingController _inputNomeGrupo;
-  late bool isActive;
-  late bool scheduleActive;
-  late TextEditingController _inputScheduleStart;
-  late TextEditingController _inputScheduleEnd;
-  late TextEditingController _inputMacAddress;
-  final GroupController _groupController = GroupController();
+  final GroupProvider groupProvider = GroupProvider();
+  late final GroupController ctlGroupController;
+  late bool keepActive;
+  late bool autoActivationTime;
+  final TextEditingController _inputNomeGrupo = TextEditingController();
+  final TextEditingController _inputScheduleStart = TextEditingController();
+  final TextEditingController _inputScheduleEnd = TextEditingController();
+  final TextEditingController _inputActiveHours = TextEditingController();
+  TimeOfDay fromTime = TimeOfDay.now();
+  TimeOfDay toTime = TimeOfDay.now();
 
   @override
   void initState() {
+    ctlGroupController = GroupController(groupProvider);
+    _inputNomeGrupo.text = widget.groupInfo.groupName ?? "";
+    _inputScheduleStart.text = widget.groupInfo.scheduleStart ?? "";
+    _inputScheduleEnd.text = widget.groupInfo.scheduleEnd ?? "";
+    _inputActiveHours.text = widget.groupInfo.keepFor ?? "";
+    keepActive = widget.groupInfo.keepFor != null;
+    autoActivationTime = widget.groupInfo.scheduleActive!;
     super.initState();
-    _inputNomeGrupo =
-        TextEditingController(text: widget.groupInfo.groupName ?? '');
-    isActive = widget.groupInfo.isActive ?? false;
-    scheduleActive = widget.groupInfo.scheduleActive ?? false;
-    _inputScheduleStart =
-        TextEditingController(text: widget.groupInfo.scheduleStart ?? '');
-    _inputScheduleEnd =
-        TextEditingController(text: widget.groupInfo.scheduleEnd ?? '');
-    _inputMacAddress =
-        TextEditingController(text: widget.groupInfo.macAddress ?? '');
   }
 
   @override
@@ -46,7 +48,7 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
     _inputNomeGrupo.dispose();
     _inputScheduleStart.dispose();
     _inputScheduleEnd.dispose();
-    _inputMacAddress.dispose();
+    _inputActiveHours.dispose();
     super.dispose();
   }
 
@@ -54,20 +56,20 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
     final updatedGroup = {
       'group_id': widget.groupInfo.groupId,
       'name': _inputNomeGrupo.text,
-      'is_active': isActive,
-      'schedule_active': scheduleActive,
+      'schedule_active': autoActivationTime,
       'schedule_start': _inputScheduleStart.text,
       'schedule_end': _inputScheduleEnd.text,
+      'keep_for': keepActive ? _inputActiveHours.text : null,
     };
 
     try {
-      await _groupController.updateGroupInfo(updatedGroup);
+      await ctlGroupController.updateGroupInfo(updatedGroup);
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SuccessScreen(
             message: 'Alterações salvas com sucesso',
-            screen: '/group_switch',
+            screen: AppRoutes.groupScreen,
           ),
         ),
       );
@@ -84,6 +86,47 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
     }
   }
 
+  Future<void> _selectTime(BuildContext context, bool isFromTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        if (isFromTime) {
+          fromTime = picked;
+          _inputScheduleStart.text = picked.format(context);
+        } else {
+          toTime = picked;
+          _inputScheduleEnd.text = picked.format(context);
+        }
+      });
+    }
+  }
+
+  Widget _buildTimePickerField(BuildContext context, bool isFromTime) {
+    final TimeOfDay time = isFromTime ? fromTime : toTime;
+    return Expanded(
+      child: InkWell(
+        onTap: () => _selectTime(context, isFromTime),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: isFromTime ? 'De' : 'Até',
+            hintText: '${time.hour}:${time.minute}',
+            prefixIcon: const Icon(Icons.access_time),
+          ),
+          child: Text('${time.hour}:${time.minute}'),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,9 +139,11 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              BuildInput(
-                icon: const Icon(Icons.face),
-                labelText: 'Nome',
+              TextFormField(
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.face),
+                  labelText: 'Nome',
+                ),
                 controller: _inputNomeGrupo,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -110,44 +155,39 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
               ),
               const SizedBox(height: 16.0),
               CheckboxListTile(
-                title: const Text('Ativo'),
-                value: isActive,
-                controlAffinity: ListTileControlAffinity.leading,
+                title: const Text('Ativo por quantas horas?'),
+                value: keepActive,
                 onChanged: (value) {
                   setState(() {
-                    isActive = value ?? false;
+                    keepActive = value ?? false;
+                    autoActivationTime = !keepActive;
                   });
                 },
               ),
+              if (keepActive)
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Ativo por (horas)'),
+                  controller: _inputActiveHours,
+                ),
               CheckboxListTile(
-                title: const Text('Ativação Automática'),
-                value: scheduleActive,
-                controlAffinity: ListTileControlAffinity.leading,
+                title: const Text('Definir um Horário de Ativação Automática?'),
+                value: autoActivationTime,
                 onChanged: (value) {
                   setState(() {
-                    scheduleActive = value ?? false;
+                    autoActivationTime = value ?? false;
+                    keepActive = !autoActivationTime;
                   });
                 },
               ),
-              if (scheduleActive)
+              if (autoActivationTime)
                 Row(
                   children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'De'),
-                        controller: _inputScheduleStart,
-                      ),
-                    ),
+                    _buildTimePickerField(context, true),
                     const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Até'),
-                        controller: _inputScheduleEnd,
-                      ),
-                    ),
+                    _buildTimePickerField(context, false),
                   ],
                 ),
-              const SizedBox(height: 16.0),
             ],
           ),
         ),
