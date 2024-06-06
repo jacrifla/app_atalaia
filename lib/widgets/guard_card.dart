@@ -1,3 +1,4 @@
+import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
 
 class GuardCard extends StatefulWidget {
@@ -9,6 +10,10 @@ class GuardCard extends StatefulWidget {
 
 class _GuardCardState extends State<GuardCard> {
   bool _guardaAtiva = false;
+  Color ativate = appTheme.primaryColor;
+  Color desativate = appTheme.disabledColor;
+  Color guardaButtonColor = appTheme.colorScheme.error;
+  Color bgCard = appTheme.colorScheme.background;
 
   void _toggleGuarda() {
     setState(() {
@@ -20,14 +25,20 @@ class _GuardCardState extends State<GuardCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      color: _guardaAtiva
-          ? Theme.of(context).colorScheme.error
-          : Theme.of(context).colorScheme.background,
+      color: bgCard,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const Text(
+              'Guarda',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,34 +46,34 @@ class _GuardCardState extends State<GuardCard> {
                 Icon(
                   Icons.security,
                   size: 50,
-                  color: _guardaAtiva
-                      ? Theme.of(context).colorScheme.background
-                      : Theme.of(context).colorScheme.primary,
+                  color: _guardaAtiva ? ativate : desativate,
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Guarda',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       const SizedBox(height: 5),
                       Text(
                         _guardaAtiva
                             ? 'Sua guarda está ativa no momento.'
                             : 'Sua guarda não está ativa no momento.',
+                        style: TextStyle(
+                          color: _guardaAtiva ? ativate : desativate,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: _toggleGuarda,
-                        child: Text(_guardaAtiva
-                            ? 'Desativar Guarda'
-                            : 'Ativar Guarda Agora'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              !_guardaAtiva ? ativate : guardaButtonColor,
+                        ),
+                        child: Text(
+                          _guardaAtiva
+                              ? 'Desativar Guarda'
+                              : 'Ativar Guarda Agora',
+                        ),
                       ),
                     ],
                   ),
