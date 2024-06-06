@@ -9,7 +9,8 @@ require_once './model/UserModel.php';
 class SwitchController
 {
     
-    public function createSwitch(Request $request, Response $response){
+    public function createSwitch(Request $request, Response $response)
+    {
         try {
             
             $data            = $request->bodyJson();
@@ -69,7 +70,8 @@ class SwitchController
                 }
     }
             
-    public function updateSwitch(Request $request, Response $response){
+    public function updateSwitch(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -98,7 +100,8 @@ class SwitchController
     }
 
 
-    public function deleteSwitch(Request $request, Response $response){
+    public function deleteSwitch(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
@@ -126,7 +129,8 @@ class SwitchController
         }
     }
 
-    public function toggleSwitch(Request $request, Response $response){
+    public function toggleSwitch(Request $request, Response $response)
+    {
         try {
             
             $data = $request->bodyJson();
