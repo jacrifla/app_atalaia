@@ -188,11 +188,10 @@ class GroupSwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('SELECT s.* 
-            FROM tb_switch s
-            JOIN tb_group g ON s.group_id = g.id
-            WHERE g.uuid = ?            
-            AND s.deleted_at IS NULL');
+            $stmt = $pdo->prepare('SELECT * 
+            FROM tb_switch
+            WHERE group_id = ?            
+            AND deleted_at IS NULL');
             $stmt->execute([$groupId]);
 
             return $stmt->fetchAll(PDO::FETCH_OBJ);
