@@ -124,7 +124,7 @@ class GroupSwitchModel
     public static function toggleGroup($data)
     {
         try {
-            var_dump("data: ", $data);
+            // var_dump("data: ", $data);
             $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('
