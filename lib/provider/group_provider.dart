@@ -1,73 +1,197 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 
 import '../utils/config.dart';
 
-class GroupProvider extends ChangeNotifier {
+class GroupProvider {
   final Dio _dio = Dio();
 
-  Future<Map<String, dynamic>> _postData(String url, dynamic data) async {
+  Future<Response?> getGroups(String userId) async {
     try {
-      Response response = await _dio.post('$url', data: data);
-      return response.data;
-    } catch (error) {
-      throw Exception('Failed to perform POST request: $error');
-    }
-  }
-
-  Future<Map<String, dynamic>> createGroup(Map<String, dynamic> data) async {
-    return _postData('${Config.apiUrl}/groups/new', jsonEncode(data));
-  }
-
-  Future<Map<String, dynamic>> getOneGroup(String groupId) async {
-    return _postData(
-        '${Config.apiUrl}/groups/getone', jsonEncode({'group_id': groupId}));
-  }
-
-  Future<Map<String, dynamic>> getSwitchesInGroup(String groupId) async {
-    return _postData('${Config.apiUrl}/groups/switches', {'group_id': groupId});
-  }
-
-  Future<Map<String, dynamic>> getGroups(String userId) async {
-    return _postData('${Config.apiUrl}/groups', {'user_id': userId});
-  }
-
-  Future<Map<String, dynamic>> checkSwitchInGroup(String macAddress) async {
-    return _postData(
-        '${Config.apiUrl}/groups/checkswitch', {'mac_address': macAddress});
-  }
-
-  Future<Map<String, dynamic>> addSwitchToGroup(
-      Map<String, dynamic> data) async {
-    return _postData('${Config.apiUrl}/groups/newswitch', jsonEncode(data));
-  }
-
-  Future<Map<String, dynamic>> toggleGroup(Map<String, dynamic> data) async {
-    try {
-      Response response = await _dio.post('${Config.apiUrl}/groups/toggle',
-          data: jsonEncode(data));
-      if (response.data != null) {
-        return response.data;
-      } else {
-        throw Exception('Response data is null');
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups',
+        data: {'user_id': userId},
+      );
+      if (response.statusCode == 200) {
+        return response;
       }
-    } catch (error) {
-      throw Exception('Failed to toggle group: $error');
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
     }
+    return null;
   }
 
-  Future<Map<String, dynamic>> removeSwitchFromGroup(String macAddress) async {
-    return _postData(
-        '${Config.apiUrl}/groups/removeswitch', {'mac_address': macAddress});
+  Future<Response?> getOneGroup(String groupId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/getone',
+        data: {'group_id': groupId},
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
   }
 
-  Future<Map<String, dynamic>> updateGroupInfo(
-      Map<String, dynamic> data) async {
-    return _postData('${Config.apiUrl}/groups/edit', jsonEncode(data));
+  Future<Response?> createGroup(Map<String, dynamic> data) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/new',
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
   }
 
-  Future<Map<String, dynamic>> deleteGroup(String groupId) async {
-    return _postData('${Config.apiUrl}/groups/delete', {'group_id': groupId});
+  Future<Response?> updateGroup(Map<String, dynamic> data) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/edit',
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> toggleGroup(Map<String, dynamic> data) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/toggle',
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Nada foi mudado');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> addSwitchToGroup(Map<String, dynamic> data) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/newswitch',
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> getSwitchesInGroup(String groupId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/switches',
+        data: {'group_id': groupId},
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> checkSwitchInGroup(String macAddress) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/checkswitch',
+        data: {'mac_address': macAddress},
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> removeSwitchFromGroup(String macAddress) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/removeswitch',
+        data: {'mac_address': macAddress},
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
+  }
+
+  Future<Response?> deleteGroup(String groupId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/delete',
+        data: {'group_id': groupId},
+      );
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return null;
   }
 }
