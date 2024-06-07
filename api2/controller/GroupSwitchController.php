@@ -277,7 +277,7 @@ class GroupSwitchController
             
             $data = $request->bodyJson();
             
-            $data = GroupSwitchModel::softDelete($data['group_id']);
+            GroupSwitchModel::softDelete($data['group_id']);
             $data = GroupSwitchModel::removeAllSwitchesFromGroup($data['mac_addresses']);
             
             if ($data) {

@@ -231,8 +231,9 @@ class GroupSwitchModel
 
     public static function removeAllSwitchesFromGroup(array $mac_addresses)
     {
-        var_dump('$mac_addresses');
         try {
+
+            // var_dump("mac_addresses" , $mac_addresses);
             $pdo = ConnectionMYSQL::getInstance();
 
             // Construir a cláusula IN com placeholders
