@@ -29,34 +29,14 @@ class GroupSwitchModel
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-    
+
             $stmt = $pdo->prepare('SELECT * 
             FROM tb_group 
             WHERE uuid = ?            
             AND deleted_at IS NULL');
             $stmt->execute([$groupId]);
-    
+
             return $stmt->fetch(PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }
-    
-    public static function getSwitchesInGroup($groupId)
-    {
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
-
-            $stmt = $pdo->prepare('SELECT s.* 
-            FROM tb_switch s
-            JOIN tb_group g ON s.group_id = g.id
-            WHERE g.uuid = ?            
-            AND s.deleted_at IS NULL');
-            $stmt->execute([$groupId]);
-
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {
@@ -69,11 +49,18 @@ class GroupSwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();            
             $stmt = $pdo->prepare('
-            INSERT INTO tb_group (uuid, name, is_active, schedule_active, schedule_start, schedule_end, user_id, keep_for) 
-            VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?)'
+            INSERT INTO tb_group (uuid, name, is_active, schedule_active, schedule_start, schedule_end, user_id) 
+            VALUES (UUID(), ?, ?, ?, ?, ?, ?)'
         );
 
-        $stmt->execute([$data['name'], $data['is_active'],$data['schedule_active'], $data['schedule_start'], $data['schedule_end'], $data['user_id'], $data['keep_for']]);
+        $stmt->execute([
+            $data['name'], 
+            $data['is_active'],
+            $data['schedule_active'], 
+            $data['schedule_start'], 
+            $data['schedule_end'], 
+            $data['user_id']
+        ]);
 
         if ($stmt->rowCount() > 0) {
             // Recupera o último ID inserido
@@ -94,57 +81,6 @@ class GroupSwitchModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-    }
-
-    public static function checkSwitchInGroup($mac_address)
-    {
-        try{
-            $pdo = ConnectionMYSQL::getInstance();
-
-            $stmt = $pdo->prepare('SELECT group_id FROM tb_switch WHERE mac_address = ? AND group_id IS NOT NULL');
-            $stmt->execute([$mac_address]);
-
-            return ($stmt->rowCount() > 0);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-
-    }
-
-    public static function addSwitchToGroup(array $data)
-    {
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
-
-            $stmt = $pdo->prepare('UPDATE tb_switch SET group_id = ? WHERE mac_address = ?');
-            $stmt->execute([$data['group_id'],$data['mac_address'] ]);
-
-            return ($stmt->rowCount() > 0);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-
-    }
-
-    public static function removeSwitchFromGroup($mac_address)
-    {
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
-
-            $stmt = $pdo->prepare('UPDATE tb_switch SET group_id = NULL WHERE mac_address = ?');
-            $stmt->execute([$mac_address]);
-
-            return ($stmt->rowCount() > 0);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-
     }
 
     public static function updateGroupInfo(array $data)
@@ -185,19 +121,137 @@ class GroupSwitchModel
         }
     }
 
-    public static function softDelete($groupId)
+    public static function toggleGroup($data)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            $stmt = $pdo->prepare('UPDATE tb_group SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
-            $stmt->execute([$groupId]);
-    
+
+            $stmt = $pdo->prepare('
+                UPDATE tb_group
+                SET is_active = ?
+                WHERE uuid = ?
+            ');
+            $stmt->bindParam(1, $data['is_active'], PDO::PARAM_INT);
+            $stmt->bindParam(2, $data['group_id'], PDO::PARAM_INT);
+            $stmt->execute();
+
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
+    }
+
+    public static function addSwitchToGroup(array $data)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('UPDATE tb_switch SET group_id = ? WHERE mac_address = ?');
+            $stmt->execute([$data['group_id'],$data['mac_address'] ]);
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+    }
+
+    public static function getSwitchesInGroup($groupId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT s.* 
+            FROM tb_switch s
+            JOIN tb_group g ON s.group_id = g.id
+            WHERE g.uuid = ?            
+            AND s.deleted_at IS NULL');
+            $stmt->execute([$groupId]);
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public static function checkSwitchInGroup($mac_address)
+    {
+        try{
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT group_id FROM tb_switch WHERE mac_address = ? AND group_id IS NOT NULL');
+            $stmt->execute([$mac_address]);
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+    }
+
+    public static function removeSwitchFromGroup($mac_address)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('UPDATE tb_switch SET group_id = NULL WHERE mac_address = ?');
+            $stmt->execute([$mac_address]);
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+    }
+
+    public static function softDelete($groupId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+            $stmt = $pdo->prepare('UPDATE tb_group SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
+            $stmt->execute([$groupId]);
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public static function removeAllSwitchesFromGroup(array $mac_addresses)
+    {
+        var_dump('$mac_addresses');
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            // Construir a cláusula IN com placeholders
+            $placeholders = implode(',', array_fill(0, count($mac_addresses), '?'));
+    
+            // Preparar a consulta SQL
+            $sql = "UPDATE tb_switch SET group_id = NULL WHERE mac_address IN ($placeholders)";
+            $stmt = $pdo->prepare($sql);
+    
+            // Executar a consulta com a lista de mac_addresses
+            $stmt->execute($mac_addresses);
+
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
     }
 
     public static function getGroupIdByUUID($groupId){
@@ -223,50 +277,7 @@ class GroupSwitchModel
         }
     }
 
-    public static function removeAllSwitchesFromGroupByGroupId($groupId)
-    {
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
-            
-            $stmt = $pdo->prepare('
-                UPDATE tb_switch AS s
-                JOIN tb_group AS g ON s.group_id = g.id
-                SET s.group_id = NULL 
-                WHERE g.uuid = ?
-            ');
-            
-            $stmt->execute([$groupId]);
-            
-            return ($stmt->rowCount() > 0);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }
 
-    
-        
-    public static function toggleGroup($groupId)
-    {
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
-    
-            $stmt = $pdo->prepare('
-                UPDATE tb_group
-                SET is_active = IF(is_active = 1, 0, 1)
-                WHERE uuid = ?
-            ');
-            $stmt->bindParam(1, $groupId, PDO::PARAM_STR);
-            $stmt->execute();
-    
-            return ($stmt->rowCount() > 0);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }    
 
 //     public static function insertGroupInfo(array $data)
 // {
@@ -307,7 +318,4 @@ class GroupSwitchModel
 //         throw new \Exception($e->getMessage());
 //     }
 // }
-
-
-   
 }
