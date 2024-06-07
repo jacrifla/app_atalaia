@@ -177,11 +177,11 @@ class GroupProvider {
     return {};
   }
 
-  Future<Map<String, dynamic>> deleteGroup(String groupId) async {
+  Future<Map<String, dynamic>> deleteGroup(Map<String, dynamic> data) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}/groups/delete',
-        data: {'group_id': groupId},
+        data: data,
       );
       if (response.statusCode == 200) {
         return response.data;
