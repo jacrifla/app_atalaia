@@ -130,12 +130,16 @@ class GroupSwitchController
             $data             = $request->bodyJson();
             $groupInfo        = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
             $data['group_id'] = $groupInfo['id'];
-            $group            = GroupSwitchModel::toggleGroup($data);
+            $toggle            = GroupSwitchModel::toggleGroup($data);
+            if($toggle){
+                $success = GroupSwitchModel::toggleSwitches($data);
+                $toggle = $success ? $success : 'Não há switches nesse grupo';
+            }
             
-            if ($group) {
+            if ($toggle) {
                 $response::json([
                     'status' => 'success',
-                    'dados' => $group
+                    'dados' => $toggle
                 ], 200);
             }else {
                 $response::json([
@@ -199,9 +203,9 @@ class GroupSwitchController
                 ], 200);
             }else {
                 $response::json([
-                    'status' => 'error',
-                    'msg' => 'Internal Error'
-                ], 400);
+                    'status' => 'success',
+                    'msg' => 'Não há switches nesse grupo'
+                ], 200);
             }
             
             
@@ -276,14 +280,19 @@ class GroupSwitchController
         try {
             
             $data = $request->bodyJson();
+            // $deleted = true;
+            $deleted = GroupSwitchModel::softDelete($data['group_id']) ;
+            if($deleted){
+                $groupInfo        = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
+                $data['group_id'] = $groupInfo['id'];
+                $data   = GroupSwitchModel::removeAllSwitchesFromGroup($data['group_id']) ;
+                $deleted  = $data ? $data : 'Não há switches nesse grupo';
+            }
             
-            GroupSwitchModel::softDelete($data['group_id']);
-            $data = GroupSwitchModel::removeAllSwitchesFromGroup($data['mac_addresses']);
-            
-            if ($data) {
+            if ($deleted) {
                 $response::json([
                     'status' => 'success',
-                    'dados' => $data
+                    'dados' => $deleted
                 ], 200);
             }else {
                 $response::json([
