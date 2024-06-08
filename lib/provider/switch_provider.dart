@@ -76,6 +76,31 @@ class SwitchProvider {
     }
   }
 
+  Future<List<SwitchModel>> getSwitchesWithoutGroup(String userId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/switches/withoutgroup',
+        data: {'user_id': userId},
+      );
+      if (response.statusCode == 200) {
+        List<SwitchModel> switches = [];
+        for (var switchData in response.data['data']) {
+          switches.add(SwitchModel.fromJson(switchData));
+        }
+        return switches;
+      } else {
+        return [];
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 404) {
+        return [];
+      } else if (error.response?.statusCode == 500) {
+        throw 'Erro no servidor: ${error.response?.data['msg']}';
+      }
+      throw 'Erro ao conectar ao servidor: ${error.message}';
+    }
+  }
+
   Future<Map<String, dynamic>> getSwitch(String macAddress) async {
     try {
       final response = await _dio.post(

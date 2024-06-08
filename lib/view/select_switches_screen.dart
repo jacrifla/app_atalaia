@@ -38,7 +38,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
     groupController = GroupController(provider: groupProvider);
     switchController = SwitchController(switchProvider);
     groupModel = GroupModel();
-    futureSwitches = switchController.getSwitches();
+    futureSwitches = switchController.getSwitchesWithoutGroup();
   }
 
   Future<void> _addSwitchToGroup(SwitchModel switchModel) async {

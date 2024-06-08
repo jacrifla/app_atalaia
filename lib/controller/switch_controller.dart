@@ -36,6 +36,16 @@ class SwitchController extends ChangeNotifier {
     }
   }
 
+  Future<List<SwitchModel>> getSwitchesWithoutGroup() async {
+    try {
+      final switches = await _switchProvider.getSwitchesWithoutGroup(userId);
+      notifyListeners();
+      return switches;
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<bool> updateSwitch({
     required String name,
     required String watts,
