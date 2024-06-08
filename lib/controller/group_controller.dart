@@ -205,4 +205,20 @@ class GroupController extends ChangeNotifier {
       throw ('Erro ao deletar grupo: $error');
     }
   }
+
+  // Retorna a lista de endereços MAC dos switches do grupo
+  Future<List<String>> getMacAddresses(String groupId) async {
+    try {
+      final List<Map<String, dynamic>> switchesInGroup =
+          await getSwitchesInGroup(groupId);
+
+      // Extrai os endereços MAC dos switches encontrados
+      final List<String> macAddresses = switchesInGroup
+          .map((switchData) => switchData['mac_address'] as String)
+          .toList();
+      return macAddresses;
+    } catch (error) {
+      return [];
+    }
+  }
 }

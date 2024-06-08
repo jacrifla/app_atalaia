@@ -5,8 +5,5 @@ import 'app.dart';
 
 Future<void> main() async {
   await GetStorage.init();
-
-  runApp(
-    const MyApp(),
-  );
+  runApp(const MyApp());
 }
