@@ -10,6 +10,7 @@ Http::post('/user', 'UserController@getUserInfo');
 
 // Switches
 Http::post('/switches', 'SwitchController@getSwitches');
+Http::post('/switches/withoutgroup', 'SwitchController@getSwitchesWithoutGroup');
 Http::post('/switches/getone', 'SwitchController@getSwitch');
 Http::post('/switches/new', 'SwitchController@createSwitch');
 Http::post('/switches/edit', 'SwitchController@updateSwitch');

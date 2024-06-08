@@ -25,6 +25,27 @@ class SwitchModel
         }
     }
 
+    public static function getSwitchesWithoutGroup($userId)
+    {
+        
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT s.* 
+            FROM tb_switch s
+            JOIN tb_user u ON s.user_id = u.id
+            WHERE u.uuid = ?
+            AND s.group_id IS NULL
+            AND s.deleted_at IS NULL');
+            $stmt->execute([$userId]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public static function getSwitch($mac_address)
     {
         try {

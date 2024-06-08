@@ -185,6 +185,33 @@ class SwitchController
         }
     }
 
+    public function getSwitchesWithoutGroup(Request $request, Response $response)
+    {
+        try {
+            $data = $request->bodyJson();
+            $userId = $data['user_id'];
+            
+            $switches = SwitchModel::getSwitches($userId);
+            
+            if ($switches) {
+                return $response::json([
+                    'status' => 'success',
+                    'data' => $switches
+                ], 200);
+            } else {
+                return $response::json([
+                    'status' => 'error',
+                    'message' => 'Nenhum ponto encontrado para o usuário',
+                ], 404);
+            }
+        } catch (\Exception $e) {
+            return $response::json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getSwitch(Request $request, Response $response)
     {
         try {
