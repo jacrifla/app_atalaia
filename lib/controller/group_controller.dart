@@ -221,8 +221,9 @@ class GroupController extends ChangeNotifier {
 
       return groups;
     } catch (error) {
-      throw ('Erro ao obter todos os grupos: $error');
+      print('Erro ao obter todos os grupos: $error');
     }
+    return [];
   }
 
   // Retorna a lista de endereços MAC dos switches do grupo
