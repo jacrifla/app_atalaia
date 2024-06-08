@@ -1,53 +1,34 @@
+import 'package:app_atalaia/provider/group_provider.dart';
+import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../core/constantes.dart';
 import '../controller/group_controller.dart';
 import '../model/group_model.dart';
 import '../utils/utils.dart';
 
 class GroupCardToggle extends StatefulWidget {
-  final GroupModel groupInfo;
+  final GroupModel groupModel;
 
-  const GroupCardToggle({super.key, required this.groupInfo});
+  const GroupCardToggle({super.key, required this.groupModel});
 
   @override
   State<GroupCardToggle> createState() => _GroupCardToggleState();
 }
 
 class _GroupCardToggleState extends State<GroupCardToggle> {
+  final GroupProvider groupProvider = GroupProvider();
+  late final GroupController ctlGroupController;
+  late GroupModel groupModel;
   late bool isActive;
-  late String groupName;
+  late String? groupName;
 
   @override
   void initState() {
     super.initState();
-    isActive = widget.groupInfo.isActive ?? true;
-    groupName = toCapitalizeWords(widget.groupInfo.groupName!);
-  }
-
-  Future<void> _toggleGroup(BuildContext context) async {
-    final groupController =
-        Provider.of<GroupController>(context, listen: false);
-    final groupId = widget.groupInfo.groupId;
-
-    print('Clicou na lâmpada do grupo com o ID: $groupId');
-    final newStatus = !isActive;
-
-    try {
-      bool success = await groupController.toggleGroup({
-        'group_id': groupId,
-        'is_active': newStatus,
-      });
-
-      if (success) {
-        setState(() {
-          isActive = newStatus;
-        });
-      }
-    } catch (error) {
-      // Handle error appropriately
-      print('Erro ao alternar grupo: $error');
-    }
+    ctlGroupController = GroupController(provider: groupProvider);
+    groupModel = widget.groupModel;
+    isActive = groupModel.isActive ?? false;
+    groupName = groupModel.groupName;
   }
 
   @override
@@ -56,26 +37,36 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              groupName,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => _toggleGroup(context),
-              child: Icon(
-                Icons.lightbulb,
-                size: 40,
-                color: isActive ? activeColor : inactiveColor,
-              ),
-            ),
-          ],
-        ),
+        child: groupName != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    toCapitalizeWords(groupName!),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: appTheme.colorScheme.background,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      setState(() {
+                        isActive = !isActive;
+                      });
+                      // Atualizar o grupo no servidor
+                      groupModel.isActive = isActive;
+                      // await ctlGroupController.updateGroup(groupModel.toJson());
+                    },
+                    child: Icon(
+                      Icons.lightbulb,
+                      size: 40,
+                      color: isActive ? activeColor : inactiveColor,
+                    ),
+                  ),
+                ],
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }
