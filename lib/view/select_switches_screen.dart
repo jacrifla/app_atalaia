@@ -1,20 +1,21 @@
+import 'package:app_atalaia/controller/group_controller.dart';
+import 'package:app_atalaia/model/group_model.dart';
+import 'package:app_atalaia/provider/group_provider.dart';
+import 'package:app_atalaia/provider/switch_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../controller/switch_controller.dart';
 import '../model/switch_model.dart';
-import '../utils/auth_provider.dart';
 import '../widgets/button_icon.dart';
+import '../utils/utils.dart';
 
 class SwitchSelectionScreen extends StatefulWidget {
-  final String groupName;
-  final Function(Map<String, dynamic>) addSwitchToGroup;
-  final String? groupId; // Adicione o groupId como um parâmetro opcional
+  final String? groupName;
+  final String? groupId;
 
   const SwitchSelectionScreen({
     super.key,
-    required this.groupName,
-    required this.addSwitchToGroup,
+    this.groupName,
     this.groupId,
   });
 
@@ -23,19 +24,49 @@ class SwitchSelectionScreen extends StatefulWidget {
 }
 
 class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
-  late Future<List<SwitchModel>> _switchesFuture;
+  final GroupProvider groupProvider = GroupProvider();
+  final SwitchProvider switchProvider = SwitchProvider();
+  late GroupController groupController;
+  late SwitchController switchController;
+  late GroupModel groupModel;
+  late Future<List<SwitchModel>> futureSwitches;
   List<SwitchModel> selectedSwitches = [];
 
   @override
   void initState() {
     super.initState();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = authProvider.userId;
-    if (userId != null) {
-      _switchesFuture =
-          Provider.of<SwitchController>(context, listen: false).getSwitches();
-    } else {
-      _switchesFuture = Future.error('User ID is null');
+    groupController = GroupController(provider: groupProvider);
+    switchController = SwitchController(switchProvider);
+    groupModel = GroupModel();
+    futureSwitches = switchController.getSwitches();
+  }
+
+  Future<void> _addSwitchToGroup(SwitchModel switchModel) async {
+    try {
+      await groupController.addSwitchToGroup(
+          widget.groupId!, switchModel.macAddress!);
+      setState(() {
+        selectedSwitches.add(switchModel);
+        switchModel.groupId = widget.groupId;
+      });
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao adicionar switch ao grupo: $error')),
+      );
+    }
+  }
+
+  Future<void> _removeSwitchFromGroup(SwitchModel switchModel) async {
+    try {
+      await groupController.removeSwitchFromGroup(switchModel.macAddress!);
+      setState(() {
+        selectedSwitches.remove(switchModel);
+        switchModel.groupId = null;
+      });
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao remover switch do grupo: $error')),
+      );
     }
   }
 
@@ -43,10 +74,10 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.groupName),
+        title: Text(toCapitalizeWords(widget.groupName ?? '')),
       ),
       body: FutureBuilder<List<SwitchModel>>(
-        future: _switchesFuture,
+        future: futureSwitches,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -54,50 +85,37 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No switches available'));
-          }
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final switchItem = snapshot.data![index];
+                final isSelected = selectedSwitches.contains(switchItem);
 
-          List<SwitchModel> availableSwitches = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: availableSwitches.length,
-            itemBuilder: (context, index) {
-              SwitchModel switchItem = availableSwitches[index];
-              return ListTile(
-                title: Text(switchItem.name ?? 'Unknown'),
-                trailing: IconButton(
-                  icon: selectedSwitches.contains(switchItem)
-                      ? const Icon(Icons.check_box)
-                      : const Icon(Icons.check_box_outline_blank),
-                  onPressed: () {
-                    setState(() {
-                      if (selectedSwitches.contains(switchItem)) {
-                        selectedSwitches.remove(switchItem);
+                return ListTile(
+                  title: Text(toCapitalizeWords(switchItem.name ?? '')),
+                  trailing: IconButton(
+                    icon: isSelected
+                        ? const Icon(Icons.check_box)
+                        : const Icon(Icons.check_box_outline_blank),
+                    onPressed: () {
+                      if (isSelected) {
+                        _removeSwitchFromGroup(switchItem);
                       } else {
-                        selectedSwitches.add(switchItem);
+                        _addSwitchToGroup(switchItem);
                       }
-                    });
-                  },
-                ),
-              );
-            },
-          );
+                    },
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ButtonIcon(
         onPressed: () async {
-          Map<String, dynamic> data = {
-            'groupId': widget.groupId,
-            'switches': selectedSwitches
-                .map((switchModel) => switchModel.userId)
-                .toList(),
-          };
-          print(data);
-          try {
-            await widget.addSwitchToGroup(data);
-          } catch (error) {
-            print('Erro ao adicionar switches ao grupo: $error');
-          }
+          // Adicionar lógica adicional de salvamento se necessário
         },
         labelText: 'Save',
         icon: const Icon(Icons.save),
