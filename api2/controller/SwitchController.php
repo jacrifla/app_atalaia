@@ -191,7 +191,7 @@ class SwitchController
             $data = $request->bodyJson();
             $userId = $data['user_id'];
             
-            $switches = SwitchModel::getSwitches($userId);
+            $switches = SwitchModel::getSwitchesWithoutGroup($userId);
             
             if ($switches) {
                 return $response::json([
