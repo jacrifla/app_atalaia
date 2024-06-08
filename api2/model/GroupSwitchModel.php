@@ -240,7 +240,7 @@ class GroupSwitchModel
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            $stmt = $pdo->prepare('UPDATE tb_group SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ?');
+            $stmt = $pdo->prepare('UPDATE tb_group SET deleted_at = CURRENT_TIMESTAMP WHERE uuid = ? AND deleted_at IS NULL');
             $stmt->execute([$groupId]);
 
             return ($stmt->rowCount() > 0);
