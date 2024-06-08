@@ -1,11 +1,13 @@
-import 'package:app_atalaia/utils/auth_provider.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/auth_provider.dart';
+import '../model/group_model.dart';
 import '../provider/group_provider.dart';
 
 class GroupController extends ChangeNotifier {
   final GroupProvider provider;
   final String userId = AuthProvider().userId!;
+  final GroupModel groupModel = GroupModel();
 
   GroupController({required this.provider});
 
@@ -175,7 +177,6 @@ class GroupController extends ChangeNotifier {
     try {
       Map<String, dynamic> response =
           await provider.removeSwitchFromGroup(macAddress);
-      print(response);
       if (response['status'] == 'success') {
         return true;
       } else {
@@ -203,6 +204,24 @@ class GroupController extends ChangeNotifier {
       }
     } catch (error) {
       throw ('Erro ao deletar grupo: $error');
+    }
+  }
+
+  // Retorna todos os grupos associados ao usuário
+  Future<List<GroupModel>> getAllGroups() async {
+    try {
+      final List<String> groupIds = await getGroupsIds();
+      final List<GroupModel> groups = [];
+
+      for (final groupId in groupIds) {
+        final groupData = await getOneGroup(groupId);
+        final group = GroupModel.fromJsonMap(groupData);
+        groups.add(group);
+      }
+
+      return groups;
+    } catch (error) {
+      throw ('Erro ao obter todos os grupos: $error');
     }
   }
 
