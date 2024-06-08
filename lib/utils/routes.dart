@@ -12,6 +12,7 @@ import '../view/loading_screen.dart';
 import '../view/monitor_switch_screen.dart';
 import '../view/recover_confirmation_screen.dart';
 import '../view/recover_screen.dart';
+import '../view/select_switches_screen.dart';
 import '../view/switch_create_screen.dart';
 import '../view/switch_edit_screen.dart';
 import '../view/switch_screen.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
   static const String switchCreate = '/switch_create';
   static const String switchEdit = '/switch_edit';
   static const String userProfile = '/profile';
+  static const String selectSwitch = '/select_switch';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -64,6 +66,7 @@ class AppRoutes {
       switchCreate: (context) => const SwitchCreateScreen(),
       switchEdit: (context) => EditSwitchScreen(switchModel: SwitchModel()),
       userProfile: (context) => const PerfilScreen(),
+      selectSwitch: (context) => const SwitchSelectionScreen(),
     };
   }
 }
