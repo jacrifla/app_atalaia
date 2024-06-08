@@ -132,8 +132,8 @@ class GroupSwitchController
             $data['group_id'] = $groupInfo['id'];
             $toggle            = GroupSwitchModel::toggleGroup($data);
             if($toggle){
-                if(GroupSwitchModel::getSwitchesInGroup($data['group_id'])){
-                    GroupSwitchModel::toggleSwitches($data);
+                if($switches = GroupSwitchModel::getSwitchesInGroup($data['group_id'])){
+                    GroupSwitchModel::toggleSwitches($switches);
                 }else{
                     $toggle ='Não há switches nesse grupo';
                 }
