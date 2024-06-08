@@ -125,17 +125,17 @@ class GroupSwitchController
     public function toggleGroup(Request $request, Response $response)
     {
         try {
-            
             $data = $request->bodyJson();
-            $data             = $request->bodyJson();
-            $groupInfo        = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
+            $groupInfo = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
             $data['group_id'] = $groupInfo['id'];
-            $toggle            = GroupSwitchModel::toggleGroup($data);
-            if($toggle){
-                if($switches = GroupSwitchModel::getSwitchesInGroup($data['group_id'])){
-                    GroupSwitchModel::toggleSwitches($switches);
-                }else{
-                    $toggle ='Não há switches nesse grupo';
+            
+            $toggle = GroupSwitchModel::toggleGroup($data);
+            if ($toggle) {
+                $switches = GroupSwitchModel::getSwitchesInGroup($data['group_id']);
+                if ($switches) {
+                    $toggle = GroupSwitchModel::toggleSwitches($data['group_id'], $data['is_active']);
+                } else {
+                    $toggle = 'Não há switches nesse grupo';
                 }
             }
             
@@ -144,14 +144,12 @@ class GroupSwitchController
                     'status' => 'success',
                     'dados' => $toggle
                 ], 200);
-            }else {
+            } else {
                 $response::json([
                     'status' => 'error',
                     'msg' => 'Internal Error'
                 ], 400);
             }
-            
-            
         } catch (\Exception $e) {
             $response::json([
                 'status' => 'error',

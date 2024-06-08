@@ -124,7 +124,6 @@ class GroupSwitchModel
     public static function toggleGroup($data)
     {
         try {
-            // var_dump("data: ", $data);
             $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('
@@ -144,17 +143,18 @@ class GroupSwitchModel
         }
     }
 
-    public static function toggleSwitches(array $data)
+    public static function toggleSwitches($groupId, $isActive)
     {
         try {
-
             $pdo = ConnectionMYSQL::getInstance();
-            // Preparar a consulta SQL
-            $sql = "UPDATE tb_switch SET is_active = ? WHERE group_id = ?";
-            $stmt = $pdo->prepare($sql);
-    
-            $stmt->bindParam(1, $data['is_active'], PDO::PARAM_INT);
-            $stmt->bindParam(2, $data['group_id'], PDO::PARAM_INT);
+
+            $stmt = $pdo->prepare('
+                UPDATE tb_switch
+                SET is_active = ?
+                WHERE group_id = ?
+            ');
+            $stmt->bindParam(1, $isActive, PDO::PARAM_INT);
+            $stmt->bindParam(2, $groupId, PDO::PARAM_INT);
             $stmt->execute();
 
             return ($stmt->rowCount() > 0);
@@ -163,7 +163,6 @@ class GroupSwitchModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
     public static function addSwitchToGroup(array $data)
