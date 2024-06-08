@@ -1,41 +1,39 @@
+import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../utils/auth_provider.dart';
-import '../widgets/button_icon.dart';
-import '../widgets/header.dart';
-import '../widgets/menu.dart';
 import '../controller/group_controller.dart';
-import 'group_create_screen.dart';
 import '../model/group_model.dart';
-import '../widgets/group_content.dart';
+import '../provider/group_provider.dart';
+import '../widgets/button_icon.dart';
+import '../widgets/group_card_actions.dart';
+import '../widgets/header_screen.dart';
+import 'group_create_screen.dart';
 
 class GroupScreen extends StatefulWidget {
-  const GroupScreen({super.key});
+  const GroupScreen({Key? key}) : super(key: key);
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
 }
 
 class _GroupScreenState extends State<GroupScreen> {
-  late Future<List<GroupModel>> _groupsFuture;
-  final GroupController _groupController = GroupController();
+  final GroupProvider groupProvider = GroupProvider();
+  late final GroupController ctlGroupController;
+
+  // Lista para armazenar os grupos obtidos
+  List<GroupModel> groups = [];
 
   @override
   void initState() {
+    ctlGroupController = GroupController(provider: groupProvider);
+    _loadGroups(); // Carrega os grupos ao iniciar a tela
     super.initState();
-    _loadGroups();
   }
 
-  void _loadGroups() {
+  // Método para carregar os grupos
+  void _loadGroups() async {
+    List<GroupModel> loadedGroups = await ctlGroupController.getAllGroups();
     setState(() {
-      _groupsFuture = _groupController.loadGroups();
-    });
-  }
-
-  void _refreshGroups() {
-    setState(() {
-      _loadGroups();
+      groups = loadedGroups;
     });
   }
 
@@ -46,52 +44,57 @@ class _GroupScreenState extends State<GroupScreen> {
     );
   }
 
+  void _refreshGroups() {
+    setState(() {
+      _loadGroups();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final userId = authProvider.userId;
-
-    if (userId == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('Erro: usuário não autenticado'),
-        ),
-      );
-    }
-
-    return Scaffold(
-      appBar: const Header(title: 'Grupos'),
-      endDrawer: const MenuDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: GroupContent(
-                groupsFuture: _groupsFuture,
-                isDeleting: true,
-              ),
-            ),
-          ],
-        ),
+    return HeaderScreen(
+      title: 'Grupos',
+      body: FutureBuilder(
+        future: ctlGroupController.getAllGroups(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Erro ao carregar grupos: ${snapshot.error}'),
+            );
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return GroupCardActions(
+                  groupModel: groups[index],
+                );
+              },
+            );
+          }
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIcon(
-              labelText: 'Criar Novo Grupo',
+              labelText: 'Criar Grupo',
               onPressed: () => _navigateToCreateGroup(context),
               icon: const Icon(Icons.add),
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: appTheme.colorScheme.primary,
             ),
             ButtonIcon(
-              labelText: 'Atualizar Grupos',
+              labelText: 'Atualizar',
               onPressed: _refreshGroups,
               icon: const Icon(Icons.refresh),
-              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              backgroundColor: appTheme.colorScheme.onSecondary,
             ),
           ],
         ),
