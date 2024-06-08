@@ -1,13 +1,12 @@
+import 'package:app_atalaia/model/group_model.dart';
 import 'package:flutter/material.dart';
-
-import 'success_screen.dart';
-import 'error_screen.dart';
-import '../utils/routes.dart';
 import '../provider/group_provider.dart';
 import '../controller/group_controller.dart';
-import '../widgets/header.dart';
-import '../widgets/menu.dart';
+import '../utils/routes.dart';
 import '../widgets/button_icon.dart';
+import '../widgets/header_screen.dart';
+import 'error_screen.dart';
+import 'success_screen.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -17,18 +16,19 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
+  late final GroupModel groupModel;
   final GroupProvider groupProvider = GroupProvider();
   late final GroupController ctlGroupController;
   final TextEditingController _inputGroupName = TextEditingController();
   final TextEditingController _inputActiveHours = TextEditingController();
-  bool keepActive = false;
   bool autoActivationTime = false;
   TimeOfDay fromTime = TimeOfDay.now();
   TimeOfDay toTime = TimeOfDay.now();
 
   @override
   void initState() {
-    ctlGroupController = GroupController(groupProvider);
+    ctlGroupController = GroupController(provider: groupProvider);
+    groupModel = GroupModel();
     super.initState();
   }
 
@@ -42,21 +42,16 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   Future<void> _createGroup(BuildContext context) async {
     try {
       await ctlGroupController.createGroup(
-        name: _inputGroupName.text.toLowerCase(),
-        isActive: false,
-        scheduleActive: autoActivationTime,
-        scheduleStart: _formatTimeOfDayToString(fromTime),
-        scheduleEnd: _formatTimeOfDayToString(toTime),
-        keepFor: _inputActiveHours.text,
+        _inputGroupName.text.toLowerCase(),
+        true,
+        autoActivationTime,
+        groupModel.formatTimeOfDayToString(fromTime),
+        groupModel.formatTimeOfDayToString(toTime),
       );
       _navigateToSuccessScreen(context);
     } catch (error) {
       _navigateToErrorScreen(context, error.toString());
     }
-  }
-
-  String _formatTimeOfDayToString(TimeOfDay time) {
-    return '${time.hour}:${time.minute}';
   }
 
   void _navigateToSuccessScreen(BuildContext context) {
@@ -124,9 +119,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const Header(title: 'Criar Grupo'),
-      endDrawer: const MenuDrawer(),
+    return HeaderScreen(
+      title: 'Criar Grupo',
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Center(
@@ -149,51 +143,25 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                 maxLength: 20,
               ),
               const SizedBox(height: 16.0),
-              CheckboxListTile(
-                title: const Text('Ativo quantas horas?'),
-                value: keepActive,
-                onChanged: (value) {
-                  setState(() {
-                    keepActive = value ?? false;
-                    autoActivationTime = !keepActive;
-                  });
-                },
+              Row(
+                children: [
+                  _buildTimePickerField(context, true),
+                  const SizedBox(width: 8),
+                  _buildTimePickerField(context, false),
+                ],
               ),
-              if (keepActive)
-                TextFormField(
-                  controller: _inputActiveHours,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Ativar por (horas)',
-                  ),
-                ),
-              CheckboxListTile(
-                title: const Text('Definir um Horário de Ativação Automática?'),
-                value: autoActivationTime,
-                onChanged: (value) {
-                  setState(() {
-                    autoActivationTime = value ?? false;
-                    keepActive = !autoActivationTime;
-                  });
-                },
-              ),
-              if (autoActivationTime)
-                Row(
-                  children: [
-                    _buildTimePickerField(context, true),
-                    const SizedBox(width: 8),
-                    _buildTimePickerField(context, false),
-                  ],
-                ),
             ],
           ),
         ),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ButtonIcon(
-          labelText: 'Criar Grupo',
-          onPressed: () => _createGroup(context),
+        child: SizedBox(
+          width: double.infinity,
+          child: ButtonIcon(
+            labelText: 'Criar Grupo',
+            onPressed: () => _createGroup(context),
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
