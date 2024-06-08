@@ -22,24 +22,18 @@ class EditGroupScreen extends StatefulWidget {
 class _EditGroupScreenState extends State<EditGroupScreen> {
   final GroupProvider groupProvider = GroupProvider();
   late final GroupController ctlGroupController;
-  late bool keepActive;
-  late bool autoActivationTime;
   final TextEditingController _inputNomeGrupo = TextEditingController();
   final TextEditingController _inputScheduleStart = TextEditingController();
   final TextEditingController _inputScheduleEnd = TextEditingController();
-  final TextEditingController _inputActiveHours = TextEditingController();
   TimeOfDay fromTime = TimeOfDay.now();
   TimeOfDay toTime = TimeOfDay.now();
 
   @override
   void initState() {
-    ctlGroupController = GroupController(groupProvider);
+    ctlGroupController = GroupController(provider: groupProvider);
     _inputNomeGrupo.text = widget.groupInfo.groupName ?? "";
     _inputScheduleStart.text = widget.groupInfo.scheduleStart ?? "";
     _inputScheduleEnd.text = widget.groupInfo.scheduleEnd ?? "";
-    _inputActiveHours.text = widget.groupInfo.keepFor ?? "";
-    keepActive = widget.groupInfo.keepFor != null;
-    autoActivationTime = widget.groupInfo.scheduleActive!;
     super.initState();
   }
 
@@ -48,22 +42,19 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
     _inputNomeGrupo.dispose();
     _inputScheduleStart.dispose();
     _inputScheduleEnd.dispose();
-    _inputActiveHours.dispose();
     super.dispose();
   }
 
   Future<void> _saveChanges() async {
-    final updatedGroup = {
-      'group_id': widget.groupInfo.groupId,
-      'name': _inputNomeGrupo.text,
-      'schedule_active': autoActivationTime,
-      'schedule_start': _inputScheduleStart.text,
-      'schedule_end': _inputScheduleEnd.text,
-      'keep_for': keepActive ? _inputActiveHours.text : null,
-    };
-
     try {
-      await ctlGroupController.updateGroupInfo(updatedGroup);
+      await ctlGroupController.updateGroup(
+        widget.groupInfo.groupId!,
+        _inputNomeGrupo.text,
+        true,
+        true,
+        _inputScheduleStart.text,
+        _inputScheduleEnd.text,
+      );
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -151,43 +142,16 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
                   }
                   return null;
                 },
-                maxLength: 24,
+                maxLength: 20,
               ),
               const SizedBox(height: 16.0),
-              CheckboxListTile(
-                title: const Text('Ativo por quantas horas?'),
-                value: keepActive,
-                onChanged: (value) {
-                  setState(() {
-                    keepActive = value ?? false;
-                    autoActivationTime = !keepActive;
-                  });
-                },
+              Row(
+                children: [
+                  _buildTimePickerField(context, true),
+                  const SizedBox(width: 8.0),
+                  _buildTimePickerField(context, false),
+                ],
               ),
-              if (keepActive)
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Ativo por (horas)'),
-                  controller: _inputActiveHours,
-                ),
-              CheckboxListTile(
-                title: const Text('Definir um Horário de Ativação Automática?'),
-                value: autoActivationTime,
-                onChanged: (value) {
-                  setState(() {
-                    autoActivationTime = value ?? false;
-                    keepActive = !autoActivationTime;
-                  });
-                },
-              ),
-              if (autoActivationTime)
-                Row(
-                  children: [
-                    _buildTimePickerField(context, true),
-                    const SizedBox(width: 8.0),
-                    _buildTimePickerField(context, false),
-                  ],
-                ),
             ],
           ),
         ),
