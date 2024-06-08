@@ -5,14 +5,13 @@ import '../utils/auth_provider.dart';
 
 class SwitchController extends ChangeNotifier {
   final SwitchProvider _switchProvider;
-  final AuthProvider _authProvider = AuthProvider();
+  final String userId = AuthProvider().userId!;
 
   SwitchController(this._switchProvider);
 
   Future<bool> createSwitch(
       String name, String watts, String macAddress) async {
     try {
-      final userId = await getUserId();
       final result = await _switchProvider.createSwitch(
         name,
         watts,
@@ -29,7 +28,6 @@ class SwitchController extends ChangeNotifier {
 
   Future<List<SwitchModel>> getSwitches() async {
     try {
-      final userId = await getUserId();
       final switches = await _switchProvider.getSwitches(userId);
       notifyListeners();
       return switches;
@@ -73,7 +71,6 @@ class SwitchController extends ChangeNotifier {
   Future<bool> toggleSwitch(
       {required String macAddress, required bool isActive}) async {
     try {
-      final userId = await getUserId();
       final Map<String, dynamic> data = {
         'mac_address': macAddress,
         'user_id': userId,
@@ -85,13 +82,5 @@ class SwitchController extends ChangeNotifier {
     } catch (error) {
       return false;
     }
-  }
-
-  Future<String> getUserId() async {
-    final userId = _authProvider.userId;
-    if (userId == null) {
-      throw 'Usuário não autenticado';
-    }
-    return userId;
   }
 }
