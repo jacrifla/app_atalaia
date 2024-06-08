@@ -1,170 +1,208 @@
+import 'package:app_atalaia/utils/auth_provider.dart';
 import 'package:flutter/material.dart';
-import '../model/group_model.dart';
-import '../model/switch_model.dart';
+
 import '../provider/group_provider.dart';
-import '../utils/auth_provider.dart';
 
 class GroupController extends ChangeNotifier {
-  final GroupProvider _groupProvider = GroupProvider();
-  final AuthProvider _authProvider = AuthProvider();
-  String _userId = '';
+  final GroupProvider provider;
+  final String userId = AuthProvider().userId!;
 
-  GroupController() {
-    _userId = _authProvider.userId ?? '';
+  GroupController({required this.provider});
+
+  // Devolve a lista de groupIds que estao dentro do userId conectado
+  Future<List<String>> getGroupsIds() async {
+    try {
+      Map<String, dynamic> response = await provider.getGroups(userId);
+      if (response['status'] == 'success') {
+        List<dynamic> data = response['dados'];
+        List<String> groupIds =
+            data.map((group) => group['uuid'] as String).toList();
+        return groupIds;
+      } else {
+        throw ('Erro ao obter grupos');
+      }
+    } catch (error) {
+      throw ('Erro ao obter grupos: $error');
+    }
   }
 
-  Future<void> createGroup({
-    required String name,
-    required bool isActive,
-    required bool scheduleActive,
-    required String scheduleStart,
-    required String scheduleEnd,
-    required String keepFor,
-    int? activeHours,
-  }) async {
+  // Retorna as informacoes do grupo com base nas colunas da tabela
+  Future<Map<String, dynamic>> getOneGroup(String groupId) async {
     try {
-      final Map<String, dynamic> data = {
-        'name': name,
-        'is_active': isActive,
-        'schedule_active': scheduleActive,
-        'schedule_start': scheduleStart,
-        'schedule_end': scheduleEnd,
-        'keep_for': keepFor,
-        'user_id': await getUserId(),
+      Map<String, dynamic> response = await provider.getOneGroup(groupId);
+      if (response['status'] == 'success') {
+        return response['dados'];
+      } else {
+        throw ('Erro ao obter detalhes do grupo');
+      }
+    } catch (error) {
+      throw ('Erro ao obter detalhes do grupo: $error');
+    }
+  }
+
+  // Retorna o groupId do grupo criado
+  Future<String> createGroup(
+    String name,
+    bool isActive,
+    bool scheduleActive,
+    String scheduleStart,
+    String scheduleEnd,
+  ) async {
+    try {
+      Map<String, dynamic> requestData = {
+        "name": name,
+        "is_active": isActive,
+        "schedule_active": scheduleActive,
+        "schedule_start": scheduleStart,
+        "schedule_end": scheduleEnd,
+        "user_id": userId
+      };
+      Map<String, dynamic> response = await provider.createGroup(requestData);
+      if (response['status'] == 'success') {
+        return response['dados']['uuid'];
+      } else {
+        throw ('Erro ao criar grupo');
+      }
+    } catch (error) {
+      throw ('Erro ao criar grupo: $error');
+    }
+  }
+
+  // Retorna true ou erro
+  Future<bool> updateGroup(
+    String groupId,
+    String name,
+    bool isActive,
+    bool scheduleActive,
+    String scheduleStart,
+    String scheduleEnd,
+  ) async {
+    try {
+      Map<String, dynamic> requestData = {
+        "group_id": "41f886ea-245f-11ef-94a1-00090ffe0001",
+        "name": name,
+        "is_active": isActive,
+        "schedule_active": scheduleActive,
+        "schedule_start": scheduleStart,
+        "schedule_end": scheduleEnd,
       };
 
-      if (activeHours != null) {
-        data['active_hours'] = activeHours;
+      Map<String, dynamic> response = await provider.updateGroup(requestData);
+      if (response['status'] == 'success') {
+        return true;
+      } else {
+        throw ('Erro ao atualizar grupo');
       }
-
-      final response = await _groupProvider.createGroup(data);
-      _checkResponse(response);
-      return response['dados']['id'];
     } catch (error) {
-      throw error.toString();
+      throw ('Erro ao atualizar grupo: $error');
     }
   }
 
-  Future<GroupModel> getOneGroup(String groupId) async {
+  // Retorna true ou erro
+  Future<bool> toggleGroup(String groupId, bool isActive) async {
     try {
-      final response = await _groupProvider.getOneGroup(groupId);
-      _checkResponse(response);
-      return GroupModel.fromJson(response['dados']);
+      Map<String, dynamic> requestData = {
+        'group_id': groupId,
+        'is_active': isActive,
+      };
+      Map<String, dynamic> response = await provider.toggleGroup(requestData);
+      if (response['status'] == 'success') {
+        return true;
+      } else {
+        throw ('Erro ao alternar estado do grupo');
+      }
     } catch (error) {
-      throw error.toString();
+      throw ('Erro ao alternar estado do grupo: $error');
     }
   }
 
+  // Retorna true ou erro
+  Future<bool> addSwitchToGroup(String groupId, String macAddress) async {
+    try {
+      Map<String, dynamic> requestData = {
+        'group_id': groupId,
+        'mac_address': macAddress,
+      };
+      Map<String, dynamic> response =
+          await provider.addSwitchToGroup(requestData);
+      if (response['status'] == 'success') {
+        return true;
+      } else {
+        throw ('Erro ao adicionar switch ao grupo');
+      }
+    } catch (error) {
+      throw ('Erro ao adicionar switch ao grupo: $error');
+    }
+  }
+
+  // retorna uma lista dos switches com todas as info dele ques estao dentro do grupo
+  Future<List<Map<String, dynamic>>> getSwitchesInGroup(String groupId) async {
+    try {
+      Map<String, dynamic> response =
+          await provider.getSwitchesInGroup(groupId);
+      if (response['status'] == 'success') {
+        List<dynamic> data = response['dados'];
+
+        return data
+            .map((switchData) => switchData as Map<String, dynamic>)
+            .toList();
+      } else {
+        throw ('Erro ao obter switches do grupo');
+      }
+    } catch (error) {
+      throw ('Erro ao obter switches do grupo: $error');
+    }
+  }
+
+  // Retorna true ou erro
   Future<bool> checkSwitchInGroup(String macAddress) async {
     try {
-      final response = await _groupProvider.checkSwitchInGroup(macAddress);
-      _checkResponse(response);
-      return true;
-    } catch (error) {
-      throw error.toString();
-    }
-  }
+      Map<String, dynamic> response =
+          await provider.checkSwitchInGroup(macAddress);
 
-  Future<List<SwitchModel>> getSwitchesInGroup(String groupId) async {
-    try {
-      final response = await _groupProvider.getSwitchesInGroup(groupId);
-      _checkResponse(response);
-      return [];
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<List<GroupModel>> getGroups() async {
-    try {
-      final userId = await getUserId();
-      final response = await _groupProvider.getGroups(userId);
-      _checkResponse(response);
-      List<GroupModel> groups = [];
-      for (var groupData in response['dados']) {
-        final groupDetails = await getOneGroup(groupData['uuid']);
-        groups.add(groupDetails);
-      }
-      return groups;
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<bool> toggleGroup(Map<String, dynamic> data) async {
-    try {
-      final response = await _groupProvider.toggleGroup(data);
-      _checkResponse(response);
-      if (response['msg'] is bool) {
-        return response['msg'];
+      if (response['status'] == 'success') {
+        return true;
       } else {
-        return response['msg'] == 'active';
+        throw ('Erro ao verificar switch no grupo');
       }
     } catch (error) {
-      throw error.toString();
+      throw ('Erro ao verificar switch no grupo: $error');
     }
   }
 
-  Future<void> addSwitchToGroup(Map<String, dynamic> data) async {
+  // Retorna true ou erro
+  Future<bool> removeSwitchFromGroup(String macAddress) async {
     try {
-      final response = await _groupProvider.addSwitchToGroup(data);
-      _checkResponse(response);
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<void> removeSwitchFromGroup(String macAddress) async {
-    try {
-      final response = await _groupProvider.removeSwitchFromGroup(macAddress);
-      _checkResponse(response);
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<void> updateGroupInfo(Map<String, dynamic> data) async {
-    try {
-      final response = await _groupProvider.updateGroupInfo(data);
-      _checkResponse(response);
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<void> deleteGroup(String groupId) async {
-    try {
-      final response = await _groupProvider.deleteGroup(groupId);
-      _checkResponse(response);
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<List<GroupModel>> loadGroups() async {
-    try {
-      final userId = await getUserId();
-      final response = await _groupProvider.getGroups(userId);
-      _checkResponse(response);
-      List<GroupModel> groups = [];
-      for (var groupData in response['dados']) {
-        final groupId = groupData['uuid'];
-        final groupDetails = await getOneGroup(groupId);
-        groups.add(groupDetails);
+      Map<String, dynamic> response =
+          await provider.removeSwitchFromGroup(macAddress);
+      print(response);
+      if (response['status'] == 'success') {
+        return true;
+      } else {
+        throw ('Erro ao remover switch do grupo');
       }
-      return groups;
     } catch (error) {
-      throw error.toString();
+      throw ('Erro ao remover switch do grupo: $error');
     }
   }
 
-  Future<String> getUserId() async {
-    return _userId;
-  }
+  // Retorna sempre sucesso
+  Future<bool> deleteGroup(String groupId, [List<String>? macAddresses]) async {
+    try {
+      macAddresses ??= [];
 
-  void _checkResponse(Map<String, dynamic> response) {
-    if (response['status'] != 'success') {
-      throw response['msg'];
+      Map<String, dynamic> requestData = {
+        'group_id': groupId,
+        'mac_addresses': macAddresses,
+      };
+      Map<String, dynamic> response = await provider.deleteGroup(requestData);
+      if (response['status'] == 'success') {
+        return true;
+      } else {
+        throw ('Erro ao deletar grupo');
+      }
+    } catch (error) {
+      throw ('Erro ao deletar grupo: $error');
     }
   }
 }
