@@ -35,8 +35,7 @@ class ButtonIcon extends StatelessWidget {
           ),
         ),
         side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
-        minimumSize: MaterialStateProperty.all(
-            const Size(120, 50)), // Ajuste o tamanho aqui conforme necessário
+        minimumSize: MaterialStateProperty.all(const Size(120, 50)),
       ),
     );
   }
