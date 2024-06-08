@@ -32,3 +32,28 @@ bool isValidMacAddress(String mac) {
   );
   return macRegExp.hasMatch(mac);
 }
+
+String? validatePassword(String value) {
+  // Verifica se a senha tem pelo menos 8 caracteres
+  if (value.length < 8) {
+    return 'A senha deve ter pelo menos 8 caracteres';
+  }
+
+  // Verifica se a senha contém pelo menos um número
+  if (!RegExp(r'[0-9]').hasMatch(value)) {
+    return 'A senha deve conter pelo menos um número';
+  }
+
+  // Verifica se a senha contém pelo menos um caractere especial
+  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+    return 'A senha deve conter pelo menos um caractere especial';
+  }
+
+  // Verifica se a senha contém pelo menos uma letra
+  if (!RegExp(r'[a-zA-Z]').hasMatch(value)) {
+    return 'A senha deve conter pelo menos uma letra';
+  }
+
+  // Se todos os critérios forem atendidos, retorna null
+  return null;
+}

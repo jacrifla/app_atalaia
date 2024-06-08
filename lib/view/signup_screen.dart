@@ -164,15 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           labelText: 'Digite sua senha',
                           hintText: '*********',
                           icon: const Icon(Icons.key_outlined),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '* Digite sua senha';
-                            }
-                            if (value.length < 8) {
-                              return '* Senha deve ter no mínimo 8 caracteres';
-                            }
-                            return null;
-                          },
+                          validator: (value) => validatePassword(value!),
                         ),
                         BuildInput(
                           isPassword: true,

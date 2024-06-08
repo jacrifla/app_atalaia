@@ -3,13 +3,11 @@
 import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
-import '../utils/auth_provider.dart';
 import '../utils/utils.dart';
 import '../view/error_screen.dart';
 
 class UserController with ChangeNotifier {
   final UserProvider _userProvider;
-  final AuthProvider _authProvider = AuthProvider();
 
   UserController(this._userProvider);
 
@@ -145,10 +143,6 @@ class UserController with ChangeNotifier {
         'status': 'error',
         'message': 'Senha deve ter no mínimo 8 caracteres'
       };
-    }
-
-    if (!_authProvider.isAuthenticated()) {
-      return {'status': 'error', 'message': 'Usuário não autenticado'};
     }
 
     try {
