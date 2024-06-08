@@ -1,14 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../themes/theme.dart';
 import '../controller/group_controller.dart';
+import '../provider/group_provider.dart';
+import '../model/group_model.dart';
+import '../utils/utils.dart';
 import '../view/group_edit_screen.dart';
 import '../view/select_switches_screen.dart';
-import '../model/group_model.dart';
 
-class GroupCardActions extends StatelessWidget {
-  final GroupModel groupInfo;
+class GroupCardActions extends StatefulWidget {
+  final GroupModel groupModel;
 
-  const GroupCardActions({super.key, required this.groupInfo});
+  const GroupCardActions({super.key, required this.groupModel});
+
+  @override
+  State<GroupCardActions> createState() => _GroupCardActionsState();
+}
+
+class _GroupCardActionsState extends State<GroupCardActions> {
+  final GroupProvider groupProvider = GroupProvider();
+  late final GroupController ctlGroupController;
+  late List<GroupModel> groups;
+
+  @override
+  void initState() {
+    ctlGroupController = GroupController(provider: groupProvider);
+    _loadGroups(); // Carrega os grupos ao iniciar o widget
+    super.initState();
+  }
+
+  // Método para carregar os grupos
+  void _loadGroups() async {
+    List<GroupModel> loadedGroups = await ctlGroupController.getAllGroups();
+    setState(() {
+      groups = loadedGroups;
+    });
+  }
+
+  // Método para excluir o grupo
+  Future<void> _deleteGroup(String groupId) async {
+    try {
+      bool confirmed = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirmar exclusão'),
+            content: const Text('Tem certeza que deseja excluir este grupo?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Confirmar'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirmed == true) {
+        // Chame o método de exclusão do controlador
+        await ctlGroupController.deleteGroup(groupId);
+        // Atualize a lista de grupos após a exclusão
+        _loadGroups();
+        // Exiba uma mensagem informando que o grupo foi excluído com sucesso
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Grupo excluído com sucesso'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao excluir grupo: $error'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +108,16 @@ class GroupCardActions extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.group,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: appTheme.primaryColor,
                     size: 28,
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    groupInfo.groupName ?? 'Unknown',
+                    toCapitalizeWords(widget.groupModel.groupName ?? 'Unknown'),
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: appTheme.primaryColor,
                       fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -65,7 +137,7 @@ class GroupCardActions extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditGroupScreen(
-                            groupInfo: groupInfo,
+                            groupInfo: widget.groupModel,
                           ),
                         ),
                       );
@@ -82,12 +154,8 @@ class GroupCardActions extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SwitchSelectionScreen(
-                            groupId:
-                                groupInfo.groupId, // Passando o groupId aqui
-                            addSwitchToGroup: (Map<String, dynamic> data) {
-                              data['groupId'] = groupInfo.groupId;
-                            },
-                            groupName: groupInfo.groupName ?? 'Unknown',
+                            groupId: widget.groupModel.groupId,
+                            groupName: widget.groupModel.groupName ?? 'Unknown',
                           ),
                         ),
                       );
@@ -99,20 +167,7 @@ class GroupCardActions extends StatelessWidget {
                       color: Colors.red,
                       size: 28,
                     ),
-                    onPressed: () async {
-                      try {
-                        final groupId = groupInfo.groupId;
-                        if (groupId != null) {
-                          await Provider.of<GroupController>(context,
-                                  listen: false)
-                              .deleteGroup(groupId);
-                        } else {
-                          print('groupId is null. Cannot delete group.');
-                        }
-                      } catch (error) {
-                        print('Erro ao excluir o grupo: $error');
-                      }
-                    },
+                    onPressed: () => _deleteGroup(widget.groupModel.groupId!),
                   ),
                 ],
               ),
