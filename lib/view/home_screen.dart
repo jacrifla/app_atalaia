@@ -1,53 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../controller/group_controller.dart';
 import '../controller/switch_controller.dart';
-import '../model/group_model.dart';
-import '../model/switch_model.dart';
-import '../utils/auth_provider.dart';
-import '../widgets/group_content.dart';
+import '../provider/group_provider.dart';
+import '../provider/switch_provider.dart';
 import '../widgets/guard_card.dart';
 import '../widgets/menu.dart';
-import '../widgets/switch_content.dart';
+import '../widgets/group_card_toggle.dart';
+import '../model/group_model.dart';
+import '../model/switch_model.dart';
+import '../widgets/switch_card_toggle.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final SwitchProvider switchProvider = SwitchProvider();
+  final GroupProvider groupProvider = GroupProvider();
+  late final SwitchController ctlSwitchController;
+  late final GroupController ctlGroupController;
   int _selectedIndex = 0;
-  late Future<List<SwitchModel>> _switchesFuture;
-  late Future<List<GroupModel>> _groupsFuture;
+  late List<GroupModel> userGroups = [];
+  late List<SwitchModel> userSwitches = [];
 
   @override
   void initState() {
     super.initState();
-    _switchesFuture =
-        Provider.of<SwitchController>(context, listen: false).getSwitches();
-    _loadGroups();
+    ctlSwitchController = SwitchController(switchProvider);
+    ctlGroupController = GroupController(provider: groupProvider);
+    _loadData();
   }
 
-  Future<void> _loadGroups() async {
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-    if (userId != null) {
-      final groupController =
-          Provider.of<GroupController>(context, listen: false);
-      setState(() {
-        _groupsFuture = groupController.loadGroups();
-      });
-    } else {
-      _groupsFuture = Future.error('User ID is null');
-    }
+  Future<void> _loadData() async {
+    final groups = await ctlGroupController.getAllGroups();
+    final switches = await ctlSwitchController.getSwitches();
+    setState(() {
+      userGroups = groups;
+      userSwitches = switches;
+    });
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Widget _buildGroupCards() {
+    return ListView.builder(
+      itemCount: userGroups.length,
+      itemBuilder: (context, index) {
+        final group = userGroups[index];
+        return GroupCardToggle(groupModel: group);
+      },
+    );
+  }
+
+  Widget _buildSwitchCards() {
+    return ListView.builder(
+      itemCount: userSwitches.length,
+      itemBuilder: (context, index) {
+        final switchItem = userSwitches[index];
+        return SwitchCard(switchModel: switchItem);
+      },
+    );
+  }
+
+  Widget _buildSelectedScreen() {
+    switch (_selectedIndex) {
+      case 0:
+        return _buildGroupCards();
+      case 1:
+        return _buildSwitchCards();
+      default:
+        return Container();
+    }
   }
 
   @override
@@ -72,11 +103,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const GuardCard(),
             const SizedBox(height: 20),
             Expanded(
-              child: _selectedIndex == 0
-                  ? GroupContent(groupsFuture: _groupsFuture)
-                  : SwitchContent(
-                      selectedIndex: _selectedIndex,
-                      switchesFuture: _switchesFuture),
+              child: AnimatedBuilder(
+                animation: ctlSwitchController,
+                builder: (context, child) {
+                  return _buildSelectedScreen();
+                },
+              ),
             ),
           ],
         ),
