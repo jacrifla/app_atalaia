@@ -1,4 +1,5 @@
 class SwitchModel {
+  int? id;
   String? uuid;
   String? userId;
   String? groupId;
@@ -9,6 +10,7 @@ class SwitchModel {
   bool? guardActive;
 
   SwitchModel({
+    this.id,
     this.uuid,
     this.userId,
     this.groupId,
