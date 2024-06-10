@@ -25,7 +25,7 @@ class _SwitchScreenState extends State<SwitchScreen> {
   @override
   void initState() {
     super.initState();
-    ctlSwitchController = SwitchController(switchProvider);
+    ctlSwitchController = SwitchController(provider: switchProvider);
     _loadSwitches();
   }
 

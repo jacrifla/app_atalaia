@@ -27,7 +27,7 @@ class _SwitchCreateScreenState extends State<SwitchCreateScreen> {
 
   @override
   void initState() {
-    ctlSwitchController = SwitchController(switchProvider);
+    ctlSwitchController = SwitchController(provider: switchProvider);
     super.initState();
   }
 

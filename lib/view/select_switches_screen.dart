@@ -36,7 +36,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   void initState() {
     super.initState();
     groupController = GroupController(provider: groupProvider);
-    switchController = SwitchController(switchProvider);
+    switchController = SwitchController(provider: switchProvider);
     groupModel = GroupModel();
     futureSwitches = switchController.getSwitchesWithoutGroup();
   }

@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    ctlSwitchController = SwitchController(switchProvider);
+    ctlSwitchController = SwitchController(provider: switchProvider);
     ctlGroupController = GroupController(provider: groupProvider);
     _loadData();
   }

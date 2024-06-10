@@ -23,8 +23,9 @@ class _SwitchCardState extends State<SwitchCard> {
   @override
   void initState() {
     super.initState();
-    ctlSwitchController = SwitchController(switchProvider);
+    ctlSwitchController = SwitchController(provider: switchProvider);
     isActive = widget.switchModel.isActive!;
+    print("isActive: ${widget.switchModel.isActive}");
   }
 
   Future<void> _toggleSwitch() async {

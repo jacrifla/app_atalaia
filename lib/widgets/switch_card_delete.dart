@@ -29,7 +29,7 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
   @override
   void initState() {
     super.initState();
-    ctlSwitchController = SwitchController(switchProvider);
+    ctlSwitchController = SwitchController(provider: switchProvider);
   }
 
   Future<void> _confirmDelete() async {

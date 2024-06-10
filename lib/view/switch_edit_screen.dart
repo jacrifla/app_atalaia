@@ -20,6 +20,7 @@ class EditSwitchScreen extends StatefulWidget {
 }
 
 class _EditSwitchScreenState extends State<EditSwitchScreen> {
+  final SwitchProvider switchProvider = SwitchProvider();
   late final SwitchController ctlSwitchController;
   late TextEditingController _nameController;
   late TextEditingController _wattsController;
@@ -28,7 +29,7 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
   @override
   void initState() {
     super.initState();
-    ctlSwitchController = SwitchController(SwitchProvider());
+    ctlSwitchController = SwitchController(provider: switchProvider);
     _nameController = TextEditingController(text: widget.switchModel.name);
     _wattsController =
         TextEditingController(text: widget.switchModel.watts?.toString());
