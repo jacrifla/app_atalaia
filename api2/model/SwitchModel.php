@@ -54,9 +54,15 @@ class SwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('SELECT is_active 
-            FROM tb_switch 
-            WHERE mac_address = ?');
+            $stmt = $pdo->prepare('
+            SELECT 
+                s.is_active as is_active,
+                s.guard_active as guard_active,
+                IF(g.is_active IS NOT NULL, g.is_active, 0) as guard_is_on
+            FROM tb_switch s
+            INNER JOIN tb_user u ON u.id = s.user_id
+            INNER JOIN tb_guard g ON g.user_id = u.id
+            WHERE s.mac_address = ?');
             $stmt->execute([$mac_address]);
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
