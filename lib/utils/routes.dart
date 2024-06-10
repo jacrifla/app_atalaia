@@ -24,8 +24,6 @@ import '../view/signup_screen.dart';
 // import '../view/recover_screen.dart';
 
 class AppRoutes {
-  static const String errorScreen = '/error_screen';
-  static const String confirmScreen = '/confirm_screen';
   static const String guard = '/guard';
   static const String groupEdit = '/group_edit';
   static const String groupCreate = '/group_create';
@@ -38,7 +36,6 @@ class AppRoutes {
   static const String recover = '/recover';
   static const String recoverConfirmation = '/recover_confirmation';
   static const String signUp = '/register';
-  static const String successScreen = '/success_screen';
   static const String switchScreen = '/switch_screen';
   static const String switchCreate = '/switch_create';
   static const String switchEdit = '/switch_edit';
@@ -47,8 +44,6 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      // errorScreen: (context) => const ErrorScreen(),
-      // confirmScreen: (context) => const ConfirmationScreen(),
       guard: (context) => GuardManagementScreen(),
       groupEdit: (context) => EditGroupScreen(groupInfo: GroupModel()),
       groupCreate: (context) => const CreateGroupScreen(),
@@ -61,7 +56,6 @@ class AppRoutes {
       recover: (context) => const RecoverScreen(),
       recoverConfirmation: (context) => const RecoverConfirmationScreen(),
       signUp: (context) => const SignupScreen(),
-      // successScreen: (context) => const SuccessScreen(),
       switchScreen: (context) => const SwitchScreen(),
       switchCreate: (context) => const SwitchCreateScreen(),
       switchEdit: (context) => EditSwitchScreen(switchModel: SwitchModel()),
