@@ -7,9 +7,11 @@ Http::post('/register', 'RegisterController@createUser');
 Http::post('/user/update', 'UserController@updateUser');
 Http::post('/user/delete', 'UserController@deleteUser');
 Http::post('/user', 'UserController@getUserInfo');
+Http::post('/alluser', 'UserController@getAllUsers');
 
 // Switches
 Http::post('/switches', 'SwitchController@getSwitches');
+Http::post('/switcheactive', 'SwitchController@getSwitch');
 Http::post('/switches/withoutgroup', 'SwitchController@getSwitchesWithoutGroup');
 Http::post('/switches/getone', 'SwitchController@getSwitch');
 Http::post('/switches/new', 'SwitchController@createSwitch');
@@ -19,6 +21,7 @@ Http::post('/switches/delete', 'SwitchController@deleteSwitch');
 
 //Groups
 Http::post('/groups', 'GroupSwitchController@getGroups');
+Http::post('/groups/getgroupinfo', 'GroupSwitchController@getAllGroupInfo');
 Http::post('/groups/getone', 'GroupSwitchController@getOneGroup');
 Http::post('/groups/switches', 'GroupSwitchController@getSwitchesInGroup');
 Http::post('/groups/checkswitch', 'GroupSwitchController@checkSwitchInGroup');

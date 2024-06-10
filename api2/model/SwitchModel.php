@@ -5,6 +5,7 @@ require_once './core/ExceptionPdo.php';
 
 class SwitchModel
 {
+    // devolve todos os switches com base no uuid
     public static function getSwitches($userId)
     {
         
@@ -25,6 +26,7 @@ class SwitchModel
         }
     }
 
+    // Devolve os switches que nao estao no mesmo grupo
     public static function getSwitchesWithoutGroup($userId)
     {
         
@@ -46,6 +48,7 @@ class SwitchModel
         }
     }
 
+    // Devolve is_active ta ligado ou desligado
     public static function getSwitch($mac_address)
     {
         try {
@@ -63,6 +66,7 @@ class SwitchModel
             throw new \Exception($e->getMessage());
         }
     }
+    
     //Atualiza se o switch ta aceso ou apagado
     public static function toggleSwitch($data)
     {
@@ -81,7 +85,7 @@ class SwitchModel
         }
     }
 
-
+    // Verifica se um switch se esta vinculado a um usuario
     public static function checkSwitchExists($data){
         try {
             $pdo = ConnectionMYSQL::getInstance();
@@ -105,7 +109,7 @@ class SwitchModel
         }
     }
 
-
+    // Cria um switch no banco de dados
     public static function createSwitch(array $data)
     {
         try {
@@ -126,7 +130,7 @@ class SwitchModel
         }
     }
 
-    //Caso tente criar um switch novamente após ter deletado (softdelete) 
+    // Caso tente criar um switch novamente após ter deletado (softdelete) 
     public static function reactivateSwitch(array $data){
         try {
             $pdo = ConnectionMYSQL::getInstance();
@@ -142,6 +146,7 @@ class SwitchModel
         }
     }
 
+    // Edita nome, watts de um switch
     public static function updateSwitchInfo(array $data)
     {
         try {
@@ -158,6 +163,7 @@ class SwitchModel
         }
     }
 
+    // faz um soft delete no switch
     public static function softDelete($mac_address)
     {
         try {

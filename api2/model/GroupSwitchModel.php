@@ -5,6 +5,7 @@ require_once './core/ExceptionPdo.php';
 
 class GroupSwitchModel
 {
+    // Obtém os grupos do usuário com base no ID do usuário
     public static function getGroups($userId)
     {
         try {
@@ -25,6 +26,28 @@ class GroupSwitchModel
         }
     }
 
+    // Obtém todas as informações de um grupo com base no ID do usuário
+    public static function getAllGroupInfo($userId)
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+
+            $stmt = $pdo->prepare('SELECT g.uuid, g.name, g.is_active, g.schedule_active, g.schedule_start, g.schedule_end 
+            FROM tb_group g
+            JOIN tb_user u ON g.user_id = u.id
+            WHERE u.uuid = ?            
+            AND g.deleted_at IS NULL');
+            $stmt->execute([$userId]);
+
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    // Obtém informações de um grupo com base no ID do grupo
     public static function getOneGroup($groupId)
     {
         try {
@@ -44,6 +67,7 @@ class GroupSwitchModel
         }
     }
 
+    // Cria um novo grupo com base nos dados fornecidos
     public static function createGroup(array $data)
     {
         try {
@@ -83,12 +107,13 @@ class GroupSwitchModel
         }
     }
 
+    // Atualiza as informações de um grupo com base nos dados fornecidos
     public static function updateGroupInfo(array $data)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-           // Prepara a query SQL para atualizar os dados do usuário
+           // Prepara a query SQL para atualizar os dados do grupo
            $sql = 'UPDATE tb_group SET ';
 
            // Monta a string SQL com os campos a serem atualizados e prepara os parâmetros
@@ -104,7 +129,7 @@ class GroupSwitchModel
            // Remove a última vírgula e espaço da string SQL
            $sql = rtrim($sql, ', ');
 
-           // Adiciona a cláusula WHERE para especificar o usuário a ser atualizado
+           // Adiciona a cláusula WHERE para especificar o grupo a ser atualizado
            $sql .= ' WHERE uuid = :uuid';
            $params[':uuid'] = $data['group_id'];
 
@@ -121,6 +146,7 @@ class GroupSwitchModel
         }
     }
 
+    // Alterna a ativação de um grupo com base nos dados fornecidos
     public static function toggleGroup($data)
     {
         try {
@@ -143,6 +169,7 @@ class GroupSwitchModel
         }
     }
 
+    // Alterna os switches de um grupo com base nos dados fornecidos
     public static function toggleSwitches($groupId, $isActive)
     {
         try {
@@ -165,13 +192,14 @@ class GroupSwitchModel
         }
     }
 
-    public static function addSwitchToGroup(array $data)
+    // Adiciona um switch a um grupo com base no ID do grupo e no endereço MAC do switch
+    public static function addSwitchToGroup($groupId, $mac_address)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
             $stmt = $pdo->prepare('UPDATE tb_switch SET group_id = ? WHERE mac_address = ?');
-            $stmt->execute([$data['group_id'],$data['mac_address'] ]);
+            $stmt->execute([$groupId, $mac_address]);
 
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
@@ -179,9 +207,9 @@ class GroupSwitchModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
+    // Obtém os switches em um grupo com base no ID do grupo
     public static function getSwitchesInGroup($groupId)
     {
         try {
@@ -201,6 +229,7 @@ class GroupSwitchModel
         }
     }
 
+    // Verifica se um switch está em um grupo com base no endereço MAC
     public static function checkSwitchInGroup($mac_address)
     {
         try{
@@ -218,6 +247,7 @@ class GroupSwitchModel
 
     }
 
+    // Remove um switch de um grupo com base no endereço MAC
     public static function removeSwitchFromGroup($mac_address)
     {
         try {
@@ -235,6 +265,7 @@ class GroupSwitchModel
 
     }
 
+    // Remove logicamente um grupo com base no ID do grupo
     public static function softDelete($groupId)
     {
         try {
@@ -250,15 +281,12 @@ class GroupSwitchModel
         }
     }
 
+    // Remove todos os switches de um grupo com base no ID do grupo
     public static function removeAllSwitchesFromGroup($groupId)
     {
         try {
-
-            // var_dump("mac_addresses" , $mac_addresses);
             $pdo = ConnectionMYSQL::getInstance();
 
-          
-    
             // Preparar a consulta SQL
             $sql = "UPDATE tb_switch SET group_id = NULL WHERE group_id = ?";
             $stmt = $pdo->prepare($sql);
@@ -271,10 +299,11 @@ class GroupSwitchModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
-    public static function getGroupIdByUUID($groupId){
+    // Obtém o ID do grupo com base no UUID do grupo
+    public static function getGroupIdByUUID($groupId)
+    {
         try {
             $pdo = ConnectionMYSQL::getInstance();
     

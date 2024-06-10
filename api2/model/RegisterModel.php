@@ -5,8 +5,7 @@ require_once './core/ExceptionPdo.php';
 
 class RegisterModel
 {
-
-    
+    // Insere um novo registro de usuário no banco de dados.
     public static function insert(array $data)
     {
         try {
@@ -28,7 +27,5 @@ class RegisterModel
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-    }
-    
-    
+    }    
 }

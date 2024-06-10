@@ -5,6 +5,26 @@ require_once './core/ExceptionPdo.php';
 
 class UserModel
 {
+    // Puxa todos os usuários
+    public static function getAllUsers()
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+            $stmt = $pdo->prepare('
+                SELECT name, email, phone, uuid
+                FROM tb_user
+                WHERE deleted_at IS NULL
+            ');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    // Retorna o id do usuario com base no uuid
     public static function getUserByUUID($userId)
     {
         try {
@@ -24,6 +44,7 @@ class UserModel
         }
     }
 
+    // Retorna o id do usuario com base no email
     public static function checkUserExists(array $data)
     {
         try {
@@ -43,6 +64,7 @@ class UserModel
         }
     }
 
+    // Faz um update no na tabela de usuario, com base no uuid(user_id)
     public static function updateUserInfo(array $data)
     {
         try {
@@ -73,6 +95,7 @@ class UserModel
         }
     }
 
+    // Faz um soft delete na tabela usuarios e coloca a data da deleção
     public static function softDelete($userId)
     {
         try {
@@ -90,6 +113,7 @@ class UserModel
         }
     }
 
+    // Puxa o nome, email e telefone do usuario com base no uuid
     public static function getUserInfo($userId)
     {
         try {
