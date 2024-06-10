@@ -13,9 +13,9 @@ class GroupSwitchController
         try {
             
             $data = $request->bodyJson();
-            
+
             $data = GroupSwitchModel::getGroups($data['user_id']);
-            
+
             if ($data) {
                 $response::json([
                     'status' => 'success',

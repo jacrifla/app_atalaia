@@ -77,14 +77,22 @@ class GroupSwitchModel
             VALUES (UUID(), ?, ?, ?, ?, ?, ?)'
         );
 
-        $stmt->execute([
-            $data['name'], 
-            $data['is_active'],
-            $data['schedule_active'], 
-            $data['schedule_start'], 
-            $data['schedule_end'], 
-            $data['user_id']
-        ]);
+        // $stmt->execute([
+        //     $data['name'], 
+        //     $data['is_active'],
+        //     $data['schedule_active'], 
+        //     $data['schedule_start'], 
+        //     $data['schedule_end'], 
+        //     $data['user_id']
+        // ]);
+
+        $stmt->bindParam(1, $data['name'], PDO::PARAM_STR);
+        $stmt->bindParam(2, $data['is_active'], PDO::PARAM_INT);
+        $stmt->bindParam(3, $data['schedule_active'], PDO::PARAM_INT);
+        $stmt->bindParam(4, $data['schedule_start'], PDO::PARAM_STR);
+        $stmt->bindParam(5, $data['schedule_end'], PDO::PARAM_STR);
+        $stmt->bindParam(6, $data['user_id'], PDO::PARAM_STR);
+        $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
             // Recupera o último ID inserido
