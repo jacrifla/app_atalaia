@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'error_screen.dart';
 import '../provider/switch_provider.dart';
 import '../controller/switch_controller.dart';
 import '../utils/routes.dart';
-import '../view/success_screen.dart';
 import '../model/switch_model.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
@@ -53,34 +51,23 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
           macAddress: widget.switchModel.macAddress!,
         );
 
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(success
+                ? 'Ponto Editado'
+                : 'Falha ao atualizar o switch. Tente novamente mais tarde.'),
+            backgroundColor: success ? Colors.green : Colors.red,
+          ),
+        );
+
         if (success) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const SuccessScreen(
-                message: 'Ponto Editado',
-                screen: AppRoutes.switchScreen,
-              ),
-            ),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ErrorScreen(
-                message: 'Falha ao atualizar o switch.',
-                errorDescription: 'Tente novamente mais tarde.',
-              ),
-            ),
-          );
+          Navigator.of(context).pushReplacementNamed(AppRoutes.switchScreen);
         }
       } catch (error) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ErrorScreen(
-              message: 'Ocorreu um erro.',
-              errorDescription: error.toString(),
-            ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ocorreu um erro: $error'),
+            backgroundColor: Colors.red,
           ),
         );
       }

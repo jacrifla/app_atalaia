@@ -1,12 +1,10 @@
-import 'package:app_atalaia/model/group_model.dart';
 import 'package:flutter/material.dart';
-import '../provider/group_provider.dart';
-import '../controller/group_controller.dart';
 import '../utils/routes.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header_screen.dart';
-import 'error_screen.dart';
-import 'success_screen.dart';
+import '../model/group_model.dart';
+import '../provider/group_provider.dart';
+import '../controller/group_controller.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
@@ -20,7 +18,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   final GroupProvider groupProvider = GroupProvider();
   late final GroupController ctlGroupController;
   final TextEditingController _inputGroupName = TextEditingController();
-  final TextEditingController _inputActiveHours = TextEditingController();
   bool autoActivationTime = false;
   TimeOfDay fromTime = TimeOfDay.now();
   TimeOfDay toTime = TimeOfDay.now();
@@ -35,7 +32,6 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
   @override
   void dispose() {
     _inputGroupName.dispose();
-    _inputActiveHours.dispose();
     super.dispose();
   }
 
@@ -48,34 +44,23 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         groupModel.formatTimeOfDayToString(fromTime),
         groupModel.formatTimeOfDayToString(toTime),
       );
-      _navigateToSuccessScreen(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Grupo Criado com sucesso'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, AppRoutes.groupScreen);
+      });
     } catch (error) {
-      _navigateToErrorScreen(context, error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao criar grupo: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
-  }
-
-  void _navigateToSuccessScreen(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SuccessScreen(
-          message: 'Grupo Criado com sucesso',
-          alternativeRoute: AppRoutes.groupScreen,
-        ),
-      ),
-    );
-  }
-
-  void _navigateToErrorScreen(BuildContext context, String errorMessage) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ErrorScreen(
-          message: 'Erro ao criar grupo',
-          errorDescription: errorMessage,
-        ),
-      ),
-    );
   }
 
   Future<void> _selectTime(BuildContext context, bool isFromTime) async {

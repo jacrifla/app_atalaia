@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../utils/routes.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../model/group_model.dart';
 import '../provider/group_provider.dart';
 import '../controller/group_controller.dart';
-import 'error_screen.dart';
-import 'success_screen.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final GroupModel groupInfo;
@@ -55,26 +52,29 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
         _inputScheduleStart.text,
         _inputScheduleEnd.text,
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SuccessScreen(
-            message: 'Alterações salvas com sucesso',
-            screen: AppRoutes.groupScreen,
-          ),
-        ),
-      );
+      _showSuccessSnackbar('Alterações salvas com sucesso');
     } catch (error) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ErrorScreen(
-            message: 'Erro',
-            errorDescription: error.toString(),
-          ),
-        ),
-      );
+      _showErrorSnackbar('Erro', error.toString());
     }
+  }
+
+  void _showErrorSnackbar(String message, String errorDescription) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void _showSuccessSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+      ),
+    );
+    Navigator.pop(context);
   }
 
   Future<void> _selectTime(BuildContext context, bool isFromTime) async {

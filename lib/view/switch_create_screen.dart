@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'success_screen.dart';
 import '../utils/routes.dart';
 import '../utils/utils.dart';
 import '../widgets/menu.dart';
@@ -95,20 +93,42 @@ class _SwitchCreateScreenState extends State<SwitchCreateScreen> {
                   labelText: 'Adicionar',
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      await ctlSwitchController.createSwitch(
+                      bool success = await ctlSwitchController.createSwitch(
                         nameController.text.toLowerCase(),
                         wattsController.text,
                         macController.text.toUpperCase(),
                       );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SuccessScreen(
-                            message: 'Ponto salvo com sucesso',
-                            screen: AppRoutes.successScreen,
+                      if (success) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Sucesso'),
+                              content: const Text('Ponto salvo com sucesso'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).popUntil(
+                                        ModalRoute.withName(
+                                            AppRoutes.switchScreen));
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Erro ao salvar o ponto. Por favor, tente novamente.',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red,
                           ),
-                        ),
-                      );
+                        );
+                      }
                     }
                   },
                 ),

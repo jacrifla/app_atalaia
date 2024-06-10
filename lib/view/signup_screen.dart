@@ -1,14 +1,10 @@
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-
-import '../controller/user_controller.dart';
-import '../provider/user_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
-import '../view/success_screen.dart';
-import '../view/error_screen.dart';
+import '../controller/user_controller.dart';
+import '../provider/user_provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -44,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void _handleSubmit() async {
     if (!ctlUserController.arePasswordsEqual(
         _inputPassword.text, _inputPasswordCheck.text)) {
-      _showErrorDialog('Erro', 'As senhas não correspondem.');
+      _showErrorSnackbar(context, 'As senhas não correspondem.');
       return;
     }
 
@@ -56,35 +52,34 @@ class _SignupScreenState extends State<SignupScreen> {
         _inputPassword.text,
       );
       if (response['status'] == 'success') {
-        _showSuccessScreen('Usuário criado com sucesso!');
+        _showSuccessSnackbar(context, 'Usuário criado com sucesso!');
         _clearInputs();
       } else {
-        _showErrorDialog('Erro', response['message']);
+        _showErrorSnackbar(context, response['message']);
       }
     }
   }
 
-  void _showErrorDialog(String message, String errorDescription) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ErrorScreen(
-          message: message,
-          errorDescription: errorDescription,
-          onOKPressed: () => Navigator.pop(context),
+  void _showErrorSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.red,
       ),
     );
   }
 
-  void _showSuccessScreen(String message) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SuccessScreen(
-          message: message,
-          screen: AppRoutes.login,
+  void _showSuccessSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.green,
       ),
     );
   }

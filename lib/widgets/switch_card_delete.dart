@@ -1,14 +1,10 @@
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../provider/switch_provider.dart';
 import '../themes/theme.dart';
 import '../utils/utils.dart';
-import '../view/confirmation_screen.dart';
-import '../view/error_screen.dart';
-import '../view/success_screen.dart';
-import '../view/switch_edit_screen.dart';
 import '../model/switch_model.dart';
 import '../controller/switch_controller.dart';
+import '../view/switch_edit_screen.dart';
 
 class SwitchCardDelete extends StatefulWidget {
   final SwitchModel switchModel;
@@ -33,19 +29,27 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
   }
 
   Future<void> _confirmDelete() async {
-    final confirmed = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ConfirmationScreen(
-          question: 'Tem certeza que deseja excluir este ponto?',
-          onConfirm: () {
-            Navigator.pop(context, true);
-          },
-          onCancel: () {
-            Navigator.pop(context, false);
-          },
-        ),
-      ),
+    bool confirmed = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Tem certeza que deseja excluir este ponto?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('Sim'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Não'),
+            ),
+          ],
+        );
+      },
     );
 
     if (confirmed == true) {
@@ -57,28 +61,17 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
     bool success = await ctlSwitchController.deleteSwitch(
       macAddress: widget.switchModel.macAddress!,
     );
-    if (success) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SuccessScreen(
-            message: 'Ponto excluído com sucesso!',
-            screen: AppRoutes.switchScreen,
-          ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          success
+              ? 'Ponto excluído com sucesso!'
+              : 'Erro ao excluir o ponto. Não foi possível excluir o ponto. Por favor, tente novamente.',
+          style: const TextStyle(color: Colors.white),
         ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ErrorScreen(
-            message: 'Erro ao excluir o ponto.',
-            errorDescription:
-                'Não foi possível excluir o ponto. Por favor, tente novamente.',
-          ),
-        ),
-      );
-    }
+        backgroundColor: success ? Colors.green : Colors.red,
+      ),
+    );
   }
 
   @override
@@ -96,7 +89,7 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -105,7 +98,7 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: appTheme.colorScheme.background,
+                  color: appTheme.primaryColor,
                 ),
               ),
               GestureDetector(
@@ -113,9 +106,9 @@ class _SwitchCardDeleteState extends State<SwitchCardDelete> {
                   _confirmDelete();
                 },
                 child: Icon(
-                  Icons.close,
-                  size: 40,
-                  color: appTheme.primaryColor,
+                  Icons.delete,
+                  size: 25,
+                  color: appTheme.colorScheme.error,
                 ),
               ),
             ],
