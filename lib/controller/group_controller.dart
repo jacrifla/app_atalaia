@@ -109,13 +109,13 @@ class GroupController extends ChangeNotifier {
       };
       Map<String, dynamic> response = await provider.toggleGroup(requestData);
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
-      } else {
-        throw ('Erro ao alternar estado do grupo');
       }
     } catch (error) {
-      throw ('Erro ao alternar estado do grupo: $error');
+      print('Erro ao alternar estado do grupo: $error');
     }
+    return false;
   }
 
   // Retorna true ou erro
