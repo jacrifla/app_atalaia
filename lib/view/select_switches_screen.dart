@@ -1,9 +1,7 @@
 import 'package:app_atalaia/controller/group_controller.dart';
-import 'package:app_atalaia/model/group_model.dart';
 import 'package:app_atalaia/provider/group_provider.dart';
 import 'package:app_atalaia/provider/switch_provider.dart';
 import 'package:flutter/material.dart';
-
 import '../controller/switch_controller.dart';
 import '../model/switch_model.dart';
 import '../widgets/button_icon.dart';
@@ -28,7 +26,6 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   final SwitchProvider switchProvider = SwitchProvider();
   late GroupController groupController;
   late SwitchController switchController;
-  late GroupModel groupModel;
   late Future<List<SwitchModel>> futureSwitches;
   List<SwitchModel> selectedSwitches = [];
 
@@ -37,8 +34,27 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
     super.initState();
     groupController = GroupController(provider: groupProvider);
     switchController = SwitchController(provider: switchProvider);
-    groupModel = GroupModel();
-    futureSwitches = switchController.getSwitchesWithoutGroup();
+    futureSwitches = switchController.getSwitches();
+    _loadGroupSwitches();
+  }
+
+  Future<void> _loadGroupSwitches() async {
+    if (widget.groupId != null) {
+      try {
+        List<Map<String, dynamic>> groupSwitchesData =
+            await groupController.getSwitchesInGroup(widget.groupId!);
+        List<SwitchModel> groupSwitches = groupSwitchesData
+            .map((data) => SwitchModel.fromJson(data))
+            .toList();
+        setState(() {
+          selectedSwitches = groupSwitches;
+        });
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao carregar switches do grupo: $error')),
+        );
+      }
+    }
   }
 
   Future<void> _addSwitchToGroup(SwitchModel switchModel) async {
@@ -86,26 +102,32 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No switches available'));
           } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final switchItem = snapshot.data![index];
-                final isSelected = selectedSwitches.contains(switchItem);
+            return AnimatedBuilder(
+              animation: groupController,
+              builder: (_, child) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final switchItem = snapshot.data![index];
+                    final isSelected = selectedSwitches
+                        .any((s) => s.macAddress == switchItem.macAddress);
 
-                return ListTile(
-                  title: Text(toCapitalizeWords(switchItem.name ?? '')),
-                  trailing: IconButton(
-                    icon: isSelected
-                        ? const Icon(Icons.check_box)
-                        : const Icon(Icons.check_box_outline_blank),
-                    onPressed: () {
-                      if (isSelected) {
-                        _removeSwitchFromGroup(switchItem);
-                      } else {
-                        _addSwitchToGroup(switchItem);
-                      }
-                    },
-                  ),
+                    return ListTile(
+                      title: Text(toCapitalizeWords(switchItem.name ?? '')),
+                      trailing: IconButton(
+                        icon: isSelected
+                            ? const Icon(Icons.check_box)
+                            : const Icon(Icons.check_box_outline_blank),
+                        onPressed: () {
+                          if (isSelected) {
+                            _removeSwitchFromGroup(switchItem);
+                          } else {
+                            _addSwitchToGroup(switchItem);
+                          }
+                        },
+                      ),
+                    );
+                  },
                 );
               },
             );
@@ -114,8 +136,8 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ButtonIcon(
-        onPressed: () async {
-          // Adicionar lógica adicional de salvamento se necessário
+        onPressed: () {
+          Navigator.pop(context);
         },
         labelText: 'Save',
         icon: const Icon(Icons.save),
