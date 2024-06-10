@@ -1,4 +1,3 @@
-import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
 import '../controller/group_controller.dart';
 import '../model/group_model.dart';
@@ -9,7 +8,7 @@ import '../widgets/header_screen.dart';
 import 'group_create_screen.dart';
 
 class GroupScreen extends StatefulWidget {
-  const GroupScreen({Key? key}) : super(key: key);
+  const GroupScreen({super.key});
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
@@ -68,11 +67,15 @@ class _GroupScreenState extends State<GroupScreen> {
           } else {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: snapshot.data!.length,
+              itemCount: groups.length,
               itemBuilder: (context, index) {
-                return GroupCardActions(
-                  groupModel: groups[index],
-                );
+                if (groups.isNotEmpty && index < groups.length) {
+                  return GroupCardActions(
+                    groupModel: groups[index],
+                  );
+                } else {
+                  return const SizedBox();
+                }
               },
             );
           }
@@ -88,13 +91,11 @@ class _GroupScreenState extends State<GroupScreen> {
               labelText: 'Criar Grupo',
               onPressed: () => _navigateToCreateGroup(context),
               icon: const Icon(Icons.add),
-              backgroundColor: appTheme.colorScheme.primary,
             ),
             ButtonIcon(
               labelText: 'Atualizar',
               onPressed: _refreshGroups,
               icon: const Icon(Icons.refresh),
-              backgroundColor: appTheme.colorScheme.onSecondary,
             ),
           ],
         ),
