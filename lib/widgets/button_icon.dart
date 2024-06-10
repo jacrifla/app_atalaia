@@ -29,6 +29,7 @@ class ButtonIcon extends StatelessWidget {
       ),
       icon: icon ?? const SizedBox.shrink(),
       style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color?>(backgroundColor),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

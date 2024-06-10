@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/constantes.dart';
+import '../utils/constantes.dart';
 import '../provider/switch_provider.dart';
 import '../themes/theme.dart';
 import '../utils/utils.dart';
@@ -55,7 +55,7 @@ class _SwitchCardState extends State<SwitchCard> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: appTheme.colorScheme.background,
+                color: appTheme.primaryColor,
               ),
             ),
             AnimatedBuilder(

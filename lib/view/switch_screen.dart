@@ -1,4 +1,3 @@
-import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../provider/switch_provider.dart';
@@ -91,7 +90,6 @@ class _SwitchScreenState extends State<SwitchScreen> {
                   });
                 },
                 icon: const Icon(Icons.add),
-                backgroundColor: appTheme.colorScheme.primary,
               ),
             ),
             SizedBox(
@@ -100,7 +98,6 @@ class _SwitchScreenState extends State<SwitchScreen> {
                 labelText: 'Atualizar',
                 onPressed: _loadSwitches,
                 icon: const Icon(Icons.refresh),
-                backgroundColor: appTheme.colorScheme.primary,
               ),
             ),
           ],

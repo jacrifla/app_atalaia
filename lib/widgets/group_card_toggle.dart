@@ -1,7 +1,7 @@
 import 'package:app_atalaia/provider/group_provider.dart';
 import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
-import '../core/constantes.dart';
+import '../utils/constantes.dart';
 import '../controller/group_controller.dart';
 import '../model/group_model.dart';
 import '../utils/utils.dart';
@@ -46,7 +46,7 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: appTheme.colorScheme.background,
+                      color: appTheme.primaryColor,
                     ),
                   ),
                   GestureDetector(
@@ -54,7 +54,6 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
                       setState(() {
                         isActive = !isActive;
                       });
-                      // Atualizar o grupo no servidor
                       groupModel.isActive = isActive;
                       await ctlGroupController.toggleGroup(
                         groupModel.groupId!,

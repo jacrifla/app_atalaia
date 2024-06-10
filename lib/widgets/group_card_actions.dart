@@ -1,3 +1,4 @@
+import 'package:app_atalaia/utils/constantes.dart';
 import 'package:flutter/material.dart';
 import '../themes/theme.dart';
 import '../controller/group_controller.dart';
@@ -24,7 +25,7 @@ class _GroupCardActionsState extends State<GroupCardActions> {
   @override
   void initState() {
     ctlGroupController = GroupController(provider: groupProvider);
-    _loadGroups(); // Carrega os grupos ao iniciar o widget
+    _loadGroups();
     super.initState();
   }
 
@@ -129,7 +130,7 @@ class _GroupCardActionsState extends State<GroupCardActions> {
                   IconButton(
                     icon: const Icon(
                       Icons.edit,
-                      color: Colors.blue,
+                      color: edit,
                       size: 28,
                     ),
                     onPressed: () {
@@ -146,7 +147,7 @@ class _GroupCardActionsState extends State<GroupCardActions> {
                   IconButton(
                     icon: const Icon(
                       Icons.add,
-                      color: Colors.green,
+                      color: success,
                       size: 28,
                     ),
                     onPressed: () {
@@ -164,7 +165,7 @@ class _GroupCardActionsState extends State<GroupCardActions> {
                   IconButton(
                     icon: const Icon(
                       Icons.delete,
-                      color: Colors.red,
+                      color: delete,
                       size: 28,
                     ),
                     onPressed: () => _deleteGroup(widget.groupModel.groupId!),
