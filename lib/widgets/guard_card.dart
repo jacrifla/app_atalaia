@@ -28,58 +28,60 @@ class _GuardCardState extends State<GuardCard> {
       color: bgCard,
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            const Text(
-              'Guarda',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.security,
+                size: 50,
+                color: _guardaAtiva ? ativate : desativate,
               ),
-              textAlign: TextAlign.center,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Column(
               children: [
-                Icon(
-                  Icons.security,
-                  size: 50,
-                  color: _guardaAtiva ? ativate : desativate,
+                SizedBox(
+                  height: 50,
+                  child: Text(
+                    'Guarda'.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 5),
-                      Text(
+                Column(
+                  children: [
+                    SizedBox(
+                      width: 250,
+                      child: Text(
                         _guardaAtiva
                             ? 'Sua guarda está ativa no momento.'
                             : 'Sua guarda não está ativa no momento.',
                         style: TextStyle(
                           color: _guardaAtiva ? ativate : desativate,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: _toggleGuarda,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              !_guardaAtiva ? ativate : guardaButtonColor,
-                        ),
-                        child: Text(
-                          _guardaAtiva
-                              ? 'Desativar Guarda'
-                              : 'Ativar Guarda Agora',
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _toggleGuarda,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            !_guardaAtiva ? ativate : guardaButtonColor,
+                        minimumSize: const Size(200, 40),
                       ),
-                    ],
-                  ),
-                ),
+                      child: Text(
+                        _guardaAtiva
+                            ? 'Desativar Guarda'
+                            : 'Ativar Guarda Agora',
+                      ),
+                    ),
+                  ],
+                )
               ],
-            ),
+            )
           ],
         ),
       ),
