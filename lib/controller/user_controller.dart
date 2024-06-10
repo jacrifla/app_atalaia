@@ -1,10 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
+import '../utils/routes.dart';
 import '../utils/utils.dart';
-import '../view/error_screen.dart';
 
 class UserController with ChangeNotifier {
   final UserProvider _userProvider;
@@ -34,16 +31,7 @@ class UserController with ChangeNotifier {
       await _userProvider.login(email, password);
       Navigator.pushNamed(context, AppRoutes.loading);
     } catch (error) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ErrorScreen(
-            message: 'Erro no login',
-            errorDescription: error.toString(),
-            onOKPressed: () => Navigator.pop(context),
-          ),
-        ),
-      );
+      throw 'Erro no login';
     } finally {
       _setLoading(false);
     }
@@ -77,11 +65,10 @@ class UserController with ChangeNotifier {
       print(response);
       return response;
     } catch (error) {
-      _setErrorMessage(error.toString());
+      throw 'Erro ao atualizar perfil';
     } finally {
       _setLoading(false);
     }
-    return {};
   }
 
   Future<bool> deleteUser() async {
@@ -91,10 +78,9 @@ class UserController with ChangeNotifier {
       final bool success = await _userProvider.deleteUser();
       return success;
     } catch (error) {
-      // _setErrorMessage('Erro ao excluir usuário: $error');
-      return false;
+      throw 'Erro ao excluir conta';
     } finally {
-      // _setLoading(false);
+      _setLoading(false);
     }
   }
 

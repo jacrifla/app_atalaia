@@ -1,16 +1,12 @@
+import 'package:app_atalaia/themes/theme.dart';
+import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
-
 import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
-import '../utils/routes.dart';
-
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
-import 'confirmation_screen.dart';
-import 'success_screen.dart';
-import 'error_screen.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -35,44 +31,33 @@ class _PerfilScreenState extends State<PerfilScreen> {
     super.initState();
   }
 
-  void _excluirConta() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ConfirmationScreen(
-          question: 'Tem certeza de que deseja excluir sua conta?',
-          onConfirm: () async {
-            Navigator.pushNamed(context, AppRoutes.userProfile);
-            _excluirContaConfirmed();
-          },
-          onCancel: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+  void _excluirConta() async {
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Tem certeza de que deseja excluir sua conta?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final success = await ctlUserController.deleteUser();
+                if (success) {
+                  _showSuccessSnackbar('Conta excluída com sucesso');
+                  Navigator.pushReplacementNamed(context, AppRoutes.login);
+                } else {
+                  _showErrorSnackbar('Erro ao excluir conta');
+                }
+              },
+              child: const Text('Excluir'),
+            ),
+          ],
+        );
+      },
     );
-  }
-
-  void _excluirContaConfirmed() async {
-    final success = await ctlUserController.deleteUser();
-    if (success) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const SuccessScreen(
-            message: 'Conta excluída com sucesso',
-            alternativeRoute: '/',
-          ),
-        ),
-      );
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ErrorScreen(
-            message: 'Erro ao excluir conta',
-            errorDescription: 'Falha ao excluir a conta',
-          ),
-        ),
-      );
-    }
   }
 
   void _confirmarAlteracoes() async {
@@ -86,23 +71,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
         email,
         phone,
       );
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const SuccessScreen(
-            message: 'Perfil alterado com sucesso',
-            alternativeRoute: AppRoutes.userProfile,
-          ),
-        ),
-      );
+      _showSuccessSnackbar('Perfil alterado com sucesso');
     } catch (e) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => ErrorScreen(
-            message: 'Erro ao atualizar perfil',
-            errorDescription: e.toString(),
-          ),
-        ),
-      );
+      _showErrorSnackbar('Erro ao atualizar perfil: $e');
     }
   }
 
@@ -115,6 +86,24 @@ class _PerfilScreenState extends State<PerfilScreen> {
     } catch (e) {
       print('Erro ao carregar dados do usuário: $e');
     }
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void _showSuccessSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   @override
@@ -174,12 +163,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ButtonIcon(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.onSecondary,
                           labelText: 'Mudar senha',
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, '/recover_confirmation');
+                            Navigator.pushNamed(context, AppRoutes.recover);
                           },
                         ),
                         ButtonIcon(
@@ -197,20 +183,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
             top: 10,
             right: 10,
             child: ButtonIcon(
-              backgroundColor: Colors.redAccent[200],
+              backgroundColor: appTheme.errorColor,
               icon: const Icon(Icons.delete_outline_outlined),
               labelText: 'Deletar conta',
               onPressed: _excluirConta,
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ctlUserController.deleteUser();
-          // userProvider.delete();
-        },
-        child: Text('Teste'),
       ),
     );
   }

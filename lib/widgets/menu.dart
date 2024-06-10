@@ -1,7 +1,6 @@
-import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
+import '../themes/theme.dart';
 import '../utils/routes.dart';
-import '../view/confirmation_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({super.key});
@@ -16,13 +15,14 @@ class MenuDrawer extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                ListTile(
+                const ListTile(
                   title: Text(
                     'Menu',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: appTheme.primaryColor,
+                      // Defina a cor de acordo com o seu tema
+                      // color: appTheme.primaryColor,
                     ),
                   ),
                 ),
@@ -85,9 +85,8 @@ class MenuDrawer extends StatelessWidget {
                       Icons.logout,
                       color: appTheme.colorScheme.background,
                     ),
-                    color: appTheme.colorScheme.background,
                     onTap: () {
-                      _logout(context);
+                      _showLogoutDialog(context);
                     },
                   ),
                 ),
@@ -122,28 +121,33 @@ class MenuDrawer extends StatelessWidget {
     );
   }
 
-  void _showConfirmationDialog(
-    BuildContext context,
-    String question,
-    VoidCallback onConfirm,
-  ) {
+  void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmationScreen(
-          question: question,
-          onConfirm: onConfirm,
+        return AlertDialog(
+          title: const Text('Tem certeza que deseja sair?'),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, AppRoutes.login);
+                  },
+                  child: const Text('Sair'),
+                ),
+              ],
+            )
+          ],
         );
-      },
-    );
-  }
-
-  void _logout(BuildContext context) {
-    _showConfirmationDialog(
-      context,
-      'Tem certeza que deseja sair?',
-      () {
-        Navigator.pushReplacementNamed(context, '/');
       },
     );
   }
