@@ -7,6 +7,7 @@ require_once './model/UserModel.php';
 
 class GroupSwitchController
 {
+    // Obtém uuid dos grupos de um usuário.
     public function getGroups(Request $request, Response $response)
     {
         try {
@@ -36,6 +37,36 @@ class GroupSwitchController
         }
     }
 
+    // Obtém todas as informações de um grupo.
+    public function getAllGroupInfo(Request $request, Response $response){
+        try {
+            
+            $data = $request->bodyJson();
+            
+            $data = GroupSwitchModel::getAllGroupInfo($data['user_id']);
+            
+            if ($data) {
+                $response::json([
+                    'status' => 'success',
+                    'dados' => $data
+                ], 200);
+            }else {
+                $response::json([
+                    'status' => 'error',
+                    'msg' => 'Internal Error'
+                ], 400);
+            }
+            
+            
+        } catch (\Exception $e) {
+            $response::json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Obtém informações de um grupo específico.
     public function getOneGroup(Request $request, Response $response)
     {
         try {
@@ -61,6 +92,7 @@ class GroupSwitchController
         }
     }
 
+    // Cria um novo grupo.
     public function createGroup(Request $request, Response $response)
     {
         try {
@@ -93,6 +125,7 @@ class GroupSwitchController
             
     }
 
+    // Atualiza as informações de um grupo.
     public function updateGroupInfo(Request $request, Response $response)
     {
         try {
@@ -122,6 +155,7 @@ class GroupSwitchController
         }
     }
 
+    // Alterna a ativação de um grupo e seus switches associados.
     public function toggleGroup(Request $request, Response $response)
     {
         try {
@@ -158,37 +192,50 @@ class GroupSwitchController
         }
     }
 
+    // Adiciona um switch a um grupo.
     public function addSwitchToGroup(Request $request, Response $response)
     {
         try {
-            
             $data = $request->bodyJson();
-            $data             = $request->bodyJson();
-            $groupInfo        = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
-            $data['group_id'] = $groupInfo['id'];
-            $group            = GroupSwitchModel::addSwitchToGroup($data);
             
-            if ($group) {
-                $response::json([
-                    'status' => 'success',
-                    'dados' => $group
-                ], 200);
-            }else {
-                $response::json([
+            // Obter o ID do grupo com base no UUID fornecido
+            $groupInfo = GroupSwitchModel::getGroupIdByUUID($data['group_id']);
+            
+            // Verificar se o grupo existe e obter seu ID
+            if ($groupInfo) {
+                $groupId = $groupInfo['id'];
+                
+                // Adicionar o switch ao grupo
+                $addedSwitch = GroupSwitchModel::addSwitchToGroup($groupId, $data['mac_address']);
+
+                // Verificar se o switch foi adicionado com sucesso ao grupo
+                if ($addedSwitch) {
+                    return $response::json([
+                        'status' => 'success',
+                        'msg' => 'Switch added to group successfully'
+                    ], 200);
+                } else {
+                    return $response::json([
+                        'status' => 'error',
+                        'msg' => 'Failed to add switch to group'
+                    ], 400);
+                }
+            } else {
+                return $response::json([
                     'status' => 'error',
-                    'msg' => 'Internal Error'
-                ], 400);
+                    'msg' => 'Group not found'
+                ], 404);
             }
             
-            
         } catch (\Exception $e) {
-            $response::json([
+            return $response::json([
                 'status' => 'error',
                 'msg' => $e->getMessage()
             ], 500);
         }
     }
             
+    // Obtém os switches em um grupo.
     public function getSwitchesInGroup(Request $request, Response $response)
     {
         try {
@@ -219,6 +266,7 @@ class GroupSwitchController
         }
     }
 
+    // Verifica se um switch está em algum grupo.
     public function checkSwitchInGroup(Request $request, Response $response)
     {
         try {
@@ -248,6 +296,7 @@ class GroupSwitchController
         }
     }
 
+    // Remove um switch de um grupo.
     public function removeSwitchFromGroup(Request $request, Response $response)
     {
         try {
@@ -277,6 +326,7 @@ class GroupSwitchController
         }
     }
 
+    // Deleta um grupo e remove todos os seus switches associados.
     public function deleteGroup(Request $request, Response $response)
     {
         try {
@@ -311,11 +361,4 @@ class GroupSwitchController
             ], 500);
         }
     }
-
-  
-   
-    
-        
-        
 }
-        
