@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 // Definindo as cores do aplicativo
 const principalColor = Color(0xFF001F3E);
-const error = Color(0xFFD11111);
+const secondColor = Color(0xFF446D9D);
+const error = Color(0xFF7E0000);
 const backgroundColor = Color(0xFFE1E1E1);
-const cardsColor = Color(0xFF446D9D);
+const cardsColor = Color(0xFFFFFFFF);
 const fontFamily = 'montserrat';
 const disable = Color(0xFFCCCCCC);
 
@@ -15,7 +16,7 @@ final appTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: principalColor),
   scaffoldBackgroundColor: backgroundColor,
   primaryColor: principalColor,
-  primaryColorLight: cardsColor,
+  primaryColorLight: secondColor,
   buttonTheme: const ButtonThemeData(
     buttonColor: principalColor,
     textTheme: ButtonTextTheme.primary,
@@ -41,13 +42,13 @@ final appTheme = ThemeData(
   switchTheme: SwitchThemeData(
     thumbColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
-        return cardsColor;
+        return secondColor;
       }
       return disable;
     }),
     trackColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
-        return cardsColor;
+        return secondColor;
       }
       return disable;
     }),
