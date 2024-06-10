@@ -27,7 +27,7 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
     super.initState();
     ctlGroupController = GroupController(provider: groupProvider);
     groupModel = widget.groupModel;
-    isActive = groupModel.isActive ?? false;
+    isActive = groupModel.isActive!;
     groupName = groupModel.groupName;
   }
 
@@ -56,7 +56,10 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
                       });
                       // Atualizar o grupo no servidor
                       groupModel.isActive = isActive;
-                      // await ctlGroupController.updateGroup(groupModel.toJson());
+                      await ctlGroupController.toggleGroup(
+                        groupModel.groupId!,
+                        isActive,
+                      );
                     },
                     child: Icon(
                       Icons.lightbulb,
