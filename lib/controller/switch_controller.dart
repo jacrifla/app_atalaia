@@ -4,15 +4,15 @@ import '../provider/switch_provider.dart';
 import '../utils/auth_provider.dart';
 
 class SwitchController extends ChangeNotifier {
-  final SwitchProvider _switchProvider;
+  final SwitchProvider provider;
   final String userId = AuthProvider().userId!;
 
-  SwitchController(this._switchProvider);
+  SwitchController({required this.provider});
 
   Future<bool> createSwitch(
       String name, String watts, String macAddress) async {
     try {
-      final result = await _switchProvider.createSwitch(
+      final result = await provider.createSwitch(
         name,
         watts,
         macAddress,
@@ -28,7 +28,7 @@ class SwitchController extends ChangeNotifier {
 
   Future<List<SwitchModel>> getSwitches() async {
     try {
-      final switches = await _switchProvider.getSwitches(userId);
+      final switches = await provider.getSwitches(userId);
       notifyListeners();
       return switches;
     } catch (error) {
@@ -38,7 +38,7 @@ class SwitchController extends ChangeNotifier {
 
   Future<List<SwitchModel>> getSwitchesWithoutGroup() async {
     try {
-      final switches = await _switchProvider.getSwitchesWithoutGroup(userId);
+      final switches = await provider.getSwitchesWithoutGroup(userId);
       notifyListeners();
       return switches;
     } catch (error) {
@@ -58,7 +58,7 @@ class SwitchController extends ChangeNotifier {
         'mac_address': macAddress,
       };
 
-      final success = await _switchProvider.updateSwitch(data);
+      final success = await provider.updateSwitch(data);
       if (success) {
         notifyListeners();
       }
@@ -70,7 +70,7 @@ class SwitchController extends ChangeNotifier {
 
   Future<bool> deleteSwitch({required String macAddress}) async {
     try {
-      final result = await _switchProvider.deleteSwitch(macAddress);
+      final result = await provider.deleteSwitch(macAddress);
       notifyListeners();
       return result['status'] == 'success';
     } catch (error) {
@@ -86,7 +86,7 @@ class SwitchController extends ChangeNotifier {
         'user_id': userId,
         'is_active': isActive,
       };
-      final success = await _switchProvider.toggleSwitch(data);
+      final success = await provider.toggleSwitch(data);
       notifyListeners();
       return success['status'] == 'success';
     } catch (error) {
