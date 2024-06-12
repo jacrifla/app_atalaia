@@ -49,7 +49,8 @@ class ConnectionMYSQL
             try {
                 switch (SGBD):
                     case 'mysql':
-                        $opcoes = array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8');
+                        $opcoes = array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8',
+                                        \PDO::MYSQL_ATTR_FOUND_ROWS => true);
                         self::$pdo = new \PDO("mysql:host=" . HOST . "; dbname=" . DBNAME . ";", USER, PASSWORD, $opcoes);
                         break;
                     endswitch;

@@ -20,8 +20,10 @@ class RegisterModel
             );
     
             $stmt->execute([$data['name'], $data['email'], $data['phone'], $passwordHash]);
-    
-            return ($stmt->rowCount() > 0);
+            if($stmt->rowCount() > 0){
+                return $pdo->lastInsertId();
+            }
+            return false;
         } catch (\PDOException $e) {
             throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
         } catch (\Exception $e) {

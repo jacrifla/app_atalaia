@@ -4,6 +4,7 @@ require_once './core/Request.php';
 require_once './core/Response.php';
 require_once './model/RegisterModel.php';
 require_once './model/UserModel.php';
+require_once './model/GuardModel.php';
 
 class RegisterController
 {
@@ -20,10 +21,11 @@ class RegisterController
                     'msg' => 'Existent User'
                 ], 400);
             }else{
-                $success = RegisterModel::insert($data);
+                $user = RegisterModel::insert($data);
                 
-                if ($success) {     
-
+                if ($user) {     
+                    GuardModel::createGuard($user);
+                    unset($data['password_hash']); // Não envie o hash da senha de volta
                     $response::json([
                         'status' => 'success',
                         'dados' => $data
