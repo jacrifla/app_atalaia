@@ -32,6 +32,12 @@ Http::post('/groups/removeswitch', 'GroupSwitchController@removeSwitchFromGroup'
 Http::post('/groups/toggle', 'GroupSwitchController@toggleGroup');
 Http::post('/groups/delete', 'GroupSwitchController@deleteGroup');
 
+//Guard
+Http::post('/guard', 'GuardController@getGuardInfo');
+Http::post('/guard/configswitch', 'GuardController@defineSwitches');
+Http::post('/guard/toggle', 'GuardController@toggleGuard');
+
+
 //Rotas internas
 Http::post('/macAddress', 'MacAddressController@insert');
 Http::put('/macAddress/edit', 'MacAddressController@update');

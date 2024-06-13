@@ -6,24 +6,30 @@ require_once './core/ExceptionPdo.php';
 class GuardModel
 {
     public static function getSwitches($userId)
-    {
-        
-        try {
-            $pdo = ConnectionMYSQL::getInstance();
+{
+    try {
+        $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('SELECT s.mac_address, s.guard_active, s.name 
+        $stmt = $pdo->prepare('
+            SELECT s.mac_address, s.guard_active, s.name AS switch_name, g.is_active as guard_is_on, g.uuid AS guard_id 
             FROM tb_switch s
-            JOIN tb_user u ON s.user_id = u.id
-            WHERE u.uuid = ?            
-            AND s.deleted_at IS NULL');
-            $stmt->execute([$userId]);
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
-        } catch (\PDOException $e) {
-            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+            INNER JOIN tb_user u ON u.id = s.user_id
+            LEFT JOIN tb_guard g ON g.user_id = u.id           
+            WHERE u.id = :userId AND s.deleted_at IS NULL
+        ');
+
+        // Bind do valor userId ao placeholder :userId
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (\PDOException $e) {
+        throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+    } catch (\Exception $e) {
+        throw new \Exception($e->getMessage());
     }
+}
+
 
     public static function hasGuard($userId){
         try {
@@ -61,7 +67,7 @@ class GuardModel
     }
 
     // Alterna a ativação do guarda com base nos dados fornecidos
-    public static function toggleGuard($data)
+    public static function toggleGuard($guardId)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
@@ -72,7 +78,7 @@ class GuardModel
                 WHERE uuid = ?
             ');
 
-            $stmt->bindParam(1, $data['guard_id'], PDO::PARAM_INT);
+            $stmt->bindParam(1, $guardId, PDO::PARAM_STR);
             $stmt->execute();
 
             return ($stmt->rowCount() > 0);
