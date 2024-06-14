@@ -81,7 +81,7 @@ class GroupController extends ChangeNotifier {
   ) async {
     try {
       Map<String, dynamic> requestData = {
-        "group_id": "41f886ea-245f-11ef-94a1-00090ffe0001",
+        "group_id": groupId,
         "name": name,
         "is_active": isActive,
         "schedule_active": scheduleActive,
