@@ -5,33 +5,36 @@ require_once './core/ExceptionPdo.php';
 
 class GuardModel
 {
+    //Obtém os switches associados a um usuário específico.
     public static function getSwitches($userId)
-{
-    try {
-        $pdo = ConnectionMYSQL::getInstance();
+    {
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
 
-        $stmt = $pdo->prepare('
-            SELECT s.mac_address, s.guard_active, s.name AS switch_name, g.is_active as guard_is_on, g.uuid AS guard_id 
-            FROM tb_switch s
-            INNER JOIN tb_user u ON u.id = s.user_id
-            LEFT JOIN tb_guard g ON g.user_id = u.id           
-            WHERE u.id = :userId AND s.deleted_at IS NULL
-        ');
+            $stmt = $pdo->prepare('
+                SELECT s.mac_address, s.guard_active, s.name AS switch_name, g.is_active as guard_is_on, g.uuid AS guard_id 
+                FROM tb_switch s
+                INNER JOIN tb_user u ON u.id = s.user_id
+                LEFT JOIN tb_guard g ON g.user_id = u.id           
+                WHERE u.id = :userId AND s.deleted_at IS NULL
+            ');
 
-        // Bind do valor userId ao placeholder :userId
-        $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+            // Bind do valor userId ao placeholder :userId
+            $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
 
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
-    } catch (\PDOException $e) {
-        throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
-    } catch (\Exception $e) {
-        throw new \Exception($e->getMessage());
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
-}
 
 
-    public static function hasGuard($userId){
+    // Verifica se um usuário possui um guarda.
+    public static function hasGuard($userId)
+    {
         try {
             $pdo = ConnectionMYSQL::getInstance();            
             $stmt = $pdo->prepare('SELECT id from tb_guard WHERE user_id = ?');
@@ -46,6 +49,7 @@ class GuardModel
         }
     }
 
+    // Cria um novo guarda para um usuário específico.
     public static function createGuard($userId)
     {
         try {
@@ -66,7 +70,7 @@ class GuardModel
         }
     }
 
-    // Alterna a ativação do guarda com base nos dados fornecidos
+    // Alterna o estado de ativação de um guarda.
     public static function toggleGuard($guardId)
     {
         try {
@@ -89,6 +93,7 @@ class GuardModel
         }
     }
 
+    // Define o estado de ativação dos switches com base em seus endereços MAC.
     public static function defineSwitches($switches, $isActive)
     {
         try {
@@ -134,6 +139,5 @@ class GuardModel
     //     } catch (\Exception $e) {
     //         throw new \Exception($e->getMessage());
     //     }
-    // }
-    
+    // }  
 }
