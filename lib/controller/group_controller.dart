@@ -215,8 +215,9 @@ class GroupController extends ChangeNotifier {
       if (response['status'] == 'success') {
         final List<dynamic> data = response['dados'];
 
-        List<GroupModel> groups =
-            data.map((groupData) => GroupModel.fromJsonMap(groupData)).toList();
+        List<GroupModel> groups = data.map((groupData) {
+          return GroupModel.fromJsonMap(groupData as Map<String, dynamic>);
+        }).toList();
 
         return groups;
       } else {
@@ -224,8 +225,8 @@ class GroupController extends ChangeNotifier {
       }
     } catch (error) {
       print('Erro ao obter todos os grupos: $error');
-      rethrow;
     }
+    return [];
   }
 
   // Retorna a lista de endereços MAC dos switches do grupo
