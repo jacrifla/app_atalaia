@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../controller/guard_controller.dart';
+import '../provider/guard_provider.dart';
 import '../model/switch_card_model.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 
-class GuardManagementScreen extends StatelessWidget {
-  final List<SwitchCardModel> guardSwitches = [
-    SwitchCardModel(name: 'Switch 1', isActive: true),
-    SwitchCardModel(name: 'Switch 2', isActive: false),
-    SwitchCardModel(name: 'Switch 3', isActive: true),
-  ];
+class GuardManagementScreen extends StatefulWidget {
+  const GuardManagementScreen({super.key});
 
-  GuardManagementScreen({super.key});
+  @override
+  State<GuardManagementScreen> createState() => _GuardManagementScreenState();
+}
+
+class _GuardManagementScreenState extends State<GuardManagementScreen> {
+  final GuardManagementProvider guardProvider = GuardManagementProvider();
+  late final GuardManagementController ctlGuardController;
+  final List<SwitchCardModel> guardSwitches = [];
+
+  @override
+  void initState() {
+    ctlGuardController = GuardManagementController(provider: guardProvider);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
