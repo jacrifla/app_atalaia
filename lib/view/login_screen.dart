@@ -118,20 +118,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     buttonLine(
                       icon: const Icon(Icons.person_add),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.signUp),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, AppRoutes.signUp),
                       label: 'Criar Conta',
                     ),
                     buttonLine(
                       icon: const Icon(Icons.person_search),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.recover),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, AppRoutes.recover),
                       label: 'Esqueci Minha Senha',
                     ),
                     buttonLine(
                       icon: const Icon(Icons.help_center_rounded),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.help),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, AppRoutes.help),
                       label: 'Preciso de Ajuda',
                     ),
                   ],

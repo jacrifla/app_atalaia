@@ -165,7 +165,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
                         ButtonIcon(
                           labelText: 'Mudar senha',
                           onPressed: () {
-                            Navigator.pushNamed(context, AppRoutes.recover);
+                            Navigator.pushReplacementNamed(
+                                context, AppRoutes.recover);
                           },
                         ),
                         ButtonIcon(

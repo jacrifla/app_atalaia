@@ -84,7 +84,8 @@ class _SwitchScreenState extends State<SwitchScreen> {
               child: ButtonIcon(
                 labelText: 'Adicionar',
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.switchCreate)
+                  Navigator.pushReplacementNamed(
+                          context, AppRoutes.switchCreate)
                       .then((_) {
                     _loadSwitches();
                   });

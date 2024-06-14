@@ -29,7 +29,7 @@ class UserController with ChangeNotifier {
     _setLoading(true);
     try {
       await _userProvider.login(email, password);
-      Navigator.pushNamed(context, AppRoutes.loading);
+      Navigator.pushReplacementNamed(context, AppRoutes.loading);
     } catch (error) {
       throw 'Erro no login';
     } finally {
