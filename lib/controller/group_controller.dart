@@ -152,7 +152,7 @@ class GroupController extends ChangeNotifier {
         throw ('Erro ao obter switches do grupo');
       }
     } catch (error) {
-      throw ('Erro ao obter switches do grupo: $error');
+      throw ('Nenhum switch cadastrado no grupo.');
     }
   }
 
@@ -210,20 +210,22 @@ class GroupController extends ChangeNotifier {
   // Retorna todos os grupos associados ao usuário
   Future<List<GroupModel>> getAllGroups() async {
     try {
-      final List<String> groupIds = await getGroupsIds();
-      final List<GroupModel> groups = [];
+      final Map<String, dynamic> response = await provider.getAllGroups(userId);
 
-      for (final groupId in groupIds) {
-        final groupData = await getOneGroup(groupId);
-        final group = GroupModel.fromJsonMap(groupData);
-        groups.add(group);
+      if (response['status'] == 'success') {
+        final List<dynamic> data = response['dados'];
+
+        List<GroupModel> groups =
+            data.map((groupData) => GroupModel.fromJsonMap(groupData)).toList();
+
+        return groups;
+      } else {
+        throw ('Erro ao obter todos os grupos');
       }
-
-      return groups;
     } catch (error) {
       print('Erro ao obter todos os grupos: $error');
+      rethrow;
     }
-    return [];
   }
 
   // Retorna a lista de endereços MAC dos switches do grupo
