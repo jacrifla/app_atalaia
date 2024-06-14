@@ -94,28 +94,24 @@ class GuardModel
     }
 
     // Define o estado de ativação dos switches com base em seus endereços MAC.
-    public static function defineSwitches($switches, $isActive)
+    public static function defineSwitch($mac_address, $isActive)
     {
         try {
             $pdo = ConnectionMYSQL::getInstance();
             
-            // Sanitizar o array de switches (opcional, mas recomendado)
-            $switches = array_map([$pdo, 'quote'], $switches);
-            
-            // Construir a cláusula IN
-            $placeholders = implode(',', $switches);
-            
+           
             // Criar a consulta com os valores concatenados diretamente
             $query = "
                 UPDATE tb_switch
                 SET guard_active = :isActive
-                WHERE mac_address IN ($placeholders)
+                WHERE mac_address =:mac_address
             ";
             
             $stmt = $pdo->prepare($query);
             
             // Bind do valor para guard_active
             $stmt->bindValue(':isActive', $isActive, PDO::PARAM_INT);
+            $stmt->bindValue(':mac_address', $mac_address, PDO::PARAM_STR);
             
             $stmt->execute();
             

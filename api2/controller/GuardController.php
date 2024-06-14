@@ -39,12 +39,12 @@ class GuardController
     }
 
     // Obtém todas as informações de um grupo.
-    public function defineSwitches(Request $request, Response $response){
+    public function defineSwitch(Request $request, Response $response){
         try {
             
             $data = $request->bodyJson();
             
-            $data = GuardModel::defineSwitches($data['mac_addresses'], $data['is_active']);
+            $data = GuardModel::defineSwitch($data['mac_address'], $data['is_active']);
             
             if ($data) {
                 $response::json([

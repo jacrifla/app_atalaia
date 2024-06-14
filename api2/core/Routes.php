@@ -34,7 +34,7 @@ Http::post('/groups/delete', 'GroupSwitchController@deleteGroup');
 
 //Guard
 Http::post('/guard', 'GuardController@getGuardInfo');
-Http::post('/guard/configswitch', 'GuardController@defineSwitches');
+Http::post('/guard/configswitch', 'GuardController@defineSwitch');
 Http::post('/guard/toggle', 'GuardController@toggleGuard');
 
 
