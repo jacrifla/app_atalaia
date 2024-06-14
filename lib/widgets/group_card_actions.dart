@@ -32,9 +32,11 @@ class _GroupCardActionsState extends State<GroupCardActions> {
   // Método para carregar os grupos
   void _loadGroups() async {
     List<GroupModel> loadedGroups = await ctlGroupController.getAllGroups();
-    setState(() {
-      groups = loadedGroups;
-    });
+    if (mounted) {
+      setState(() {
+        groups = loadedGroups;
+      });
+    }
   }
 
   // Método para excluir o grupo
