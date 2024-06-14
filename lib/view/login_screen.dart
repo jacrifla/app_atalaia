@@ -125,13 +125,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     buttonLine(
                       icon: const Icon(Icons.person_search),
                       onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.help),
+                          Navigator.pushNamed(context, AppRoutes.recover),
                       label: 'Esqueci Minha Senha',
                     ),
                     buttonLine(
                       icon: const Icon(Icons.help_center_rounded),
                       onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.recover),
+                          Navigator.pushNamed(context, AppRoutes.help),
                       label: 'Preciso de Ajuda',
                     ),
                   ],
