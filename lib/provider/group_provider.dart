@@ -5,6 +5,26 @@ import '../utils/config.dart';
 class GroupProvider {
   final Dio _dio = Dio();
 
+  Future<Map<String, dynamic>> getAllGroups(String userId) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}/groups/getgroupinfo',
+        data: {'user_id': userId},
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 400) {
+        throw ('Erro interno');
+      } else if (error.response?.statusCode == 500) {
+        throw ('Erro do servidor');
+      }
+    }
+    return {};
+  }
+
   Future<Map<String, dynamic>> getGroups(String userId) async {
     try {
       final response = await _dio.post(
