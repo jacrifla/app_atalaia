@@ -14,16 +14,20 @@ class GuardManagementProvider {
     dio.options.baseUrl = Config.apiUrl;
   }
 
-  Future<Response> getGuardInfo(Map<String, dynamic> data) async {
+  Future<Response?> getGuardInfo(Map<String, dynamic> data) async {
     try {
       final response = await dio.post(
         '/guard',
+        // data: {'user_id': userId},
         data: data,
       );
-
       return response;
-    } on DioException {
-      throw ('Falha ao obter informações do guarda');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ('Falha ao obter informações do guarda: ${e.message}');
+      } else {
+        throw ('Falha ao obter informações do guarda: ${e.message}');
+      }
     }
   }
 

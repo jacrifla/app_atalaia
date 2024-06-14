@@ -1,19 +1,62 @@
-import 'package:app_atalaia/controller/switch_controller.dart';
-
+import 'package:flutter/material.dart';
 import '../provider/guard_provider.dart';
+import '../utils/auth_provider.dart';
 
-class GuardManagementController {
-  final GuardManagementProvider _guardProvider = GuardManagementProvider();
+class GuardManagementController extends ChangeNotifier {
+  final GuardManagementProvider provider;
+  final String userId = AuthProvider().userId!;
 
-  // Método para carregar os pontos associados à guarda
-  Future<void> loadGuardPoints() async {
-    await _guardProvider.loadGuardPoints();
+  String? guardId;
+  Map<String, dynamic>? guardInfo;
+
+  GuardManagementController({required this.provider});
+
+  Future<bool> getGuardInfo() async {
+    try {
+      final response = await provider.getGuardInfo({"user_id": userId});
+
+      if (response != null && response.statusCode == 200) {
+        guardInfo?.clear();
+        guardInfo = response.data;
+        guardId = guardInfo!['dados'][0]['guard_id'];
+
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      print('Error fetching guard info: $error');
+      return false;
+    }
   }
 
-  // Método para adicionar um ponto associado à guarda
-  Future<void> addGuardPoint(SwitchController point) async {
-    await _guardProvider.addGuardPoint(point);
+  Future<bool> defineSwitches(String macAddress, bool isActive) async {
+    try {
+      final response = await provider.defineSwitches({
+        'user_id': userId,
+        'mac_addresses': [macAddress],
+        'is_active': isActive,
+      });
+      print(response);
+      return response.statusCode == 200;
+    } catch (error) {
+      print('Error defining switches: $error');
+      return false;
+    }
   }
 
-  // Outros métodos conforme necessário
+  Future<bool> toggleGuard() async {
+    try {
+      final response = await provider.toggleGuard({
+        'user_id': userId,
+        'guard_id': guardId,
+      });
+
+      return response.statusCode == 200;
+    } catch (error) {
+      print('Error toggling guard: $error');
+      return false;
+    }
+  }
 }
