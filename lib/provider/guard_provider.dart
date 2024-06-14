@@ -1,24 +1,55 @@
-import 'package:app_atalaia/controller/switch_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:app_atalaia/utils/config.dart';
+import 'package:dio/dio.dart';
 
-class GuardManagementProvider extends ChangeNotifier {
-  final List<SwitchController> _guardPoints = [];
+class GuardManagementProvider {
+  final Dio dio = Dio();
 
-  List<SwitchController> get guardPoints => _guardPoints;
-
-  // Método para carregar os pontos associados à guarda
-  Future<void> loadGuardPoints() async {
-    // Lógica para carregar os pontos associados à guarda do banco de dados ou de uma API
-    // Atualiza _guardPoints
-    notifyListeners();
+  GuardManagementProvider() {
+    initDio();
   }
 
-  // Método para adicionar um ponto associado à guarda
-  Future<void> addGuardPoint(SwitchController point) async {
-    // Lógica para adicionar um ponto associado à guarda ao banco de dados ou a uma API
-    // Atualiza _guardPoints
-    notifyListeners();
+  void initDio() {
+    dio.options.connectTimeout = const Duration(seconds: 5);
+    dio.options.receiveTimeout = const Duration(seconds: 10);
+    dio.options.baseUrl = Config.apiUrl;
   }
 
-  // Outros métodos para atualizar, deletar pontos associados à guarda, etc.
+  Future<Response> getGuardInfo(Map<String, dynamic> data) async {
+    try {
+      final response = await dio.post(
+        '/guard',
+        data: data,
+      );
+
+      return response;
+    } on DioException {
+      throw ('Falha ao obter informações do guarda');
+    }
+  }
+
+  Future<Response> defineSwitches(Map<String, dynamic> data) async {
+    try {
+      final response = await dio.post(
+        '/guard/configswitch',
+        data: data,
+      );
+
+      return response;
+    } on DioException {
+      throw ('Falha ao definir switches');
+    }
+  }
+
+  Future<Response> toggleGuard(Map<String, dynamic> data) async {
+    try {
+      final response = await dio.post(
+        '/guard/toggle',
+        data: data,
+      );
+
+      return response;
+    } on DioException {
+      throw ('Falha ao alternar guarda');
+    }
+  }
 }
