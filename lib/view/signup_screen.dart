@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/routes.dart';
 import '../utils/utils.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -54,6 +55,7 @@ class _SignupScreenState extends State<SignupScreen> {
       if (response['status'] == 'success') {
         _showSuccessSnackbar(context, 'Usuário criado com sucesso!');
         _clearInputs();
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
       } else {
         _showErrorSnackbar(context, response['message']);
       }
@@ -137,10 +139,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           icon: const Icon(Icons.phone_outlined),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Digite seu e-mail';
+                              return 'Digite seu celular';
                             }
                             if (!isValidPhoneNumber(value)) {
-                              return 'Digite um e-mail válido';
+                              return 'Digite um celular válido';
                             }
                             return null;
                           },
