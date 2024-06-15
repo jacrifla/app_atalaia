@@ -5,9 +5,15 @@ class AuthProvider extends ChangeNotifier {
   final box = GetStorage();
 
   String? get userId => box.read('uuid');
+  String? get guardId => box.read('uuid');
 
   void setUserId(String userId) {
     box.write('uuid', userId);
+    notifyListeners();
+  }
+
+  void setGuardId(String guardId) {
+    box.write('uuid', guardId);
     notifyListeners();
   }
 
