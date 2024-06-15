@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../utils/auth_provider.dart';
 import '../model/group_model.dart';
 import '../provider/group_provider.dart';
@@ -61,6 +60,7 @@ class GroupController extends ChangeNotifier {
       };
       Map<String, dynamic> response = await provider.createGroup(requestData);
       if (response['status'] == 'success') {
+        notifyListeners();
         return response['dados']['uuid'];
       } else {
         throw ('Erro ao criar grupo');
@@ -91,6 +91,7 @@ class GroupController extends ChangeNotifier {
 
       Map<String, dynamic> response = await provider.updateGroup(requestData);
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
       } else {
         throw ('Erro ao atualizar grupo');
@@ -128,6 +129,7 @@ class GroupController extends ChangeNotifier {
       Map<String, dynamic> response =
           await provider.addSwitchToGroup(requestData);
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
       } else {
         throw ('Erro ao adicionar switch ao grupo');
@@ -144,7 +146,7 @@ class GroupController extends ChangeNotifier {
           await provider.getSwitchesInGroup(groupId);
       if (response['status'] == 'success') {
         List<dynamic> data = response['dados'];
-
+        notifyListeners();
         return data
             .map((switchData) => switchData as Map<String, dynamic>)
             .toList();
@@ -163,6 +165,7 @@ class GroupController extends ChangeNotifier {
           await provider.checkSwitchInGroup(macAddress);
 
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
       } else {
         throw ('Erro ao verificar switch no grupo');
@@ -178,6 +181,7 @@ class GroupController extends ChangeNotifier {
       Map<String, dynamic> response =
           await provider.removeSwitchFromGroup(macAddress);
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
       } else {
         throw ('Erro ao remover switch do grupo');
@@ -198,6 +202,7 @@ class GroupController extends ChangeNotifier {
       };
       Map<String, dynamic> response = await provider.deleteGroup(requestData);
       if (response['status'] == 'success') {
+        notifyListeners();
         return true;
       } else {
         throw ('Erro ao deletar grupo');
@@ -219,6 +224,7 @@ class GroupController extends ChangeNotifier {
           return GroupModel.fromJsonMap(groupData as Map<String, dynamic>);
         }).toList();
 
+        notifyListeners();
         return groups;
       } else {
         throw ('Erro ao obter todos os grupos');
@@ -239,6 +245,7 @@ class GroupController extends ChangeNotifier {
       final List<String> macAddresses = switchesInGroup
           .map((switchData) => switchData['mac_address'] as String)
           .toList();
+      notifyListeners();
       return macAddresses;
     } catch (error) {
       return [];

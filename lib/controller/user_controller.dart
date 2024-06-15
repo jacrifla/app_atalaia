@@ -18,6 +18,7 @@ class UserController with ChangeNotifier {
     try {
       final userId = _userProvider.getUserId();
       final response = await _userProvider.getUser(userId);
+      notifyListeners();
       return response;
     } catch (error) {
       throw 'Erro ao carregar os dados do usuário: $error';
@@ -41,7 +42,10 @@ class UserController with ChangeNotifier {
       String name, String email, String phone, String password) async {
     _setLoading(true);
     try {
-      return await _userProvider.createUser(name, email, phone, password);
+      final result =
+          await _userProvider.createUser(name, email, phone, password);
+      notifyListeners();
+      return result;
     } catch (error) {
       return {'status': 'error', 'msg': error.toString()};
     } finally {
@@ -62,7 +66,7 @@ class UserController with ChangeNotifier {
         email,
         phone,
       );
-      print(response);
+      notifyListeners();
       return response;
     } catch (error) {
       throw 'Erro ao atualizar perfil';
@@ -76,6 +80,7 @@ class UserController with ChangeNotifier {
 
     try {
       final bool success = await _userProvider.deleteUser();
+      notifyListeners();
       return success;
     } catch (error) {
       throw 'Erro ao excluir conta';
@@ -133,6 +138,7 @@ class UserController with ChangeNotifier {
 
     try {
       final response = await createUser(name, email, phone, password);
+      notifyListeners();
       return response['data'];
     } catch (error) {
       return {'status': 'error', 'message': error.toString()};
