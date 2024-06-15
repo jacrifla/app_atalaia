@@ -25,10 +25,21 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
   @override
   void initState() {
     super.initState();
-    ctlGroupController = GroupController(provider: groupProvider);
     groupModel = widget.groupModel;
+    ctlGroupController = GroupController(provider: groupProvider);
     isActive = groupModel.isActive!;
     groupName = groupModel.groupName;
+  }
+
+  Future<void> _toggleGroup() async {
+    setState(() {
+      isActive = !isActive;
+    });
+    groupModel.isActive = isActive;
+    await ctlGroupController.toggleGroup(
+      groupModel.groupId!,
+      isActive,
+    );
   }
 
   @override
@@ -50,16 +61,7 @@ class _GroupCardToggleState extends State<GroupCardToggle> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async {
-                      setState(() {
-                        isActive = !isActive;
-                      });
-                      groupModel.isActive = isActive;
-                      await ctlGroupController.toggleGroup(
-                        groupModel.groupId!,
-                        isActive,
-                      );
-                    },
+                    onTap: _toggleGroup,
                     child: Icon(
                       Icons.lightbulb,
                       size: 40,
