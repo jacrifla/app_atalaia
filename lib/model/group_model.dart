@@ -24,10 +24,8 @@ class GroupModel {
   GroupModel.fromJson(Map<String, dynamic> json) {
     groupId = json['uuid'];
     groupName = json['name'];
-    isActive = json.containsKey('is_active') ? json['is_active'] == 1 : false;
-    scheduleActive = json.containsKey('schedule_active')
-        ? json['schedule_active'] == 1
-        : false;
+    isActive = GroupModel._parseBool(json['is_active']);
+    scheduleActive = GroupModel._parseBool(json['schedule_active']);
     scheduleStart = json['schedule_start'];
     scheduleEnd = json['schedule_end'];
     userId = json['user_id'];
@@ -54,6 +52,13 @@ class GroupModel {
     return '${time.hour}:${time.minute}';
   }
 
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is String) return value.toLowerCase() == 'true' || value == '1';
+    if (value is int) return value == 1;
+    return false;
+  }
+
   @override
   String toString() {
     return 'GroupModel(group_id: $groupId, groupName: $groupName, isActive: $isActive, scheduleActive: $scheduleActive, scheduleStart: $scheduleStart, scheduleEnd: $scheduleEnd, user_id: $userId, macAddresses: $macAddresses)';
@@ -63,8 +68,8 @@ class GroupModel {
     return GroupModel(
       groupId: json['uuid'] as String?,
       groupName: json['name'] as String?,
-      isActive: json['is_active'] == 1,
-      scheduleActive: json['schedule_active'] == 1,
+      isActive: GroupModel._parseBool(json['is_active']),
+      scheduleActive: GroupModel._parseBool(json['schedule_active']),
       scheduleStart: json['schedule_start'] as String?,
       scheduleEnd: json['schedule_end'] as String?,
       userId: json['user_id'] as String?,
