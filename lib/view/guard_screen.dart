@@ -4,7 +4,7 @@ import '../provider/guard_provider.dart';
 import '../model/switch_model.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
-import '../widgets/guard_card_toggle.dart';
+import '../widgets/guard_card_add.dart';
 
 class GuardScreen extends StatefulWidget {
   const GuardScreen({super.key});
@@ -47,7 +47,7 @@ class _GuardScreenState extends State<GuardScreen> {
             : ListView.builder(
                 itemCount: guardSwitches.length,
                 itemBuilder: (context, index) {
-                  return GuardCardToggle(switchModel: guardSwitches[index]);
+                  return GuardCardAdd(switchModel: guardSwitches[index]);
                 },
               ),
       ),
