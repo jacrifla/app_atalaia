@@ -31,45 +31,42 @@ class MenuDrawer extends StatelessWidget {
                   label: 'Home',
                   icon: const Icon(Icons.home),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.home);
+                    Navigator.pushNamed(context, AppRoutes.home);
                   },
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Grupos',
                   icon: const Icon(Icons.group_work),
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppRoutes.groupScreen);
+                    Navigator.pushNamed(context, AppRoutes.groupScreen);
                   },
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Pontos',
                   icon: const Icon(Icons.lightbulb),
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppRoutes.switchScreen);
+                    Navigator.pushNamed(context, AppRoutes.switchScreen);
                   },
                 ),
                 _buildMenuItem(
                   label: 'Gerenciar Guarda',
                   icon: const Icon(Icons.shield_sharp),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.guard);
+                    Navigator.pushNamed(context, AppRoutes.guard);
                   },
                 ),
                 _buildMenuItem(
                   label: 'Perfil',
                   icon: const Icon(Icons.person),
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppRoutes.userProfile);
+                    Navigator.pushNamed(context, AppRoutes.userProfile);
                   },
                 ),
                 // _buildMenuItem(
                 //   label: 'Monitoramento',
                 //   icon: const Icon(Icons.bar_chart_rounded),
                 //   onTap: () {
-                //     Navigator.pushReplacementNamed(context, AppRoutes.monitor);
+                //     Navigator.pushNamed(context, AppRoutes.monitor);
                 //   },
                 //   context: context,
                 // ),
@@ -77,7 +74,7 @@ class MenuDrawer extends StatelessWidget {
                   label: 'Ajuda',
                   icon: const Icon(Icons.help_rounded),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.help);
+                    Navigator.pushNamed(context, AppRoutes.help);
                   },
                 ),
                 Container(
