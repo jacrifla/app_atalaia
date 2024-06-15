@@ -42,8 +42,8 @@ class UserProvider {
       );
 
       if (response.statusCode == 200) {
-        final userUuid = response.data['dados']['uuid'];
-        _authProvider.setUserId(userUuid);
+        final userId = response.data['dados']['uuid'];
+        _authProvider.setUserId(userId);
       }
     } catch (error) {
       if (error is DioException) {
