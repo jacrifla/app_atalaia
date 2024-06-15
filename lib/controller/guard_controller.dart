@@ -9,9 +9,18 @@ class GuardController extends ChangeNotifier {
   final String userId = AuthProvider().userId!;
 
   GuardModel? guardInfo;
+  bool guardActive = false;
 
-  GuardController({required this.provider});
+  GuardController({required this.provider}) {
+    _initializeGuardInfo();
+  }
 
+  // Inicializa as informações da guarda ao instanciar o controlador
+  Future<void> _initializeGuardInfo() async {
+    await getGuardInfo();
+  }
+
+  // Obtém o ID da guarda do usuário
   Future<String?> getGuardId() async {
     try {
       final response = await provider.getGuardInfo({"user_id": userId});
@@ -19,7 +28,6 @@ class GuardController extends ChangeNotifier {
       if (response != null && response.statusCode == 200) {
         var data = response.data['dados'];
         if (data.isNotEmpty) {
-          notifyListeners();
           return data[0]['guard_id'];
         }
       }
@@ -30,6 +38,7 @@ class GuardController extends ChangeNotifier {
     }
   }
 
+  // Obtém as informações da guarda do usuário
   Future<bool> getGuardInfo() async {
     try {
       final response = await provider.getGuardInfo({"user_id": userId});
@@ -51,7 +60,8 @@ class GuardController extends ChangeNotifier {
           switches: switchList,
         );
 
-        print(guardInfo);
+        // Atualiza o estado guardActive com base nos dados obtidos
+        guardActive = data[0]['is_active'] == 1;
 
         notifyListeners();
         return true;
@@ -64,6 +74,7 @@ class GuardController extends ChangeNotifier {
     }
   }
 
+  // Define o estado dos switches na guarda
   Future<bool> defineSwitches(SwitchModel switchModel, bool isActive) async {
     try {
       final response = await provider.defineSwitches({
@@ -83,22 +94,24 @@ class GuardController extends ChangeNotifier {
     }
   }
 
+  // Alterna o estado da guarda
   Future<bool> toggleGuard() async {
     try {
-      if (guardInfo == null) {
-        print('Guard info is not available');
+      final guardId = await getGuardId();
+
+      if (guardId == null) {
+        print('Guard ID is not available');
         return false;
       }
 
       final response = await provider.toggleGuard({
         'user_id': userId,
-        'guard_id': guardInfo!.uuid,
+        'guard_id': guardId,
       });
 
       if (response.statusCode == 200) {
-        for (var switchModel in guardInfo!.switches!) {
-          switchModel.guardActive = !switchModel.guardActive!;
-        }
+        // Atualiza o estado guardActive com base na resposta da API
+        guardActive = !guardActive;
         notifyListeners();
         return true;
       } else {
