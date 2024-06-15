@@ -5,7 +5,7 @@ import '../model/switch_model.dart';
 import '../view/group_create_screen.dart';
 import '../view/group_edit_screen.dart';
 import '../view/group_screen.dart';
-import '../view/guard_management_screen.dart';
+import '../view/guard_screen.dart';
 import '../view/help_screen.dart';
 import '../view/home_screen.dart';
 import '../view/loading_screen.dart';
@@ -44,7 +44,7 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      guard: (context) => GuardManagementScreen(),
+      guard: (context) => const GuardScreen(),
       groupEdit: (context) => EditGroupScreen(groupInfo: GroupModel()),
       groupCreate: (context) => const CreateGroupScreen(),
       groupScreen: (context) => const GroupScreen(),
