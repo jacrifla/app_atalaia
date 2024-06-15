@@ -1,10 +1,10 @@
 import 'package:app_atalaia/utils/config.dart';
 import 'package:dio/dio.dart';
 
-class GuardManagementProvider {
+class GuardProvider {
   final Dio dio = Dio();
 
-  GuardManagementProvider() {
+  GuardProvider() {
     initDio();
   }
 
@@ -18,7 +18,6 @@ class GuardManagementProvider {
     try {
       final response = await dio.post(
         '/guard',
-        // data: {'user_id': userId},
         data: data,
       );
       return response;
