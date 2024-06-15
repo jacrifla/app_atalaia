@@ -61,7 +61,7 @@ class _EditSwitchScreenState extends State<EditSwitchScreen> {
         );
 
         if (success) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.switchScreen);
+          Navigator.of(context).pushNamed(AppRoutes.switchScreen);
         }
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(

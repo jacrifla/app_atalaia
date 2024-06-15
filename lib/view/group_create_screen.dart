@@ -51,7 +51,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         ),
       );
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.pushReplacementNamed(context, AppRoutes.groupScreen);
+        Navigator.pushNamed(context, AppRoutes.groupScreen);
       });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
