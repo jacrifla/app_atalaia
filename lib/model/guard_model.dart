@@ -6,6 +6,7 @@ class GuardModel {
 
   GuardModel({this.uuid, this.switches});
 
+  // Construtor que inicializa um GuardModel a partir de uma lista JSON
   GuardModel.fromJson(List<dynamic> jsonList) {
     if (jsonList.isNotEmpty) {
       uuid = jsonList[0]['guard_id'];
@@ -18,12 +19,13 @@ class GuardModel {
                 'name': item['switch_name'],
                 'is_active': null,
                 'watts': null,
-                'guard_active': item['guard_active'],
+                'guard_active': _parseBool(item['guard_active']),
               }))
           .toList();
     }
   }
 
+  // Converte um GuardModel para um mapa JSON
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['guard_id'] = uuid;
@@ -31,6 +33,14 @@ class GuardModel {
       data['switches'] = switches!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  // Converte valores diversos para booleano
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is String) return value.toLowerCase() == 'true' || value == '1';
+    if (value is int) return value == 1;
+    return false;
   }
 
   @override

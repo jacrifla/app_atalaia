@@ -21,6 +21,7 @@ class GroupModel {
     this.macAddresses,
   });
 
+  // Construtor que inicializa um GroupModel a partir de um JSON
   GroupModel.fromJson(Map<String, dynamic> json) {
     groupId = json['uuid'];
     groupName = json['name'];
@@ -35,6 +36,7 @@ class GroupModel {
             : [];
   }
 
+  // Converte um GroupModel para um mapa JSON
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['uuid'] = groupId;
@@ -48,10 +50,12 @@ class GroupModel {
     return data;
   }
 
+  // Formata TimeOfDay para string no formato 'hora:minuto'
   String formatTimeOfDayToString(TimeOfDay time) {
     return '${time.hour}:${time.minute}';
   }
 
+  // Converte valores diversos para booleano
   static bool _parseBool(dynamic value) {
     if (value is bool) return value;
     if (value is String) return value.toLowerCase() == 'true' || value == '1';
@@ -64,6 +68,7 @@ class GroupModel {
     return 'GroupModel(group_id: $groupId, groupName: $groupName, isActive: $isActive, scheduleActive: $scheduleActive, scheduleStart: $scheduleStart, scheduleEnd: $scheduleEnd, user_id: $userId, macAddresses: $macAddresses)';
   }
 
+  // Fábrica que inicializa um GroupModel a partir de um mapa JSON
   factory GroupModel.fromJsonMap(Map<String, dynamic> json) {
     return GroupModel(
       groupId: json['uuid'] as String?,

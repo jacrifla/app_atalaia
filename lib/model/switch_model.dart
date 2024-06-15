@@ -21,6 +21,7 @@ class SwitchModel {
     this.guardActive,
   });
 
+  // Construtor que inicializa um SwitchModel a partir de um JSON
   SwitchModel.fromJson(Map<String, dynamic> json) {
     uuid = json['uuid'];
     userId = json['user_id'];
@@ -32,6 +33,7 @@ class SwitchModel {
     guardActive = _parseBool(json['guard_active']);
   }
 
+  // Converte um SwitchModel para um mapa JSON
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['uuid'] = uuid;
@@ -45,6 +47,7 @@ class SwitchModel {
     return data;
   }
 
+  // Converte valores diversos para booleano
   bool? _parseBool(dynamic value) {
     if (value is bool) {
       return value;
@@ -56,6 +59,7 @@ class SwitchModel {
     return null;
   }
 
+  // // Converte um valor dinâmico para inteiro, se possível
   int? _parseInt(dynamic value) {
     if (value is int) {
       return value;
