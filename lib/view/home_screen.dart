@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   late List<GroupModel> userGroups = [];
   late List<SwitchModel> userSwitches = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -36,17 +37,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
     final groups = await ctlGroupController.getAllGroups();
     final switches = await ctlSwitchController.getSwitches();
     setState(() {
       userGroups = groups;
       userSwitches = switches;
+      _isLoading = false;
     });
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _loadData();
     });
   }
 
@@ -71,6 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSelectedScreen() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     switch (_selectedIndex) {
       case 0:
         return _buildGroupCards();
@@ -104,8 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 20),
             Expanded(
               child: AnimatedBuilder(
-                animation: ctlSwitchController,
-                builder: (context, child) {
+                animation:
+                    Listenable.merge([ctlGroupController, ctlSwitchController]),
+                builder: (context, _) {
                   return _buildSelectedScreen();
                 },
               ),
