@@ -184,7 +184,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
             top: 10,
             right: 10,
             child: ButtonIcon(
-              backgroundColor: appTheme.errorColor,
+              backgroundColor: appTheme.colorScheme.error,
               icon: const Icon(Icons.delete_outline_outlined),
               labelText: 'Deletar conta',
               onPressed: _excluirConta,
