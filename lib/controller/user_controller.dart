@@ -28,13 +28,13 @@ class UserController with ChangeNotifier {
   Future<void> loginUser(
       BuildContext context, String email, String password) async {
     _setLoading(true);
-    try {
-      await _userProvider.login(email, password);
+    final response = await provider.login(email, password);
+    _setLoading(false);
+
+    if (response['status'] == 'success') {
       Navigator.pushReplacementNamed(context, AppRoutes.loading);
-    } catch (error) {
-      throw 'Erro no login';
-    } finally {
-      _setLoading(false);
+    } else {
+      _setErrorMessage(response['msg']);
     }
   }
 

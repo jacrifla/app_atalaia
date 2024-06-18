@@ -29,10 +29,9 @@ class UserProvider {
     return {};
   }
 
-  Future<void> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       initDio();
-
       final response = await _dio.post(
         '${Config.apiUrl}/login',
         data: {
@@ -45,18 +44,12 @@ class UserProvider {
         final userId = response.data['dados']['uuid'];
         _authProvider.setUserId(userId);
       }
+      return response.data;
     } catch (error) {
-      if (error is DioException) {
-        if (error.response?.statusCode == 401) {
-          throw 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.';
-        } else if (error.response?.statusCode == 404) {
-          throw 'Usuário não encontrado. Por favor, verifique seu e-mail.';
-        } else {
-          throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.';
-        }
-      } else {
-        throw 'Erro inesperado. Por favor, tente novamente mais tarde.';
-      }
+      return {
+        'status': 'error',
+        'msg': 'Erro ao conectar ao servidor',
+      };
     }
   }
 
@@ -64,7 +57,6 @@ class UserProvider {
       String name, String email, String phone, String password) async {
     try {
       initDio();
-
       final response = await _dio.post(
         '${Config.apiUrl}/register',
         data: {

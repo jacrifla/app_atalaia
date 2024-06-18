@@ -4,7 +4,6 @@ import '../themes/theme.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 import '../utils/routes.dart';
-import '../utils/utils.dart';
 import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
 
@@ -24,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    ctlUserController = UserController(userProvider);
+    ctlUserController = UserController(provider: userProvider);
     super.initState();
     _clearTextFields();
   }
@@ -73,9 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Digite seu e-mail';
                           }
-                          if (!isValidEmail(value)) {
-                            return 'Digite um e-mail válido';
-                          }
                           return null;
                         },
                       ),
@@ -88,9 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Digite sua senha';
-                          }
-                          if (value.length < 8) {
-                            return 'Senha deve ter no mínimo 8 caracteres';
                           }
                           return null;
                         },
