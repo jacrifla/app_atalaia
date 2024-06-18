@@ -3,25 +3,36 @@ import '../provider/user_provider.dart';
 import '../utils/routes.dart';
 import '../utils/utils.dart';
 
-class UserController with ChangeNotifier {
-  final UserProvider _userProvider;
+class UserController extends ChangeNotifier {
+  final UserProvider provider;
 
-  UserController(this._userProvider);
+  UserController({required this.provider});
 
   bool _isLoading = false;
-  String? _errorMessage;
-
   bool get isLoading => _isLoading;
+
+  String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<Map<String, dynamic>> getUser() async {
-    try {
-      final userId = _userProvider.getUserId();
-      final response = await _userProvider.getUser(userId);
-      notifyListeners();
-      return response;
-    } catch (error) {
-      throw 'Erro ao carregar os dados do usuário: $error';
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  void _setErrorMessage(String? message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  Future<void> getUser() async {
+    _setLoading(true);
+    final userId = provider.getUserId();
+    final response = await provider.getUser(userId);
+    _setLoading(false);
+
+    if (response['status'] == 'success') {
+    } else {
+      _setErrorMessage(response['msg']);
     }
   }
 

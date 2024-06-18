@@ -20,13 +20,13 @@ class UserProvider {
       initDio();
       final response =
           await _dio.post('${Config.apiUrl}/user', data: {'user_id': userId});
-      if (response.data['status'] == 'success') {
-        return response.data['dados'];
-      }
-    } on DioException {
-      rethrow;
+      return response.data;
+    } catch (error) {
+      return {
+        'status': 'error',
+        'msg': 'Erro ao carregar os dados do usuário',
+      };
     }
-    return {};
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
