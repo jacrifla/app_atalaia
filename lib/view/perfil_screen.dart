@@ -26,7 +26,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
   @override
   void initState() {
-    ctlUserController = UserController(userProvider);
+    ctlUserController = UserController(provider: userProvider);
     _loadUserData();
     super.initState();
   }
@@ -44,12 +44,16 @@ class _PerfilScreenState extends State<PerfilScreen> {
             ),
             TextButton(
               onPressed: () async {
-                final success = await ctlUserController.deleteUser();
-                if (success) {
-                  _showSuccessSnackbar('Conta excluída com sucesso');
-                  Navigator.pushReplacementNamed(context, AppRoutes.login);
+                await ctlUserController.deleteUser();
+                if (ctlUserController.errorMessage == null) {
+                  _showSnackbar('Conta excluída com sucesso', isError: false);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.login,
+                    (Route<dynamic> route) => false,
+                  );
                 } else {
-                  _showErrorSnackbar('Erro ao excluir conta');
+                  _showSnackbar(ctlUserController.errorMessage!, isError: true);
                 }
               },
               child: const Text('Excluir'),
@@ -65,43 +69,32 @@ class _PerfilScreenState extends State<PerfilScreen> {
     final email = _emailController.text;
     final phone = _phoneController.text;
 
-    try {
-      await ctlUserController.updateUserInfo(
-        name,
-        email,
-        phone,
-      );
-      _showSuccessSnackbar('Perfil alterado com sucesso');
-    } catch (e) {
-      _showErrorSnackbar('Erro ao atualizar perfil: $e');
+    await ctlUserController.updateUserInfo(name, email, phone);
+    if (ctlUserController.errorMessage == null) {
+      _showSnackbar('Perfil alterado com sucesso', isError: false);
+    } else {
+      _showSnackbar(ctlUserController.errorMessage!, isError: true);
     }
   }
 
   void _loadUserData() async {
-    try {
-      final userData = await ctlUserController.getUser();
-      _nameController.text = userData['name'];
-      _emailController.text = userData['email'];
-      _phoneController.text = userData['phone'];
-    } catch (e) {
-      print('Erro ao carregar dados do usuário: $e');
+    await ctlUserController.getUser();
+    if (ctlUserController.errorMessage == null) {
+      final userData = ctlUserController.userData;
+      _nameController.text = userData?['name'] ?? '';
+      _emailController.text = userData?['email'] ?? '';
+      _phoneController.text = userData?['phone'] ?? '';
+    } else {
+      print(
+          'Erro ao carregar dados do usuário: ${ctlUserController.errorMessage}');
     }
   }
 
-  void _showErrorSnackbar(String message) {
+  void _showSnackbar(String message, {required bool isError}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-
-  void _showSuccessSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: isError ? Colors.red : Colors.green,
       ),
     );
   }

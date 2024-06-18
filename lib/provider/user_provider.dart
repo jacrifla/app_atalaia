@@ -82,7 +82,6 @@ class UserProvider {
       String name, String email, String phone) async {
     try {
       initDio();
-
       final userId = getUserId();
       final response = await _dio.post(
         '${Config.apiUrl}/user/update',
@@ -93,40 +92,23 @@ class UserProvider {
           'phone': phone,
         },
       );
-
-      if (response.statusCode == 200) {
-        return response.data;
-      } else {
-        throw 'Falha ao atualizar usuário. Status code: ${response.statusCode}';
-      }
-    } on DioException catch (error) {
-      if (error.response?.statusCode == 401) {
-        throw 'Credenciais inválidas. Por favor, verifique seu e-mail e senha.';
-      } else if (error.response?.statusCode == 404) {
-        throw 'Usuário não encontrado. Por favor, verifique seu e-mail.';
-      } else {
-        throw 'Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.';
-      }
+      return response.data;
+    } catch (error) {
+      return {'status': 'error', 'msg': 'Erro ao atualizar usuário'};
     }
   }
 
-  Future<bool> deleteUser() async {
+  Future<Map<String, dynamic>> deleteUser() async {
     try {
       initDio();
       final userId = getUserId();
-
       final response = await _dio.post(
         '${Config.apiUrl}/user/delete',
         data: {'user_id': userId},
       );
-
-      if (response.statusCode == 200) {
-        return response.data['dados'];
-      } else {
-        throw 'Falha ao excluir usuário. Status code: ${response.statusCode}';
-      }
+      return response.data;
     } catch (error) {
-      throw 'Erro ao excluir usuário: $error';
+      return {'status': 'error', 'msg': 'Erro ao excluir usuário'};
     }
   }
 }

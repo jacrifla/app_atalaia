@@ -67,54 +67,28 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> updateUserInfo(
-    String name,
-    String email,
-    String phone,
-  ) async {
+  Future<void> updateUserInfo(String name, String email, String phone) async {
     _setLoading(true);
+    final response = await provider.updateUser(name, email, phone);
+    _setLoading(false);
 
-    try {
-      final response = await _userProvider.updateUser(
-        name,
-        email,
-        phone,
-      );
+    if (response['status'] == 'success') {
       notifyListeners();
-      return response;
-    } catch (error) {
-      throw 'Erro ao atualizar perfil';
-    } finally {
-      _setLoading(false);
+    } else {
+      _setErrorMessage(response['msg']);
     }
   }
 
-  Future<bool> deleteUser() async {
+  Future<void> deleteUser() async {
     _setLoading(true);
+    final response = await provider.deleteUser();
+    _setLoading(false);
 
-    try {
-      final bool success = await _userProvider.deleteUser();
+    if (response['status'] == 'success') {
       notifyListeners();
-      return success;
-    } catch (error) {
-      throw 'Erro ao excluir conta';
-    } finally {
-      _setLoading(false);
+    } else {
+      _setErrorMessage(response['msg']);
     }
-  }
-
-  void _setLoading(bool value) {
-    _isLoading = value;
-    notifyListeners();
-  }
-
-  void _setErrorMessage(String? message) {
-    _errorMessage = message;
-    notifyListeners();
-  }
-
-  void clearError() {
-    _setErrorMessage(null);
   }
 
   bool arePasswordsEqual(String password, String confirmPassword) {
