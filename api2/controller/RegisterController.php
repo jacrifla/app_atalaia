@@ -18,8 +18,8 @@ class RegisterController
             if($hasUser){
                 $response::json([
                     'status' => 'error',
-                    'msg' => 'Existent User'
-                ], 400);
+                    'msg' => 'Usuário existente'
+                ], 409);
             }else{
                 $user = RegisterModel::insert($data);
                 
