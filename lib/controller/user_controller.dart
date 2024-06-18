@@ -133,29 +133,37 @@ class UserController extends ChangeNotifier {
     return password.length >= 8;
   }
 
-  Future<Map<String, dynamic>> signUpUser(
-      String name, String email, String phone, String password) async {
-    if (!validateEmail(email)) {
-      return {'status': 'error', 'message': 'Email inválido'};
+  Future<void> signUpUser(BuildContext context, String name, String email,
+      String phone, String password, String confirmPassword) async {
+    if (!arePasswordsEqual(password, confirmPassword)) {
+      _setErrorMessage('As senhas não correspondem.');
+      return;
     }
 
-    if (!validatePhoneNumber(phone)) {
-      return {'status': 'error', 'message': 'Número de telefone inválido'};
+    if (!isValidEmail(email)) {
+      _setErrorMessage('Digite um e-mail válido');
+      return;
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+      _setErrorMessage('Digite um celular válido');
+      return;
     }
 
     if (!validatePassword(password)) {
-      return {
-        'status': 'error',
-        'message': 'Senha deve ter no mínimo 8 caracteres'
-      };
+      _setErrorMessage('A senha deve ter pelo menos 8 caracteres');
+      return;
     }
 
-    try {
-      final response = await createUser(name, email, phone, password);
+    final response = await provider.createUser(name, email, phone, password);
+    if (response['status'] == 'success') {
+      _setErrorMessage('Usuário criado com sucesso!');
       notifyListeners();
-      return response['data'];
-    } catch (error) {
-      return {'status': 'error', 'message': error.toString()};
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      });
+    } else {
+      _setErrorMessage(response['msg']);
     }
   }
 }
