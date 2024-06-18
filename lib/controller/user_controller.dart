@@ -38,18 +38,21 @@ class UserController with ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> createUser(
+  Future<void> createUser(
       String name, String email, String phone, String password) async {
     _setLoading(true);
-    try {
-      final result =
-          await _userProvider.createUser(name, email, phone, password);
+    final response = await provider.createUser(
+      name,
+      email,
+      phone,
+      password,
+    );
+    _setLoading(false);
+
+    if (response['status'] == 'success') {
       notifyListeners();
-      return result;
-    } catch (error) {
-      return {'status': 'error', 'msg': error.toString()};
-    } finally {
-      _setLoading(false);
+    } else {
+      _setErrorMessage(response['msg']);
     }
   }
 

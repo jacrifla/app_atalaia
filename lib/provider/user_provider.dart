@@ -74,23 +74,16 @@ class UserProvider {
           'password_hash': password,
         },
       );
-
-      if (response.statusCode == 201) {
-        return {'status': 'success', 'data': response.data};
-      } else {
-        throw 'Failed to create user: ${response.data['msg']}';
-      }
-    } catch (e) {
-      if (e is DioException) {
-        if (e.response != null) {
-          throw 'Failed to create user: ${e.response!.data['msg']}';
-        } else {
-          throw 'Failed to connect to the server.';
-        }
-      } else {
-        throw 'Unknown error occurred.';
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.statusCode == 409) {
+        return {
+          'status': 'error',
+          'msg': e.response?.data['msg'] ?? 'Erro ao criar usuário'
+        };
       }
     }
+    return {'status': 'error', 'msg': 'Erro ao criar usuário'};
   }
 
   Future<Map<String, dynamic>> updateUser(
