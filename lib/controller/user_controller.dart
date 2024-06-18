@@ -14,6 +14,9 @@ class UserController extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  Map<String, dynamic>? _userData;
+  Map<String, dynamic>? get userData => _userData;
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -24,6 +27,11 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _setUserData(Map<String, dynamic>? data) {
+    _userData = data;
+    notifyListeners();
+  }
+
   Future<void> getUser() async {
     _setLoading(true);
     final userId = provider.getUserId();
@@ -31,6 +39,7 @@ class UserController extends ChangeNotifier {
     _setLoading(false);
 
     if (response['status'] == 'success') {
+      _setUserData(response['dados']);
     } else {
       _setErrorMessage(response['msg']);
     }
@@ -52,12 +61,7 @@ class UserController extends ChangeNotifier {
   Future<void> createUser(
       String name, String email, String phone, String password) async {
     _setLoading(true);
-    final response = await provider.createUser(
-      name,
-      email,
-      phone,
-      password,
-    );
+    final response = await provider.createUser(name, email, phone, password);
     _setLoading(false);
 
     if (response['status'] == 'success') {
