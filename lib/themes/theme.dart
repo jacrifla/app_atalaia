@@ -23,31 +23,31 @@ final appTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all<Color>(principalColor),
+      foregroundColor: WidgetStateProperty.all<Color>(principalColor),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle(
-      side: MaterialStateProperty.all<BorderSide>(
+      side: WidgetStateProperty.all<BorderSide>(
           const BorderSide(color: principalColor)),
-      foregroundColor: MaterialStateProperty.all<Color>(principalColor),
+      foregroundColor: WidgetStateProperty.all<Color>(principalColor),
     ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(principalColor),
-      foregroundColor: MaterialStateProperty.all<Color>(backgroundColor),
+      backgroundColor: WidgetStateProperty.all<Color>(principalColor),
+      foregroundColor: WidgetStateProperty.all<Color>(backgroundColor),
     ),
   ),
   switchTheme: SwitchThemeData(
-    thumbColor: MaterialStateProperty.resolveWith((states) {
-      if (states.contains(MaterialState.selected)) {
+    thumbColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
         return secondColor;
       }
       return disable;
     }),
-    trackColor: MaterialStateProperty.resolveWith((states) {
-      if (states.contains(MaterialState.selected)) {
+    trackColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
         return secondColor;
       }
       return disable;

@@ -80,7 +80,7 @@ class MenuDrawer extends StatelessWidget {
                 Container(
                   color: appTheme.primaryColor,
                   child: _buildMenuItem(
-                    color: appTheme.colorScheme.background,
+                    color: appTheme.colorScheme.surface,
                     label: 'Sair',
                     icon: const Icon(
                       Icons.logout,

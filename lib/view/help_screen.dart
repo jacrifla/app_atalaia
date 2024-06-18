@@ -30,7 +30,7 @@ class _HelpScreenState extends State<HelpScreen> {
         icon: Icons.help,
       ),
       body: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
