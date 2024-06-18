@@ -57,3 +57,7 @@ String? validatePassword(String value) {
   // Se todos os critérios forem atendidos, retorna null
   return null;
 }
+
+bool arePasswordsEqual(String password, String confirmPassword) {
+  return password == confirmPassword;
+}
