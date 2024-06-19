@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#include <EEPROM.h>
+// #include <EEPROM.h>
 #include <ArduinoJson.h>
 
 const char* ssid = "AMNET85_1450";
@@ -8,10 +8,10 @@ const char* password = "hacker_cmt23";
 // const char* ssid = "AMNET85_4095_EXT";
 // const char* password = "Godofredo_2";
 
-// const char* host = "192.168.101.7";
-// const char* endpointGet = "/app_atalaia/api2/switches/getone";
-const char* host = "atalaiaproject.000webhostapp.com";
-const char* endpointGet = "/switches/getone";
+const char* host = "192.168.101.7";
+const char* endpointGet = "/app_atalaia/api2/switches/getone";
+// const char* host = "atalaiaproject.000webhostapp.com";
+// const char* endpointGet = "/switches/getone";
 const int port = 80;
 
 bool relayState = false; // Estado inicial do relé
@@ -28,7 +28,6 @@ const int relayStatus2 = LOW;
 // const int relayStatus1 = LOW;
 // const int relayStatus2 = HIGH;
 
-#define GPIO2_PIN 2
 
 void setup()
 {
