@@ -3,7 +3,10 @@ class Config {
   // static const String apiUrl = 'http://192.168.1.25:80/app_atalaia/api2';
 
   // PC - Daniel
-  static const String apiUrl = 'http://192.168.101.7:80/app_atalaia/api2';
+  // static const String apiUrl = 'http://192.168.101.7:80/app_atalaia/api2';
+
+  // IP Fixo Fatec
+  static const String apiUrl = 'http://192.168.1.100:80/app_atalaia/api2';
 
   // NOTE
   // static const String apiUrl = 'http://192.168.1.29:80/app_atalaia/api2';
