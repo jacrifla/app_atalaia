@@ -62,7 +62,7 @@ class _GroupScreenState extends State<GroupScreen> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('Erro ao carregar grupos: ${snapshot.error}'),
+              child: Text('${snapshot.error}'),
             );
           } else {
             return ListView.builder(

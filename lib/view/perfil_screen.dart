@@ -85,8 +85,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       _emailController.text = userData?['email'] ?? '';
       _phoneController.text = userData?['phone'] ?? '';
     } else {
-      print(
-          'Erro ao carregar dados do usuário: ${ctlUserController.errorMessage}');
+      print('${ctlUserController.errorMessage}');
     }
   }
 

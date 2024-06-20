@@ -51,7 +51,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
         });
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao carregar switches do grupo: $error')),
+          SnackBar(content: Text('$error')),
         );
       }
     }
