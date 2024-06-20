@@ -54,16 +54,17 @@ class SwitchModel
         try {
             $pdo = ConnectionMYSQL::getInstance();
 
-            $stmt = $pdo->prepare('
+            $stmt = $pdo->prepare("
             SELECT 
                 s.updated_at as updated_at,
                 s.is_active as is_active,
                 s.guard_active as guard_active,
-                IF(g.is_active IS NOT NULL, g.is_active, 0) as guard_is_on
+                CAST(COALESCE(g.is_active, 0) as UNSIGNED) as guard_is_on,
+                COALESCE(g.updated_at, '1970-01-01 00:00:00') AS guard_updated_at
             FROM tb_switch s
             INNER JOIN tb_user u ON u.id = s.user_id
             LEFT JOIN tb_guard g ON g.user_id = u.id
-            WHERE s.mac_address = ?');
+            WHERE s.mac_address = ?");
             $stmt->execute([$mac_address]);
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
