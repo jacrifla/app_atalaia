@@ -123,6 +123,49 @@ class GuardModel
         }
     }
 
+    public static function updateSwitches($userId){
+        try {
+            $pdo = ConnectionMYSQL::getInstance();
+            
+           
+            // Criar a consulta com os valores concatenados diretamente
+            $query = "
+                UPDATE tb_switch
+                SET updated_at = NOW()
+                WHERE user_id =:userId
+                AND deleted_at IS NULL
+            ";
+            
+            $stmt = $pdo->prepare($query);
+            
+            // Bind do valor para guard_active
+            $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+            
+            $stmt->execute();
+            
+            return ($stmt->rowCount() > 0);
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public static function getUserByGuard($guardId){
+        try {
+            $pdo = ConnectionMYSQL::getInstance();            
+            $stmt = $pdo->prepare('SELECT user_id from tb_guard WHERE uuid = ?');
+            $stmt->execute([$guardId]);
+
+            return $stmt->fetchColumn();
+        
+        } catch (\PDOException $e) {
+            throw new \Exception(ExceptionPdo::translateError($e->getMessage()));
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 
     // public static function lastInsertId()
     // {

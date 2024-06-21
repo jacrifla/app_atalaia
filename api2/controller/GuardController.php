@@ -74,9 +74,10 @@ class GuardController
         try {
             $data = $request->bodyJson();
             
-            $toggle = GuardModel::toggleGuard($data['guard_id']);
-            
-            if ($toggle) {
+            $toggle  = GuardModel::toggleGuard($data['guard_id']);
+            $guard   = GuardModel::getUserByGuard($data['guard_id']);
+            $success = GuardModel::updateSwitches($guard);
+            if ($toggle && $success) {
                 $response::json([
                     'status' => 'success',
                     'dados' => $toggle
