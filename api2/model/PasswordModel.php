@@ -101,9 +101,9 @@ class PasswordModel {
         // }
             //Configuração do servidor
             $mail->isSMTP();
-            $mail->Host = 'smtp.office365.com';
+            $mail->Host = 'smtp.mail.yahoo.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'atalaia_app@outlook.com';
+            $mail->Username = 'atalaia.project@yahoo.com';
             $mail->Password = 'Grupo1+2';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
@@ -112,7 +112,7 @@ class PasswordModel {
             $mail->Encoding = 'base64';
 
             // Destinatário
-            $mail->setFrom('atalaia_app@outlook.com', 'App_Atalaia');
+            $mail->setFrom('atalaia.project@yahoo.com', 'App_Atalaia');
             $mail->addAddress($email);
 
             // Conteúdo do email
