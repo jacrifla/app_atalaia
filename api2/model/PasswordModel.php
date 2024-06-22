@@ -1,5 +1,12 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once './PHPMailer/Exception.php';
+require_once './PHPMailer/PHPMailer.php';
+require_once './PHPMailer/SMTP.php';
+
 require_once './core/ConnectionMYSQL.php';
 require_once './core/ExceptionPdo.php';
 //EM CONSTRUÇÃO
@@ -11,14 +18,13 @@ class PasswordModel {
         try {
             $pdo = ConnectionMYSQL::getInstance();
     
-            // Prepara a query SQL para atualizar o campo deleted_at // Generates hash password
             $passwordHash = password_hash($data['password_hash'], PASSWORD_DEFAULT);
     
-            $sql = 'UPDATE tb_user SET password_hash = ? WHERE id = ?';
+            $sql = 'UPDATE tb_user SET password_hash = ? WHERE email = ?';
     
             // Executa a query SQL
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$passwordHash, $data['id']]);
+            $stmt->execute([$passwordHash, $data['email']]);
     
             return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
@@ -29,16 +35,16 @@ class PasswordModel {
     }
     
     //Password Reset Methods
-    public static function generateToken(array $data) {
+    public static function generateToken($email) {
         try {
             $pdo = ConnectionMYSQL::getInstance();
+            // $token = bin2hex(random_bytes(32 / 2));
+            $token = mt_rand(100000, 999999);
 
-            $email = $data['email'];
-            $token = $data['token'];
-            $expiration = $data['expiration'];
+            $stmt = $pdo->prepare("INSERT INTO tb_user_reset (email, token) VALUES (?, ?)");
+            $stmt->execute([$email, $token]);
 
-            $stmt = $pdo->prepare("INSERT INTO tb_user_reset (email, token, date_expiration) VALUES (?, ?, ?)");
-            $stmt->execute([$email, $token, $expiration]);
+            return $token;
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
         } catch (\Exception $e) {
@@ -46,14 +52,13 @@ class PasswordModel {
         }
     }
 
-    public static function getTokenByEmail(array $data) {
+    public static function getTokenByEmail($email) {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            $email = $data['email'];
 
-            $stmt = $pdo->prepare("SELECT * FROM tb_user_reset WHERE email = ?");
+            $stmt = $pdo->prepare("SELECT token FROM tb_user_reset WHERE email = ?");
             $stmt->execute([$email]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetchColumn();
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
         } catch (\Exception $e) {
@@ -61,17 +66,65 @@ class PasswordModel {
         }
     }
 
-    public static function deleteTokenByEmail(array $data) {
+    public static function deleteTokenByEmail($email) {
         try {
             $pdo = ConnectionMYSQL::getInstance();
-            $email = $data['email'];
-
             $stmt = $pdo->prepare("DELETE FROM tb_user_reset WHERE email = ?");
             $stmt->execute([$email]);
+            return ($stmt->rowCount() > 0);
         } catch (\PDOException $e) {
             throw new \Exception($e->getMessage());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
+
+
+
+
+    public static function sendVerificationCode($email, $code) {
+        $mail = new PHPMailer(true);
+
+        try {
+
+              // Enviar o código por email
+        // $subject = 'Código de Verificação';
+        // $message = 'Seu código de verificação para redefinição de senha é: ' . $code;
+        // $headers = 'From: atalaiaproject@gmail.com' . "\r\n" .
+        //            'Reply-To: atalaiaproject@gmail.com' . "\r\n" .
+        //            'X-Mailer: PHP/' . phpversion();
+
+        // if (mail($email, $subject, $message, $headers)) {
+        //     echo 'Código de verificação enviado!';
+        // } else {
+        //     echo 'Erro ao enviar o código de verificação.';
+        // }
+            //Configuração do servidor
+            $mail->isSMTP();
+            $mail->Host = 'smtp.office365.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'atalaia_app@outlook.com';
+            $mail->Password = 'Grupo1+2';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+
+            // Destinatário
+            $mail->setFrom('atalaia_app@outlook.com', 'App_Atalaia');
+            $mail->addAddress($email);
+
+            // Conteúdo do email
+            $mail->isHTML(true);
+            $mail->Subject = 'Código de Verificação';
+            $mail->Body    = 'Seu código de verificação para redefinição de senha é: ' . $code;
+
+            $mail->send();
+           echo 'Código de verificação enviado!';
+        } catch (Exception $e) {
+            echo "Erro ao enviar código de verificação: {$mail->ErrorInfo}";
+        }
+    }
+
 }

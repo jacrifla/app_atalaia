@@ -37,6 +37,10 @@ Http::post('/guard', 'GuardController@getGuardInfo');
 Http::post('/guard/configswitch', 'GuardController@defineSwitch');
 Http::post('/guard/toggle', 'GuardController@toggleGuard');
 
+//Change Password
+Http::post('/password/reqChangePassword', 'PasswordController@reqChangePassword');
+Http::post('/password/changePassword', 'PasswordController@changePassword');
+
 
 //Rotas internas
 Http::post('/macAddress', 'MacAddressController@insert');
