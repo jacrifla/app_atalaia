@@ -29,14 +29,14 @@ class ButtonIcon extends StatelessWidget {
       ),
       icon: icon ?? const SizedBox.shrink(),
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all<Color?>(backgroundColor),
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+        backgroundColor: MaterialStateProperty.all<Color?>(backgroundColor),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        side: WidgetStateProperty.all(borderSide ?? BorderSide.none),
-        minimumSize: WidgetStateProperty.all(const Size(120, 50)),
+        side: MaterialStateProperty.all(borderSide ?? BorderSide.none),
+        minimumSize: MaterialStateProperty.all(const Size(120, 50)),
       ),
     );
   }
