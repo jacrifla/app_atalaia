@@ -1,10 +1,11 @@
 import 'package:app_atalaia/themes/theme.dart';
 import 'package:flutter/material.dart';
 import '../controller/guard_controller.dart';
-import '../provider/guard_provider.dart';
 
 class GuardCard extends StatefulWidget {
-  const GuardCard({super.key});
+  final GuardController guardController;
+
+  const GuardCard({super.key, required this.guardController});
 
   @override
   State<GuardCard> createState() => _GuardCardState();
@@ -15,20 +16,12 @@ class _GuardCardState extends State<GuardCard> {
   Color desativate = appTheme.disabledColor;
   Color guardaButtonColor = appTheme.colorScheme.error;
   Color bgCard = appTheme.colorScheme.background;
-  late GuardController ctlGuardController;
-
-  @override
-  void initState() {
-    super.initState();
-    final guardProvider = GuardProvider();
-    ctlGuardController = GuardController(provider: guardProvider);
-  }
 
   void _toggleGuarda() async {
-    bool success = await ctlGuardController.toggleGuard();
+    bool success = await widget.guardController.toggleGuard();
     if (success) {
       setState(() {
-        // Não é necessário gerenciar _guardaAtiva aqui, pois é gerenciado pelo controlador
+        // Atualiza a UI com base no novo estado da guarda
       });
     }
   }
@@ -36,7 +29,7 @@ class _GuardCardState extends State<GuardCard> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: ctlGuardController,
+      animation: widget.guardController,
       builder: (context, _) {
         return Card(
           elevation: 3,
@@ -50,8 +43,9 @@ class _GuardCardState extends State<GuardCard> {
                   child: Icon(
                     Icons.security,
                     size: 50,
-                    color:
-                        ctlGuardController.guardActive ? ativate : desativate,
+                    color: widget.guardController.guardActive
+                        ? ativate
+                        : desativate,
                   ),
                 ),
                 Expanded(
@@ -67,11 +61,11 @@ class _GuardCardState extends State<GuardCard> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        ctlGuardController.guardActive
+                        widget.guardController.guardActive
                             ? 'Sua guarda está ativa no momento.'
                             : 'Sua guarda não está ativa no momento.',
                         style: TextStyle(
-                          color: ctlGuardController.guardActive
+                          color: widget.guardController.guardActive
                               ? ativate
                               : desativate,
                         ),
@@ -81,13 +75,13 @@ class _GuardCardState extends State<GuardCard> {
                       ElevatedButton(
                         onPressed: _toggleGuarda,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ctlGuardController.guardActive
+                          backgroundColor: widget.guardController.guardActive
                               ? guardaButtonColor
                               : ativate,
                           minimumSize: const Size(200, 40),
                         ),
                         child: Text(
-                          ctlGuardController.guardActive
+                          widget.guardController.guardActive
                               ? 'Desativar Guarda'
                               : 'Ativar Guarda Agora',
                         ),

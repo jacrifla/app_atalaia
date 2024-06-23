@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../controller/group_controller.dart';
 import '../controller/switch_controller.dart';
+import '../controller/guard_controller.dart';
 import '../provider/group_provider.dart';
 import '../provider/switch_provider.dart';
+import '../provider/guard_provider.dart';
 import '../widgets/guard_card.dart';
 import '../widgets/menu.dart';
 import '../widgets/group_card_toggle.dart';
@@ -21,8 +23,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final SwitchProvider switchProvider = SwitchProvider();
   final GroupProvider groupProvider = GroupProvider();
+  final GuardProvider guardProvider = GuardProvider();
   late final SwitchController ctlSwitchController;
   late final GroupController ctlGroupController;
+  late final GuardController guardController;
+
   int _selectedIndex = 0;
   late List<GroupModel> userGroups = [];
   late List<SwitchModel> userSwitches = [];
@@ -33,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     ctlSwitchController = SwitchController(provider: switchProvider);
     ctlGroupController = GroupController(provider: groupProvider);
+    guardController = GuardController(provider: guardProvider);
     _loadData();
   }
 
@@ -42,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     final groups = await ctlGroupController.getAllGroups();
     final switches = await ctlSwitchController.getSwitches();
+    await guardController.getGuardInfo();
     setState(() {
       userGroups = groups;
       userSwitches = switches;
@@ -52,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _loadData();
     });
   }
 
@@ -79,6 +85,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSelectedScreen() {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
+    }
+
+    if (guardController.guardActive) {
+      return const Center(
+        child: Text(
+          'Guarda Ativa',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+      );
     }
 
     switch (_selectedIndex) {
@@ -110,12 +129,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const GuardCard(),
+            GuardCard(
+              guardController: guardController,
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: AnimatedBuilder(
-                animation:
-                    Listenable.merge([ctlGroupController, ctlSwitchController]),
+                animation: Listenable.merge(
+                    [ctlGroupController, ctlSwitchController, guardController]),
                 builder: (context, _) {
                   return _buildSelectedScreen();
                 },
