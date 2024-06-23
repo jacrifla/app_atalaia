@@ -95,6 +95,31 @@ class UserController extends ChangeNotifier {
     }
   }
 
+  Future<void> requestChangePassword(String email) async {
+    _setLoading(true);
+    final response = await provider.requestChangePassword(email);
+    _setLoading(false);
+
+    if (response['status'] == 'success') {
+      notifyListeners();
+    } else {
+      _setErrorMessage(response['msg']);
+    }
+  }
+
+  Future<void> changePassword(
+      String email, String token, String newPassword) async {
+    _setLoading(true);
+    final response = await provider.changePassword(email, token, newPassword);
+    _setLoading(false);
+
+    if (response['status'] == 'success') {
+      notifyListeners();
+    } else {
+      _setErrorMessage(response['msg']);
+    }
+  }
+
   bool arePasswordsEqual(String password, String confirmPassword) {
     return password == confirmPassword;
   }

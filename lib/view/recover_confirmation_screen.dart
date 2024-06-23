@@ -1,13 +1,17 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
-
-import 'home_screen.dart';
+import '../provider/user_provider.dart';
+import '../controller/user_controller.dart';
+import '../utils/routes.dart';
 import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
 
 class RecoverConfirmationScreen extends StatefulWidget {
-  const RecoverConfirmationScreen({super.key});
+  final String email;
+  final String token;
+
+  const RecoverConfirmationScreen(
+      {super.key, required this.email, required this.token});
 
   @override
   State<RecoverConfirmationScreen> createState() =>
@@ -19,21 +23,30 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
   final TextEditingController _inputPassword = TextEditingController();
   final TextEditingController _inputPasswordCheck = TextEditingController();
 
+  final UserProvider userProvider = UserProvider();
+  late final UserController ctlUserController;
+
+  @override
+  void initState() {
+    super.initState();
+    ctlUserController = UserController(provider: userProvider);
+  }
+
   bool _arePasswordsEqual() {
     return _inputPassword.text == _inputPasswordCheck.text;
   }
 
-  void _handleSubmit() {
+  void _handleSubmit() async {
     if (!_arePasswordsEqual()) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Erro'),
-          content: Text('As senhas não correspondem.'),
+          title: const Text('Erro'),
+          content: const Text('As senhas não correspondem.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -42,12 +55,15 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
     }
 
     if (_formState.currentState!.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ),
-      );
+      await ctlUserController.changePassword(
+          widget.email, widget.token, _inputPassword.text);
+      if (ctlUserController.errorMessage == null) {
+        Navigator.pushNamed(context, AppRoutes.login);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(ctlUserController.errorMessage!)),
+        );
+      }
     }
   }
 
@@ -67,17 +83,17 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
   Widget build(BuildContext context) {
     _clearTextFields();
     return Scaffold(
-      appBar: Header(title: 'Nova Senha'),
+      appBar: const Header(title: 'Nova Senha'),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
-                  Text(
+                  const Text(
                     'Crie uma nova senha que contenha combinação de letras (minúsculas e maiúsculas), números e símbolos.',
                     style: TextStyle(
                       fontSize: 18,
@@ -91,7 +107,7 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
                           controller: _inputPassword,
                           isPassword: true,
                           labelText: 'Digite sua senha',
-                          icon: Icon(Icons.key_outlined),
+                          icon: const Icon(Icons.key_outlined),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '* Digite sua senha';
@@ -106,7 +122,7 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
                           controller: _inputPasswordCheck,
                           isPassword: true,
                           labelText: 'Repita sua senha',
-                          icon: Icon(Icons.key_outlined),
+                          icon: const Icon(Icons.key_outlined),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '* Digite sua senha';
@@ -123,7 +139,7 @@ class _RecoverConfirmationScreenState extends State<RecoverConfirmationScreen> {
                 ],
               ),
               ButtonIcon(
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
                 onPressed: _handleSubmit,
               )
             ],

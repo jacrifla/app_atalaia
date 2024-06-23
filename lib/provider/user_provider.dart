@@ -111,4 +111,43 @@ class UserProvider {
       return {'status': 'error', 'msg': 'Erro ao excluir usuário'};
     }
   }
+
+  Future<Map<String, dynamic>> requestChangePassword(String email) async {
+    try {
+      initDio();
+      final response = await _dio.post(
+        '${Config.apiUrl}/password/reqChangePassword',
+        data: {
+          'email': email,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        return {
+          'status': 'error',
+          'msg': 'Erro ao enviar o email, verifique seu provedor de email'
+        };
+      }
+      return {'status': 'error', 'msg': e};
+    }
+  }
+
+  Future<Map<String, dynamic>> changePassword(
+      String email, String token, String newPassword) async {
+    try {
+      initDio();
+      final response = await _dio.post(
+        '${Config.apiUrl}/password/changePassword',
+        data: {
+          'email': email,
+          'token': token,
+          'newPassword': newPassword,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      return {'status': 'error', 'msg': e};
+    }
+  }
 }

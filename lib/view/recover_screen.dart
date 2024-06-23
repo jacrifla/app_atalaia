@@ -1,48 +1,83 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-
-import 'recover_confirmation_screen.dart';
+import '../provider/user_provider.dart';
+import '../controller/user_controller.dart';
+import 'token_verification_screen.dart';
 import '../widgets/header.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
-import '../utils/utils.dart';
 
 class RecoverScreen extends StatefulWidget {
-  const RecoverScreen({super.key});
+  final String? email;
+
+  const RecoverScreen({super.key, this.email});
 
   @override
   State<RecoverScreen> createState() => _RecoverScreenState();
 }
 
 class _RecoverScreenState extends State<RecoverScreen> {
+  final UserProvider userProvider = UserProvider();
+  late final UserController ctlUserController;
+
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
-  final TextEditingController _inputEmailCel = TextEditingController();
+  late final TextEditingController _inputEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    ctlUserController = UserController(provider: userProvider);
+    _inputEmail = TextEditingController(text: widget.email ?? '');
+  }
 
   String? _validateInput(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Por favor, insira seu e-mail ou telefone.';
-    }
-    if (!isValidEmail(value) && !isValidPhoneNumber(value)) {
-      return 'Por favor, insira um e-mail ou telefone válido.';
+      return 'Por favor, insira seu e-mail';
     }
     return null;
+  }
+
+  void sendEmail() async {
+    await ctlUserController.requestChangePassword(_inputEmail.text);
+    if (ctlUserController.errorMessage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Email enviado com sucesso. Verifique seu email para o token.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              TokenVerificationScreen(email: _inputEmail.text),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(ctlUserController.errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Recuperação'),
+      appBar: const Header(title: 'Recuperação'),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 children: [
-                  Text(
-                    'Insira seu e-mail ou telefone de cadastro.',
+                  const Text(
+                    'Insira seu e-mail de cadastro.',
                     style: TextStyle(
                       fontSize: 18,
                     ),
@@ -50,8 +85,8 @@ class _RecoverScreenState extends State<RecoverScreen> {
                   Form(
                     key: _formState,
                     child: BuildInput(
-                      controller: _inputEmailCel,
-                      labelText: 'E-mail ou telefone',
+                      controller: _inputEmail,
+                      labelText: 'Digite seu e-mail',
                       validator: _validateInput,
                     ),
                   ),
@@ -60,15 +95,10 @@ class _RecoverScreenState extends State<RecoverScreen> {
               ButtonIcon(
                 onPressed: () {
                   if (_formState.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecoverConfirmationScreen(),
-                      ),
-                    );
+                    sendEmail();
                   }
                 },
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
               ),
             ],
           ),
