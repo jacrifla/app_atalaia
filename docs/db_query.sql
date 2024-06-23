@@ -83,16 +83,18 @@ CREATE TABLE tb_guard (
     user_id INT NOT NULL,
     deleted_at TIMESTAMP NULL,
     is_active BIT NOT NULL DEFAULT 0, -- Quando ativo toda a funcionalidade deve parar
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     INDEX IX_tb_guard_uuid (uuid),
 	CONSTRAINT FK_tb_guard_user_id FOREIGN KEY (user_id) REFERENCES tb_user(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE tb_user_reset (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(40) NOT NULL,
-    token VARCHAR(100) NOT NULL,
-    date_expiration TIMESTAMP NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  id int(11) NOT NULL AUTO_INCREMENT,
+  email varchar(40) NOT NULL,
+  token varchar(100) NOT NULL,
+  date_expiration timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE tb_mac_addresses (
     id INT AUTO_INCREMENT PRIMARY KEY,

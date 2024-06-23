@@ -1,12 +1,13 @@
-import 'package:app_atalaia/themes/theme.dart';
-import 'package:app_atalaia/utils/routes.dart';
 import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
+import '../utils/routes.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
+import '../themes/theme.dart';
+import 'recover_screen.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({super.key});
@@ -85,7 +86,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       _emailController.text = userData?['email'] ?? '';
       _phoneController.text = userData?['phone'] ?? '';
     } else {
-      print('${ctlUserController.errorMessage}');
+      _showSnackbar(ctlUserController.errorMessage!, isError: true);
     }
   }
 
@@ -157,8 +158,13 @@ class _PerfilScreenState extends State<PerfilScreen> {
                         ButtonIcon(
                           labelText: 'Mudar senha',
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, AppRoutes.recover);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RecoverScreen(email: _emailController.text),
+                              ),
+                            );
                           },
                         ),
                         ButtonIcon(

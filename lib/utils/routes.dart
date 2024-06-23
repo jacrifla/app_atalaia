@@ -10,7 +10,6 @@ import '../view/help_screen.dart';
 import '../view/home_screen.dart';
 import '../view/loading_screen.dart';
 import '../view/monitor_switch_screen.dart';
-import '../view/recover_confirmation_screen.dart';
 import '../view/recover_screen.dart';
 import '../view/select_switches_screen.dart';
 import '../view/switch_create_screen.dart';
@@ -34,7 +33,6 @@ class AppRoutes {
   static const String login = '/';
   static const String monitorSwitch = '/monitor_switch';
   static const String recover = '/recover';
-  static const String recoverConfirmation = '/recover_confirmation';
   static const String signUp = '/register';
   static const String switchScreen = '/switch_screen';
   static const String switchCreate = '/switch_create';
@@ -54,7 +52,6 @@ class AppRoutes {
       login: (context) => const LoginScreen(),
       monitorSwitch: (context) => const MonitorSwitchScreen(),
       recover: (context) => const RecoverScreen(),
-      recoverConfirmation: (context) => const RecoverConfirmationScreen(),
       signUp: (context) => const SignupScreen(),
       switchScreen: (context) => const SwitchScreen(),
       switchCreate: (context) => const SwitchCreateScreen(),
