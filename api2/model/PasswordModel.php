@@ -121,9 +121,9 @@ class PasswordModel {
             $mail->Body    = 'Seu código de verificação para redefinição de senha é: ' . $code;
 
             $mail->send();
-           echo 'Código de verificação enviado!';
+           return true;
         } catch (Exception $e) {
-            echo "Erro ao enviar código de verificação: {$mail->ErrorInfo}";
+            return false;
         }
     }
 

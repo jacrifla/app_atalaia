@@ -12,11 +12,11 @@ class PasswordController
             $data = $request->bodyJson();
             
             $genToken = PasswordModel::generateToken($data['email']);
-            PasswordModel::sendVerificationCode($data['email'], $genToken);
+            $res = PasswordModel::sendVerificationCode($data['email'], $genToken);
             
             
             
-            if ($genToken) {     
+            if ($res) {     
                 $response::json([
                     'status' => 'success',
                     'dados' => $data
