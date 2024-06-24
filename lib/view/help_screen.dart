@@ -48,51 +48,50 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                   ),
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                   controller: _inputPesquisar,
                   onChanged: _filterTopics,
                 ),
               ),
               const SizedBox(height: 20),
-              for (var topic in filteredTopics)
-                GestureDetector(
-                  onTap: () => _showTopicContent(context, topic),
-                  child: Card(
-                    color: Theme.of(context).colorScheme.primary,
-                    elevation: 5,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            topic['title']!,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onPrimary,
+              ...filteredTopics.map((topic) => GestureDetector(
+                    onTap: () => _showTopicContent(context, topic),
+                    child: Card(
+                      color: Theme.of(context).colorScheme.primary,
+                      elevation: 5,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              topic['title']!,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _truncateWithEllipsis(topic['content']!),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                            const SizedBox(height: 8),
+                            Text(
+                              _truncateWithEllipsis(topic['content']!),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  )),
             ],
           ),
         ),
