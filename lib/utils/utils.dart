@@ -61,3 +61,22 @@ String? validatePassword(String value) {
 bool arePasswordsEqual(String password, String confirmPassword) {
   return password == confirmPassword;
 }
+
+String cleanPhoneNumber(String phoneNumber) {
+  return phoneNumber.replaceAll(RegExp(r'[\(\)\-\s]'), '');
+}
+
+String applyPhoneMask(String phoneNumber) {
+  final cleaned = phoneNumber.replaceAll(RegExp(r'\D'), '');
+  final length = cleaned.length;
+
+  if (length <= 2) {
+    return cleaned;
+  } else if (length <= 7) {
+    return '(${cleaned.substring(0, 2)}) ${cleaned.substring(2)}';
+  } else if (length <= 11) {
+    return '(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 7)}-${cleaned.substring(7)}';
+  } else {
+    return '(${cleaned.substring(0, 2)}) ${cleaned.substring(2, 7)}-${cleaned.substring(7, 11)}';
+  }
+}
