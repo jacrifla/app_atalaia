@@ -4,6 +4,7 @@ import '../widgets/button_icon.dart';
 import '../widgets/header.dart';
 import '../controller/user_controller.dart';
 import '../provider/user_provider.dart';
+import '../utils/utils.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -25,7 +26,27 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void initState() {
     ctlUserController = UserController(provider: userProvider);
+    _inputPhone.addListener(_onPhoneChanged);
     super.initState();
+  }
+
+  void _onPhoneChanged() {
+    final text = _inputPhone.text;
+    final selectionIndex = _inputPhone.selection.end;
+    final maskedText = applyPhoneMask(text);
+
+    // Calcular a nova posição do cursor
+    int newSelectionIndex = selectionIndex;
+    if (maskedText.length > text.length) {
+      newSelectionIndex += maskedText.length - text.length;
+    } else if (maskedText.length < text.length) {
+      newSelectionIndex -= text.length - maskedText.length;
+    }
+
+    _inputPhone.value = TextEditingValue(
+      text: maskedText,
+      selection: TextSelection.collapsed(offset: newSelectionIndex),
+    );
   }
 
   void _clearInputs() {
@@ -36,13 +57,18 @@ class _SignupScreenState extends State<SignupScreen> {
     _inputPasswordCheck.clear();
   }
 
+  String cleanPhoneNumber(String phoneNumber) {
+    return phoneNumber.replaceAll(RegExp(r'[\(\)\-\s]'), '');
+  }
+
   void _handleSubmit() async {
     if (_formState.currentState!.validate()) {
+      String cleanedPhone = cleanPhoneNumber(_inputPhone.text);
       await ctlUserController.signUpUser(
         context,
         _inputName.text.toLowerCase(),
         _inputEmail.text.toLowerCase(),
-        _inputPhone.text,
+        cleanedPhone,
         _inputPassword.text,
         _inputPasswordCheck.text,
       );
@@ -85,7 +111,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       children: [
                         BuildInput(
                           controller: _inputName,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.text,
                           labelText: 'Nome',
                           hintText: 'John Doe',
                           icon: const Icon(Icons.account_circle_outlined),
@@ -111,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         BuildInput(
                           controller: _inputPhone,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.phone,
                           labelText: 'Celular',
                           hintText: '(99) 99999-9999',
                           icon: const Icon(Icons.phone_outlined),

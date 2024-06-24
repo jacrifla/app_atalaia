@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../provider/user_provider.dart';
 import '../controller/user_controller.dart';
 import '../utils/routes.dart';
+import '../utils/utils.dart';
 import '../widgets/header.dart';
 import '../widgets/menu.dart';
 import '../widgets/build_input.dart';
@@ -28,8 +29,28 @@ class _PerfilScreenState extends State<PerfilScreen> {
   @override
   void initState() {
     ctlUserController = UserController(provider: userProvider);
+    _phoneController.addListener(_onPhoneChanged); // Adicione o listener aqui
     _loadUserData();
     super.initState();
+  }
+
+  void _onPhoneChanged() {
+    final text = _phoneController.text;
+    final selectionIndex = _phoneController.selection.end;
+    final maskedText = applyPhoneMask(text);
+
+    // Calculate new cursor position
+    int newSelectionIndex = selectionIndex;
+    if (maskedText.length > text.length) {
+      newSelectionIndex += maskedText.length - text.length;
+    } else if (maskedText.length < text.length) {
+      newSelectionIndex -= text.length - maskedText.length;
+    }
+
+    _phoneController.value = TextEditingValue(
+      text: maskedText,
+      selection: TextSelection.collapsed(offset: newSelectionIndex),
+    );
   }
 
   void _excluirConta() async {
@@ -68,7 +89,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
   void _confirmarAlteracoes() async {
     final name = _nameController.text;
     final email = _emailController.text;
-    final phone = _phoneController.text;
+    final phone = cleanPhoneNumber(_phoneController.text);
 
     await ctlUserController.updateUserInfo(name, email, phone);
     if (ctlUserController.errorMessage == null) {
@@ -84,7 +105,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
       final userData = ctlUserController.userData;
       _nameController.text = userData?['name'] ?? '';
       _emailController.text = userData?['email'] ?? '';
-      _phoneController.text = userData?['phone'] ?? '';
+      setState(() {
+        _phoneController.text = applyPhoneMask(userData?['phone'] ?? '');
+      });
     } else {
       _showSnackbar(ctlUserController.errorMessage!, isError: true);
     }
@@ -134,6 +157,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                             },
                           ),
                           BuildInput(
+                            keyboardType: TextInputType.emailAddress,
                             labelText: 'E-mail',
                             icon: const Icon(Icons.email_outlined),
                             controller: _emailController,
@@ -142,6 +166,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                             },
                           ),
                           BuildInput(
+                            keyboardType: TextInputType.phone,
                             labelText: 'Celular',
                             icon: const Icon(Icons.phone_outlined),
                             controller: _phoneController,
