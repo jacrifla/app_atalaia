@@ -48,17 +48,17 @@ class _TokenVerificationScreenState extends State<TokenVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: 'Verificação de Token'),
+      appBar: const Header(title: 'Verificação de Token'),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 children: [
-                  Text(
+                  const Text(
                     'Insira o token de verificação enviado para o seu e-mail.',
                     style: TextStyle(
                       fontSize: 18,
@@ -76,7 +76,7 @@ class _TokenVerificationScreenState extends State<TokenVerificationScreen> {
               ),
               ButtonIcon(
                 onPressed: _handleSubmit,
-                icon: Icon(Icons.check),
+                icon: const Icon(Icons.check),
               ),
             ],
           ),

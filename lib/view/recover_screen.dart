@@ -40,7 +40,7 @@ class _RecoverScreenState extends State<RecoverScreen> {
     await ctlUserController.requestChangePassword(_inputEmail.text);
     if (ctlUserController.errorMessage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
               'Email enviado com sucesso. Verifique seu email para o token.'),
           backgroundColor: Colors.green,
