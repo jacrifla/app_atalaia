@@ -89,13 +89,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (guardController.guardActive) {
       return const Center(
-        child: Text(
-          'Guarda Ativa',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Guarda Ativa',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            Text(
+              'Desative a guarda para usar as outras funções',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.redAccent,
+              ),
+            ),
+          ],
         ),
       );
     }
