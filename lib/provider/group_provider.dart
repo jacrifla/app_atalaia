@@ -120,8 +120,7 @@ class GroupProvider {
     return {};
   }
 
-  Future<Map<String, dynamic>> addSwitchToGroup(
-      Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> addSwitchToGroup(Map<String, dynamic> data) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}/groups/newswitch',
@@ -140,7 +139,7 @@ class GroupProvider {
     return {};
   }
 
-  Future<Map<String, dynamic>> getSwitchesInGroup(String groupId) async {
+  Future<Map<String, dynamic>> getSwitchesInGroup(int groupId) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}/groups/switches',

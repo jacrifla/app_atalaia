@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GroupModel {
-  String? groupId;
+  dynamic groupId;
   String? groupName;
   bool? isActive;
   bool? scheduleActive;
@@ -30,10 +30,7 @@ class GroupModel {
     scheduleStart = json['schedule_start'];
     scheduleEnd = json['schedule_end'];
     userId = json['user_id'];
-    macAddresses =
-        json.containsKey('mac_address') && json['mac_address'] != null
-            ? [json['mac_address']]
-            : [];
+    macAddresses = json.containsKey('mac_address') && json['mac_address'] != null ? [json['mac_address']] : [];
   }
 
   // Converte um GroupModel para um mapa JSON
@@ -71,15 +68,14 @@ class GroupModel {
   // Fábrica que inicializa um GroupModel a partir de um mapa JSON
   factory GroupModel.fromJsonMap(Map<String, dynamic> json) {
     return GroupModel(
-      groupId: json['uuid'] as String?,
+      groupId: json['id'] as int?,
       groupName: json['name'] as String?,
       isActive: GroupModel._parseBool(json['is_active']),
       scheduleActive: GroupModel._parseBool(json['schedule_active']),
       scheduleStart: json['schedule_start'] as String?,
       scheduleEnd: json['schedule_end'] as String?,
       userId: json['user_id'] as String?,
-      macAddresses:
-          json['mac_address'] != null ? [json['mac_address'] as String] : [],
+      macAddresses: json['mac_address'] != null ? [json['mac_address'] as String] : [],
     );
   }
 }

@@ -7,8 +7,7 @@ class SwitchProvider {
 
   List<SwitchModel> switches = [];
 
-  Future<Map<String, dynamic>> createSwitch(
-      String name, String watts, String macAddress, String userId) async {
+  Future<Map<String, dynamic>> createSwitch(String name, String watts, String macAddress, String userId) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}/switches/new',
@@ -60,6 +59,7 @@ class SwitchProvider {
       if (response.statusCode == 200) {
         List<SwitchModel> switches = [];
         for (var switchData in response.data['data']) {
+          print(switchData);
           switches.add(SwitchModel.fromJson(switchData));
         }
         return switches;

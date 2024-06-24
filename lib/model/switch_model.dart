@@ -1,8 +1,8 @@
 class SwitchModel {
   int? id;
   String? uuid;
-  String? userId;
-  String? groupId;
+  int? userId;
+  int? groupId;
   String? macAddress;
   String? name;
   bool? isActive;
@@ -24,8 +24,8 @@ class SwitchModel {
   // Construtor que inicializa um SwitchModel a partir de um JSON
   SwitchModel.fromJson(Map<String, dynamic> json) {
     uuid = json['uuid'];
-    userId = json['user_id'];
-    groupId = json['group_id'];
+    userId = _parseInt(json['user_id']);
+    groupId = _parseInt(json['group_id']);
     macAddress = json['mac_address'];
     name = json['name'];
     isActive = _parseBool(json['is_active']);
