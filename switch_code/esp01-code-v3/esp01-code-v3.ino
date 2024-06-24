@@ -16,13 +16,16 @@
 // #define RELAY_FIRST_STATUS HIGH
 // #define RELAY_SECOND_STATUS LOW
 
-const char* ssid = "AMNET85_1450";
-const char* password = "hacker_cmt23";
+const char* ssid = "Dsum";
+const char* password = "@Danielsum23";
+// const char* ssid = "AMNET85_1450";
+// const char* password = "hacker_cmt23";
 // const char* ssid = "AMNET85_4095_EXT";
 // const char* password = "Godofredo_2";
 
 const int port = 80;
-const char* host = "192.168.101.7";
+const char* host = "192.168.181.144";
+// const char* host = "192.168.101.7";
 const char* endpointGet = "/app_atalaia/api2/switches/getone";
 const char* endpointUpdate = "/app_atalaia/api2/switches/toggle";
 // const char* host = "atalaiaproject.000webhostapp.com";
@@ -44,6 +47,7 @@ time_t realLatestDateTime = 0;
 time_t previousServerDateTime = 0;
 time_t previousGuardDateTime = 0;
 time_t previousRealDateTime = 0;
+
 
 void setup()
 {
@@ -77,7 +81,6 @@ void setup()
 }
 
 
-
 void resetSensorPin()
 {
   // Restabelecendo o pino do sensor de corrente
@@ -90,7 +93,6 @@ void resetSensorPin()
   digitalWrite(SENSOR_PIN, LOW);
   pinMode(SENSOR_PIN, INPUT);
 }
-
 
 
 void startConnection()
@@ -113,7 +115,6 @@ void startConnection()
 }
 
 
-
 void getFormattedCurrentTime()
 {
   if (WiFi.status() == WL_CONNECTED) {
@@ -124,18 +125,20 @@ void getFormattedCurrentTime()
 }
 
 
-
 time_t getCurrentTime()
 {
+  Serial.println("Trying to access NTP: ");
   // Atualiza a hora do cliente NTP
   while(!timeClient.update()) {
     timeClient.forceUpdate();
+    Serial.print(".")
   }
+
+  Serial.println("Success");
 
   // Retorna a hora atual em segundos desde 1970
   return timeClient.getEpochTime();
 }
-
 
 
 time_t convertDateTimeToTimeT(String dateTimeStr)
@@ -157,7 +160,6 @@ time_t convertDateTimeToTimeT(String dateTimeStr)
 }
 
 
-
 String formatDateTime(time_t t)
 {
   char buffer[20];
@@ -167,7 +169,6 @@ String formatDateTime(time_t t)
 
   return String(buffer);
 }
-
 
 
 void loop()
@@ -183,11 +184,11 @@ void loop()
     testRealStatus(); //debug
   } else {
     startConnection();
+    timeClient.begin();
   }
 
   delay(1000);
 }
-
 
 
 void getRealStatus()
@@ -210,7 +211,6 @@ void getRealStatus()
 }
 
 
-
 void getServerStatus()
 {
   String payload = requestStatus();
@@ -220,7 +220,6 @@ void getServerStatus()
 
   readJson(payload);
 }
-
 
 
 String requestStatus()
@@ -272,7 +271,6 @@ bool validatePayload(String payload)
 }
 
 
-
 void readJson(String payload)
 {
   // Criando um buffer para armazenar o JSON
@@ -308,6 +306,8 @@ void readJson(String payload)
 
   String updatedAt = dados["updated_at"];
   serverLatestDateTime = convertDateTimeToTimeT(updatedAt);
+  String guardUpdatedAt = dados["guard_updated_at"];
+  guardLatestDateTime = convertDateTimeToTimeT(guardUpdatedAt);
 
   switch (isActive) {
     case 0:
@@ -356,32 +356,48 @@ void readJson(String payload)
 }
 
 
+bool isDateServerDiff()
+{
+  return (previousServerDateTime != serverLatestDateTime);
+}
+
+
+bool isDateRealDiff()
+{
+  return (previousRealDateTime != realLatestDateTime);
+}
+
+
+bool isDateGuardDiff()
+{
+  return (previousGuardDateTime != guardLatestDateTime);
+}
+
 
 void resolveRelayStatus()
 {
-  if (!guardStatus 
-      && serverStatus != realStatus
-      && (previousServerDateTime != serverLatestDateTime
-          || previousRealDateTime != realLatestDateTime
-        )
-    ) {
-    if (serverLatestDateTime > realLatestDateTime) {
-      relayStatus = relayStatus ? false : true;
+  if (!guardStatus && serverStatus != realStatus) {
+    if (isDateServerDiff() || isDateRealDiff()) {
+      if (serverLatestDateTime > realLatestDateTime) {
+        relayStatus = relayStatus ? false : true;
+      }
     } else {
       updateStatus();
     }
   }
 
   if (guardStatus && switchGuardStatus != realStatus) {
-    //Possível falha. Deveria ser o horário de atualização da guarda
-    if (serverLatestDateTime > realLatestDateTime) {
-      relayStatus = switchGuardStatus;
+    if (isDateGuardDiff() || isDateRealDiff()) {
+      if (guardLatestDateTime > realLatestDateTime) {
+        relayStatus = relayStatus ? false : true;
+      }
     } else {
       updateStatus();
     }
   }
 
   previousServerDateTime = serverLatestDateTime;
+  previousGuardDateTime = guardLatestDateTime;
   previousRealDateTime = realLatestDateTime;
 
   Serial.print("guardStatus: ");
@@ -399,7 +415,6 @@ void resolveRelayStatus()
   Serial.print("realLatestDateTime: ");
   Serial.println(realLatestDateTime);
 }
-
 
 
 void updateStatus()
@@ -434,7 +449,6 @@ void updateStatus()
 }
 
 
-
 void updateSwitch()
 {
   if (relayStatus == true) {
@@ -447,7 +461,6 @@ void updateSwitch()
     Serial.println("Done!");
   }
 }
-
 
 
 void testRealStatus()

@@ -14,6 +14,9 @@ class Config {
   // CEL
   // static const String apiUrl = 'http://192.168.248.144:80/app_atalaia/api2';
 
+  // SERVER
+  // static const String apiUrl = 'http://192.168.1.100:80/app_atalaia/api2';
+
   // NOTE
   static const String apiUrl = 'http://192.168.1.29:80/app_atalaia/api2';
 

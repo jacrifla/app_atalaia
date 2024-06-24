@@ -9,7 +9,7 @@ import '../utils/utils.dart';
 
 class SwitchSelectionScreen extends StatefulWidget {
   final String? groupName;
-  final String? groupId;
+  final int? groupId;
 
   const SwitchSelectionScreen({
     super.key,
@@ -41,11 +41,8 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
   Future<void> _loadGroupSwitches() async {
     if (widget.groupId != null) {
       try {
-        List<Map<String, dynamic>> groupSwitchesData =
-            await groupController.getSwitchesInGroup(widget.groupId!);
-        List<SwitchModel> groupSwitches = groupSwitchesData
-            .map((data) => SwitchModel.fromJson(data))
-            .toList();
+        List<Map<String, dynamic>> groupSwitchesData = await groupController.getSwitchesInGroup(widget.groupId!);
+        List<SwitchModel> groupSwitches = groupSwitchesData.map((data) => SwitchModel.fromJson(data)).toList();
         setState(() {
           selectedSwitches = groupSwitches;
         });
@@ -59,8 +56,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
 
   Future<void> _addSwitchToGroup(SwitchModel switchModel) async {
     try {
-      await groupController.addSwitchToGroup(
-          widget.groupId!, switchModel.macAddress!);
+      await groupController.addSwitchToGroup(widget.groupId!, switchModel.macAddress!);
       setState(() {
         selectedSwitches.add(switchModel);
         switchModel.groupId = widget.groupId;
@@ -109,15 +105,12 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final switchItem = snapshot.data![index];
-                    final isSelected = selectedSwitches
-                        .any((s) => s.macAddress == switchItem.macAddress);
+                    final isSelected = selectedSwitches.any((s) => s.macAddress == switchItem.macAddress);
 
                     return ListTile(
                       title: Text(toCapitalizeWords(switchItem.name ?? '')),
                       trailing: IconButton(
-                        icon: isSelected
-                            ? const Icon(Icons.check_box)
-                            : const Icon(Icons.check_box_outline_blank),
+                        icon: isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
                         onPressed: () {
                           if (isSelected) {
                             _removeSwitchFromGroup(switchItem);
