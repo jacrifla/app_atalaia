@@ -32,6 +32,7 @@ class SwitchController extends ChangeNotifier {
       notifyListeners();
       return switches;
     } catch (error) {
+      print(error);
       return [];
     }
   }

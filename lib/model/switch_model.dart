@@ -2,7 +2,7 @@ class SwitchModel {
   int? id;
   String? uuid;
   int? userId;
-  int? groupId;
+  dynamic groupId;
   String? macAddress;
   String? name;
   bool? isActive;

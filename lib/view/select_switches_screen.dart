@@ -9,7 +9,7 @@ import '../utils/utils.dart';
 
 class SwitchSelectionScreen extends StatefulWidget {
   final String? groupName;
-  final int? groupId;
+  final String? groupId;
 
   const SwitchSelectionScreen({
     super.key,
@@ -56,7 +56,7 @@ class _SwitchSelectionScreenState extends State<SwitchSelectionScreen> {
 
   Future<void> _addSwitchToGroup(SwitchModel switchModel) async {
     try {
-      await groupController.addSwitchToGroup(widget.groupId!, switchModel.macAddress!);
+      await groupController.addSwitchToGroup(widget.groupId, switchModel.macAddress!);
       setState(() {
         selectedSwitches.add(switchModel);
         switchModel.groupId = widget.groupId;

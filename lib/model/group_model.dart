@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GroupModel {
-  dynamic groupId;
+  String? groupId;
   String? groupName;
   bool? isActive;
   bool? scheduleActive;
@@ -68,7 +68,7 @@ class GroupModel {
   // Fábrica que inicializa um GroupModel a partir de um mapa JSON
   factory GroupModel.fromJsonMap(Map<String, dynamic> json) {
     return GroupModel(
-      groupId: json['id'] as int?,
+      groupId: json['uuid'] as String?,
       groupName: json['name'] as String?,
       isActive: GroupModel._parseBool(json['is_active']),
       scheduleActive: GroupModel._parseBool(json['schedule_active']),

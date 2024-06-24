@@ -40,7 +40,7 @@ class _GroupCardActionsState extends State<GroupCardActions> {
   }
 
   // Método para excluir o grupo
-  Future<void> _deleteGroup(int groupId) async {
+  Future<void> _deleteGroup(String groupId) async {
     try {
       bool confirmed = await showDialog(
         context: context,

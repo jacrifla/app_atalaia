@@ -30,6 +30,7 @@ class GroupController extends ChangeNotifier {
   Future<Map<String, dynamic>> getOneGroup(String groupId) async {
     try {
       Map<String, dynamic> response = await provider.getOneGroup(groupId);
+      print(response);
       if (response['status'] == 'success') {
         return response['dados'];
       } else {
@@ -64,7 +65,7 @@ class GroupController extends ChangeNotifier {
 
   // Retorna true ou erro
   Future<bool> updateGroup(
-    int groupId,
+    String groupId,
     String name,
     bool isActive,
     bool scheduleActive,
@@ -94,7 +95,7 @@ class GroupController extends ChangeNotifier {
   }
 
   // Retorna true ou erro
-  Future<bool> toggleGroup(int groupId, bool isActive) async {
+  Future<bool> toggleGroup(String groupId, bool isActive) async {
     try {
       Map<String, dynamic> requestData = {
         'group_id': groupId,
@@ -112,12 +113,13 @@ class GroupController extends ChangeNotifier {
   }
 
   // Retorna true ou erro
-  Future<bool> addSwitchToGroup(int groupId, String macAddress) async {
+  Future<bool> addSwitchToGroup(String? groupId, String macAddress) async {
     try {
       Map<String, dynamic> requestData = {
         'group_id': groupId,
         'mac_address': macAddress,
       };
+      print(requestData);
       Map<String, dynamic> response = await provider.addSwitchToGroup(requestData);
       if (response['status'] == 'success') {
         notifyListeners();
@@ -131,7 +133,7 @@ class GroupController extends ChangeNotifier {
   }
 
   // retorna uma lista dos switches com todas as info dele ques estao dentro do grupo
-  Future<List<Map<String, dynamic>>> getSwitchesInGroup(int groupId) async {
+  Future<List<Map<String, dynamic>>> getSwitchesInGroup(String groupId) async {
     try {
       Map<String, dynamic> response = await provider.getSwitchesInGroup(groupId);
       if (response['status'] == 'success') {
@@ -178,7 +180,7 @@ class GroupController extends ChangeNotifier {
   }
 
   // Retorna sempre sucesso
-  Future<bool> deleteGroup(int groupId, [List<String>? macAddresses]) async {
+  Future<bool> deleteGroup(String groupId, [List<String>? macAddresses]) async {
     try {
       macAddresses ??= [];
 
@@ -186,6 +188,7 @@ class GroupController extends ChangeNotifier {
         'group_id': groupId,
         'mac_addresses': macAddresses,
       };
+      print(groupId);
       Map<String, dynamic> response = await provider.deleteGroup(requestData);
       if (response['status'] == 'success') {
         notifyListeners();
@@ -222,7 +225,7 @@ class GroupController extends ChangeNotifier {
   }
 
   // Retorna a lista de endereços MAC dos switches do grupo
-  Future<List<String>> getMacAddresses(int groupId) async {
+  Future<List<String>> getMacAddresses(String groupId) async {
     try {
       final List<Map<String, dynamic>> switchesInGroup = await getSwitchesInGroup(groupId);
 

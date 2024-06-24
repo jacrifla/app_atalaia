@@ -50,6 +50,7 @@ class GroupProvider {
         '${Config.apiUrl}/groups/getone',
         data: {'group_id': groupId},
       );
+            print(response.data);
       if (response.statusCode == 200) {
         return response.data;
       }
@@ -139,7 +140,7 @@ class GroupProvider {
     return {};
   }
 
-  Future<Map<String, dynamic>> getSwitchesInGroup(int groupId) async {
+  Future<Map<String, dynamic>> getSwitchesInGroup(String groupId) async {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}/groups/switches',
@@ -198,6 +199,7 @@ class GroupProvider {
 
   Future<Map<String, dynamic>> deleteGroup(Map<String, dynamic> data) async {
     try {
+      print(data);
       final response = await _dio.post(
         '${Config.apiUrl}/groups/delete',
         data: data,
