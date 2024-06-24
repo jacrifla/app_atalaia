@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../themes/theme.dart';
 import '../widgets/build_input.dart';
 import '../widgets/button_icon.dart';
@@ -42,94 +42,109 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Image.asset('assets/images/logo.png'),
-                    const SizedBox(height: 10),
-                    titleLogo('Projeto Atalaia'),
-                  ],
-                ),
-                Form(
-                  key: _formState,
-                  child: Column(
+    return ChangeNotifierProvider(
+      create: (_) => ctlUserController,
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Column(
                     children: [
-                      BuildInput(
-                        controller: _inputEmail,
-                        keyboardType: TextInputType.emailAddress,
-                        labelText: 'E-mail',
-                        hintText: 'example@example.com',
-                        icon: const Icon(Icons.person),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Digite seu e-mail';
-                          }
-                          return null;
-                        },
+                      Image.asset('assets/images/logo.png'),
+                      const SizedBox(height: 10),
+                      titleLogo('Projeto Atalaia'),
+                    ],
+                  ),
+                  Form(
+                    key: _formState,
+                    child: Column(
+                      children: [
+                        BuildInput(
+                          controller: _inputEmail,
+                          keyboardType: TextInputType.emailAddress,
+                          labelText: 'E-mail',
+                          hintText: 'example@example.com',
+                          icon: const Icon(Icons.person),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Digite seu e-mail';
+                            }
+                            return null;
+                          },
+                        ),
+                        BuildInput(
+                          isPassword: true,
+                          controller: _inputPassword,
+                          labelText: 'Senha',
+                          hintText: '******',
+                          icon: const Icon(Icons.lock),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Digite sua senha';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  ButtonIcon(
+                    height: 50,
+                    labelText: 'Entrar',
+                    onPressed: () async {
+                      if (_formState.currentState!.validate()) {
+                        bool success = await ctlUserController.loginUser(
+                          context,
+                          _inputEmail.text.trim().toLowerCase(),
+                          _inputPassword.text.trim(),
+                        );
+
+                        if (!success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                ctlUserController.errorMessage ??
+                                    'Erro desconhecido',
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.login),
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buttonLine(
+                        icon: const Icon(Icons.person_add),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRoutes.signUp),
+                        label: 'Criar Conta',
                       ),
-                      BuildInput(
-                        isPassword: true,
-                        controller: _inputPassword,
-                        labelText: 'Senha',
-                        hintText: '******',
-                        icon: const Icon(Icons.lock),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Digite sua senha';
-                          }
-                          return null;
-                        },
+                      buttonLine(
+                        icon: const Icon(Icons.person_search),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRoutes.recover),
+                        label: 'Esqueci Minha Senha',
+                      ),
+                      buttonLine(
+                        icon: const Icon(Icons.help_center_rounded),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRoutes.help),
+                        label: 'Preciso de Ajuda',
                       ),
                     ],
                   ),
-                ),
-                ButtonIcon(
-                  height: 50,
-                  labelText: 'Entrar',
-                  onPressed: () {
-                    if (_formState.currentState!.validate()) {
-                      ctlUserController.loginUser(
-                        context,
-                        _inputEmail.text.trim().toLowerCase(),
-                        _inputPassword.text.trim(),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.login),
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buttonLine(
-                      icon: const Icon(Icons.person_add),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.signUp),
-                      label: 'Criar Conta',
-                    ),
-                    buttonLine(
-                      icon: const Icon(Icons.person_search),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.recover),
-                      label: 'Esqueci Minha Senha',
-                    ),
-                    buttonLine(
-                      icon: const Icon(Icons.help_center_rounded),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, AppRoutes.help),
-                      label: 'Preciso de Ajuda',
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -45,16 +45,19 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  Future<void> loginUser(
+  Future<bool> loginUser(
       BuildContext context, String email, String password) async {
+    _setErrorMessage(null);
     _setLoading(true);
     final response = await provider.login(email, password);
     _setLoading(false);
 
     if (response['status'] == 'success') {
       Navigator.pushReplacementNamed(context, AppRoutes.loading);
+      return true;
     } else {
       _setErrorMessage(response['msg']);
+      return false;
     }
   }
 

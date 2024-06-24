@@ -45,10 +45,15 @@ class UserProvider {
         _authProvider.setUserId(userId);
       }
       return response.data;
-    } catch (error) {
+    } on DioException catch (error) {
+      String errorMessage = error.toString();
+      if (error.response?.statusCode == 401) {
+        errorMessage =
+            'Credenciais incorretas. Por favor, verifique seu e-mail e senha.';
+      }
       return {
         'status': 'error',
-        'msg': 'Erro ao conectar ao servidor',
+        'msg': errorMessage,
       };
     }
   }
